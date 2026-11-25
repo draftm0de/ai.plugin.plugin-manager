@@ -428,3 +428,15 @@ Source: skills/_shared/scripts/verify.py
 Source: skills/_shared/templates/marketplace/sync/scripts/marketplace.py
 Test: tests/integration/project_setup/test_setup.py
 
+
+## R40: The tests of the marketplace scripts are delivered with them
+
+Status: confirmed
+Acceptance: A marketplace receives, as synced files under `tests/contracts/`, the tests of the scripts the Manager keeps in sync there: catalog generation, local development install, plugin packaging and the test runner. They use fictional data only and never read the marketplace's own `marketplace.json`, so adding or removing a catalog entry cannot break them. `setup` delivers and updates them like the other synced files, and the Manager runs the same files against its own templates, so there is one source. The person's own tests stay untouched.
+Source: skills/_shared/templates/marketplace/sync/tests/contracts/test_marketplace_catalogs.py
+Source: skills/_shared/templates/marketplace/sync/tests/contracts/test_local_plugins.py
+Source: skills/_shared/templates/marketplace/sync/tests/contracts/test_plugin_payload.py
+Source: skills/_shared/templates/marketplace/sync/tests/contracts/test_run_tests.py
+Source: skills/_shared/manifests/marketplace.sync.json
+Test: tests/integration/marketplace_create/test_managed_tests.py
+Test: tests/integration/project_setup/test_manifest.py

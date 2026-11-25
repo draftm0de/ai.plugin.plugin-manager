@@ -67,7 +67,9 @@ class ManifestTests(unittest.TestCase):
     def test_marketplace_classes_follow_the_scope(self):
         sync = load('marketplace.sync.json')
         self.assertEqual({'CLAUDE.md', 'scripts/local_plugins.py', 'scripts/marketplace.py', 'scripts/plugin_payload.py',
-                          'scripts/run_tests.py', 'scripts/verify.py', 'docs/de/concepts.md', 'docs/en/concepts.md'}, set(sync['files']))
+                          'scripts/run_tests.py', 'scripts/verify.py', 'docs/de/concepts.md', 'docs/en/concepts.md',
+                          'tests/contracts/test_local_plugins.py', 'tests/contracts/test_marketplace_catalogs.py',
+                          'tests/contracts/test_plugin_payload.py', 'tests/contracts/test_run_tests.py'}, set(sync['files']))  # R40
         seed = set(files_below(TEMPLATES / 'marketplace/seed'))
         self.assertEqual({'Makefile', 'AGENTS.md', 'SCOPE.md', 'docs/architecture.md', 'docs/prerequisites.md', 'docs/style.md', 'local-marketplace.example.json',
                           'tests/README.md', 'tests/__init__.py', 'tests/contracts/__init__.py', 'tests/contracts/test_structure.py'}, seed)
