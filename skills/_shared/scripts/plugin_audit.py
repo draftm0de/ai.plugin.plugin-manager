@@ -216,7 +216,6 @@ def scaffold_plugin(source, output, languages=None, default_language=None, repos
                 if relative.startswith('docs/') and relative.endswith(('/concepts.md', '/development.md')) and relative.split('/')[1] not in selected:
                     continue  # managed pages exist only in the selected languages (R36, R42)
                 if part == 'seed' and relative == 'gitignore.txt': relative = '.gitignore'
-                if part == 'seed' and relative == 'ci.yml': relative = '.github/workflows/validate.yml'
                 files[relative] = path.read_bytes()
                 if path.stat().st_mode & 0o111:
                     executables.add(relative)

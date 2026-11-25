@@ -25,6 +25,8 @@ def sync(ctx, target, decision, relative, expected_source, expected_local):
     if relative not in ctx.managed_files:
         raise Conflict(relative, 'Not a managed file', 'unknown_path')
     item = next((d for d in plan['decisions'] + plan['removals']['decisions'] if d['path'] == relative), None)
+    if item is None and decision == 'adopt':  # R45: a file kept on purpose may be taken back at any time
+        item = next((dict(kept, kind='content') for kept in inspection.kept_files(ctx, root, plan) if kept['path'] == relative), None)
     if item is None:
         raise Conflict(relative, 'No decision is open for this file; check status again', 'no_decision')
     if (item['source_hash'] or 'removed', item['local_hash']) != (expected_source, expected_local):

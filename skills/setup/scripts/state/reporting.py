@@ -57,6 +57,7 @@ def report(ctx, operation, root, name, plan, created_files=(), created_dirs=(), 
                      'accepted_deviations': sorted(r for r, s in files.items() if s == 'accepted')},
         'sync': {'needed': bool(plan['decisions'] or plan['removals']['decisions']) if operation == 'status' else False,
                  'decisions': list(plan['decisions']) if operation == 'status' else []},
+        'kept': list(plan.get('kept', [])) if operation == 'status' else [],
         'removals': {'auto': list(plan['removals']['auto']), 'decisions': list(plan['removals']['decisions']),
                      'kept': list(plan['removals']['kept']), 'unowned': list(plan['removals']['unowned']),
                      'lock_cleanup': list(plan['removals']['lock_cleanup'])} if operation == 'status'
@@ -83,6 +84,7 @@ def report(ctx, operation, root, name, plan, created_files=(), created_dirs=(), 
 def status(ctx, target):
     root, name, state = detection.detect_target(ctx, target, allow_unconfigured=True)
     plan = inspection.inspect(ctx, root, None)
+    plan['kept'] = inspection.kept_files(ctx, root, plan)
     if state != 'unconfigured':
         plan['style'] = inspection.style_state(ctx, root)
     evidence = evidence_files.read_evidence(ctx, root) if state != 'unconfigured' else None

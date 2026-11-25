@@ -253,8 +253,8 @@ class StaleAndErrorTests(SyncBase):
             self.assertEqual((1, code), (c, data['conflicts'][0]['code']))
             self.assertEqual(before, tree(self.p))
         self.deviate(); self.decide('keep')
-        c, data, _ = self.box.call('sync', '--decision', 'adopt', '--path', TARGET, '--source-hash', h, '--local-hash', digest(b'my version'))
-        self.assertEqual('no_decision', data['conflicts'][0]['code'])  # accepted deviation: nothing to decide
+        c, data, _ = self.box.call('sync', '--decision', 'keep', '--path', TARGET, '--source-hash', h, '--local-hash', digest(b'my version'))
+        self.assertEqual('no_decision', data['conflicts'][0]['code'])  # accepted deviation: nothing open (taking it back: R45)
         self.assertEqual(b'my version', (self.p / TARGET).read_bytes())
 
     def test_old_or_damaged_lock_is_rejected_unchanged_for_every_operation(self):

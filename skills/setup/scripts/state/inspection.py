@@ -32,6 +32,13 @@ def documentation_languages(root):
         return set()
 
 
+def kept_files(ctx, root, plan):
+    """R45: the files kept on purpose (accepted deviation) with the pair that taking one back refers to."""
+    return [dict(path=relative, **skeleton_lock.pair(fsafe.sha256(plan['templates'][relative][0]),
+                                                      fsafe.sha256(fsafe.read_regular(root, relative))))
+            for relative, state in sorted(plan['files'].items()) if state == 'accepted']
+
+
 def inspect(ctx, root, requested_language):
     """Read-only plan; raises Conflict before any write could happen."""
     language = preferences.load_language_helper(ctx)

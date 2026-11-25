@@ -1,3 +1,5 @@
+<!-- Managed by the plugin manager: do not edit. -->
+
 # Tests / Tests
 
 Use `make test` for the deterministic unit, integration and contract checks; `make test TEST_GROUP=<name>` selects a component. Other layers run directly: `python3 -B scripts/run_tests.py --kind unit|integration|contracts|native`. Missing suites report `NOT RUN`, not acceptance.

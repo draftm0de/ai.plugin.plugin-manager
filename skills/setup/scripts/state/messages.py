@@ -111,6 +111,14 @@ CATALOGUE = {
         'en': ('no change was given', 'give a name, a display name or a description'),
         'de': ('keine Änderung angegeben wurde', 'gib einen Namen, einen Anzeigenamen oder eine Beschreibung an'),
     },
+    'no_decision': {
+        'en': ('there is no open question for the file {path}', 'call /plugin-manager:setup and say which kept file you want to take back'),
+        'de': ('es zur Datei {path} keine offene Entscheidung gibt', 'rufe /plugin-manager:setup auf und nenne die behaltene Datei, die du zurückhaben willst'),
+    },
+    'stale_decision': {
+        'en': ('the file {path} changed after the question was asked', 'answer the question again for the current state'),
+        'de': ('sich die Datei {path} geändert hat, seit die Frage gestellt wurde', 'beantworte die Frage für den aktuellen Stand neu'),
+    },
     'unknown': {
         'en': ('the cause is not known (an unexpected error)',
                'either call the same skill again (it checks the state first, so repeating is safe) or run `/plugin-manager:verify` for a read-only check of the folder'),
@@ -120,7 +128,8 @@ CATALOGUE = {
 }
 
 # state-helper conflicts (Conflict.code) that are known causes; every other conflict is not known
-CONFLICT_CODES = {'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
+FILE_CODES = ('no_decision', 'stale_decision')  # their {path} is the file, not the folder
+CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decision', 'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
 
 # the gate: why a writing skill stops (the reason follows "only partly (...)")
 GATE_REASONS = {
@@ -204,7 +213,8 @@ def classify(error, folder=None):
     if isinstance(error, Failure):
         return error.code, dict({'path': str(folder)} if folder else {}, **error.facts)
     if code in CONFLICT_CODES:
-        return CONFLICT_CODES[code], {'path': str(folder) if folder else str(getattr(error, 'path', '.'))}
+        own = folder if folder and code not in FILE_CODES else getattr(error, 'path', '.')
+        return CONFLICT_CODES[code], {'path': str(own)}
     return 'unknown', {}
 
 

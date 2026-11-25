@@ -26,7 +26,7 @@ class AuditTests(unittest.TestCase):
         result = audit.scaffold_plugin(self.source, self.output, languages=['de','en'], repository='https://github.com/example/fictional', author='Fictional Team')
         self.assertIsNone(result['production_ready'])
         self.assertEqual(before, (self.source / 'SKILL.md').read_bytes())
-        self.assertTrue((self.output / '.github/workflows/validate.yml').is_file())
+        self.assertTrue((self.output / '.github/workflows/dm-verify.yml').is_file())
         self.assertTrue((self.output / 'README.en.md').is_file())
         self.assertFalse((self.output / 'plugin.mk').exists())
         subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tests'], cwd=self.output, check=True, capture_output=True)

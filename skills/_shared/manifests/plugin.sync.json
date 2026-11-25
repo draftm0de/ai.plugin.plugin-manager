@@ -1,6 +1,10 @@
 {
   "schema_version": 1,
   "files": {
+    ".github/workflows/dm-verify.yml": {
+      "sha256": "849d48233c727385a72d3972311ce10afa6e76a161df161ec3d4100ee0b42ee5",
+      "executable": false
+    },
     "AGENTS.md": {
       "sha256": "c0648468e0e3744b2c08e1e1c025b91614e373735663b840d104735a1c54b3c0",
       "executable": false
@@ -27,6 +31,10 @@
     },
     "docs/en/development.md": {
       "sha256": "5eaadabdaa0ad886c977efb88f339fb56be6e0f7ca2d27f46aca378f291c365b",
+      "executable": false
+    },
+    "docs/prerequisites.md": {
+      "sha256": "bd31c420a6b66e58e16e7abea1d653301d14c44c2ee12e2ae700652fcf92ae32",
       "executable": false
     },
     "docs/standards/coding.md": {
@@ -75,6 +83,10 @@
     },
     "skills/_shared/scripts/operator_language.py": {
       "sha256": "3660c928e59a241bc4e3250ca63d39c76eb3a52e7c33bf0d9602121b030aba5e",
+      "executable": false
+    },
+    "tests/README.md": {
+      "sha256": "c468a7f5afec48c01b190e46b74706f0e4a747444d57d132d7b7c0f3f1d64b2c",
       "executable": false
     },
     "tests/behavior/run_cases.py": {

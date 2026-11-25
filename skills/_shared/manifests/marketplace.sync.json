@@ -1,6 +1,10 @@
 {
   "schema_version": 1,
   "files": {
+    ".github/workflows/dm-verify.yml": {
+      "sha256": "621a4e31297cc5ca8831ba242d1eaa48b4286437bbd20effef7bf03c4aadf765",
+      "executable": false
+    },
     "AGENTS.md": {
       "sha256": "959056d4e31df3022dfde254c82bada637ada0c149a303b8785dbf2a463bfe2b",
       "executable": false
@@ -33,6 +37,10 @@
       "sha256": "4d9e80581684ad67e5ef64f7f9e8bf19db8c12dc3a941476612bda8d39c28dbd",
       "executable": false
     },
+    "docs/prerequisites.md": {
+      "sha256": "bd31c420a6b66e58e16e7abea1d653301d14c44c2ee12e2ae700652fcf92ae32",
+      "executable": false
+    },
     "scripts/local_plugins.py": {
       "sha256": "e43812e571110587816617f6ba81f9fc8b579a9baf236bef6e190cb5120e50d3",
       "executable": false
@@ -51,6 +59,10 @@
     },
     "scripts/verify.py": {
       "sha256": "1b375b48940ae49e192318c847f5643df9406ea89d1cadb65618dc6655c9bdc4",
+      "executable": false
+    },
+    "tests/README.md": {
+      "sha256": "94b486e08d21e6c06e3e789fb46379b12e1ea83cbb5065b06ccfd9dc0396d5d1",
       "executable": false
     },
     "tests/contracts/test_local_plugins.py": {

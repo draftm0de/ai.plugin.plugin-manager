@@ -152,7 +152,7 @@ class StandardsTests(unittest.TestCase):
         self.assertIn('docs/standards/testing.md differs from the managed standard', result.stdout)
 
     def test_the_ci_of_a_new_plugin_runs_the_verifier(self):  # R33
-        workflow = (self.plugin / '.github/workflows/validate.yml').read_text()
+        workflow = (self.plugin / '.github/workflows/dm-verify.yml').read_text()  # R44
         self.assertIn('run: python3 -B scripts/verify.py --source . --kind plugin', workflow)
 
     def test_the_managed_pre_commit_hook_is_silent_when_valid_and_stops_with_the_findings_when_not(self):  # R33
