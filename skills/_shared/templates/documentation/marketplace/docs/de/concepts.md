@@ -51,8 +51,6 @@ Marketplace
 
 Du installierst das Plugin einmal und hast beide Skills. Der Skill „Interviewtraining“ könnte zum Beispiel vorgeben: die Stellenausschreibung lesen, deine Erfahrung berücksichtigen, immer nur eine Frage stellen, deine Antwort bewerten und einen Vorschlag zur Verbesserung machen.
 
-### So nutzt du ihn
+<hr>
 
-Du hast zwei Wege. Entweder du schreibst einfach, was du brauchst, etwa „Bereite mich auf mein Gespräch morgen vor“, und der Assistent wählt den passenden Skill. Oder du rufst ihn gezielt auf, in Claude Code so: `/karriere:interviewtraining`. Der gezielte Aufruf ist der sicherere Weg, wenn es genau auf diesen Ablauf ankommt.
-
-Neugierig? Unter [Installation](installation.md) steht, wie du loslegst.
+Diese Seite wird automatisch über `/plugin-manager:docs` erstellt. Ändere sie nicht von Hand.

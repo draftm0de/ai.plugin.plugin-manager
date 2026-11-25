@@ -79,9 +79,3 @@ Changes the name, display name and description. Shows the changes first and writ
 Checks, read-only, that structure, standards and documentation follow the rules.
 
 📖 [/plugin-manager:verify – More](docs/en/skills/verify.md)
-
-License: [MIT](LICENSE).
-
----
-
-Documentation prepared with Plugin Manager.

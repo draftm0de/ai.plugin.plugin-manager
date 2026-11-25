@@ -28,8 +28,11 @@ class DocumentationCheck(unittest.TestCase):
         (self.root / 'docs/documentation.json').write_text(json.dumps(
             {'schema_version': 1, 'documentation': {'languages': ['en'], 'default_language': 'en'}}))
         result = docs.check(self.root)
-        self.assertFalse(result['valid'])
-        self.assertIn('docs/en/development.md: missing page', result['errors'])
+        self.assertTrue(result['valid'])  # findings are warnings, never a failure
+        self.assertIn('docs/en/development.md: missing page', result['warnings'])
+        self.assertEqual(0, docs.main(['--source', str(self.root)]))
+        self.assertIn('"Example" is still to be written: one fictional example',
+                      ' '.join(docs.open_sections('docs/en/skills/x.md', '## Example\n\n{{SKILL_1_3}}\n', 'en')))
 
     def test_the_copy_in_a_repository_runs_without_the_manager_and_writes_nothing(self):
         shutil.copytree(R / 'scripts/verify', self.root / 'scripts/verify', ignore=shutil.ignore_patterns('__pycache__'))

@@ -2,7 +2,7 @@
 
 [Deutsch](../de/concepts.md) | **English**
 
-[Home](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 Claude and ChatGPT can do a lot: write texts, answer questions, explain code, collect ideas. What they do not know is how *you* or your company want a particular task done. Which steps belong to it? What needs care? What should the result look like?
 
@@ -51,8 +51,6 @@ Marketplace
 
 You install the plugin once and have both skills. The skill "Interview training" could say, for example: read the job posting, take your experience into account, ask only one question at a time, rate your answer and suggest an improvement.
 
-### How you use it
+<hr>
 
-You have two ways. Either you simply write what you need, such as "Prepare me for my interview tomorrow", and the assistant picks the fitting skill. Or you call it directly, in Claude Code like this: `/career:interview-training`. The direct call is the safer way when exactly this process matters.
-
-Curious? [Installation](installation.md) shows how to get started.
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

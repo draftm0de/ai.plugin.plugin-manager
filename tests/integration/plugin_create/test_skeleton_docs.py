@@ -15,7 +15,7 @@ class SkeletonDocsTests(unittest.TestCase):
     def test_every_outline_page_exists_finished_with_only_the_title_placeholder(self):
         outline = OUTLINE['plugin']
         for template, headings in outline.items():
-            if template.endswith(('/concepts.md', '/development.md', '/files.md')):  # managed pages (R36, R42)
+            if template.endswith(('/installation.md', '/skills.md', '/concepts.md', '/development.md', '/files.md')):  # managed (R36, R42) or generated (R46)
                 continue  # the managed page (R36), not part of the skeleton templates
             with self.subTest(page=template):
                 text = (SHARED / 'templates/skeleton-docs' / template).read_text(encoding='utf-8')
@@ -25,13 +25,17 @@ class SkeletonDocsTests(unittest.TestCase):
                 else:
                     expected = ['{{TITLE}}', '{{SKILL_FEATURES}}'] if template.startswith('README') else ['{{SKILL_ROWS}}'] if template.endswith('/skills.md') else []
                     self.assertEqual(expected, found)
-                self.assertEqual(headings, re.findall(r'^## (.+)$', text, re.M))
+                found_headings = re.findall(r'^## (.+)$', text, re.M)
+                if template.startswith('README'):  # an icon may precede a heading of the start page
+                    found_headings = [re.sub(r'^[^\w]+', '', heading) for heading in found_headings]
+                self.assertEqual(headings, found_headings)
 
     def test_json_content_file_is_gone_and_no_page_is_unlisted(self):
         self.assertFalse((SHARED / 'templates/skeleton-content.json').exists())
         outline = OUTLINE['plugin']
         found = {str(p.relative_to(SHARED / 'templates/skeleton-docs')) for p in (SHARED / 'templates/skeleton-docs').rglob('*.md') if p.name != 'skill.md'}  # one page per skill
-        self.assertEqual({page for page in outline if not page.endswith(('/concepts.md', '/development.md', '/files.md'))}, found)
+        outline = {page: value for page, value in outline.items() if not page.endswith(('/installation.md', '/skills.md', '/concepts.md', '/development.md', '/files.md'))}  # generated pages
+        self.assertEqual({page for page in outline if not page.endswith(('/concepts.md', '/development.md'))}, found)
 
     def test_each_kind_has_a_template_for_every_page_of_its_outline(self):  # R34
         outline = OUTLINE
@@ -40,10 +44,7 @@ class SkeletonDocsTests(unittest.TestCase):
         self.assertIn('docs/en/plugins.md', outline['marketplace'])
         for kind, pages in outline.items():
             found = {str(p.relative_to(SHARED / 'templates/documentation' / kind)) for p in (SHARED / 'templates/documentation' / kind).rglob('*.md') if p.name != 'skill.md'}
-            self.assertEqual({page for page in pages if not page.endswith(('/concepts.md', '/development.md', '/files.md'))}, found, kind)
-            for page in pages:
-                if page.endswith(('/concepts.md', '/development.md', '/files.md')):
-                    self.assertTrue((SHARED / 'templates' / kind / 'sync' / page).is_file(), (kind, page))
+            self.assertEqual(set(pages), found, kind)
 
 
 if __name__ == '__main__':

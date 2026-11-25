@@ -2,7 +2,7 @@
 
 [Deutsch](../de/development.md) | **English**
 
-[Home](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 For people who work on this plugin. You do not need this page to use it.
 
@@ -72,8 +72,8 @@ Your own commands belong into `CUSTOM.mk`.
 | `python3 -B scripts/plugin.py check` | the host manifest does not match `plugin.json` |
 | `python3 -B scripts/verify/structure.py --source .` | manifests, catalogs, skills or the structure are invalid |
 | `python3 -B scripts/verify/standards.py --source .` | the standards or `AGENTS.md` differ or standard text is copied |
-| `python3 -B scripts/verify/conventions.py --source .` | command files, messages, failure codes, test folders or `docs/style.md` do not fit |
-| `python3 -B scripts/verify/docs.py --source .` | the documentation lacks pages, headings or link targets |
+| `python3 -B scripts/verify/conventions.py --source .` | command files, messages, failure codes or test folders do not fit |
+| `python3 -B scripts/verify/docs.py --source .` | never: missing pages, headings or link targets of the documentation are only warnings |
 | `python3 -B scripts/verify/hashes.py --source .` | hash files do not fit the sync templates |
 
 Your own steps belong into another file under `.github/workflows/`. Locally you check the same with `make test check verify`.
@@ -95,3 +95,7 @@ make check test verify
 ```
 
 Commit and push to the default branch; hosts install what lies there. There are no versions, tags or releases. Push a new plugin first, then the marketplace with its entry.
+
+<hr>
+
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

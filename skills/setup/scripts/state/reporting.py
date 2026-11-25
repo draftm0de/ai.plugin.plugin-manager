@@ -25,8 +25,6 @@ def next_flow(operation, failed, needs_choice, plan, missing, state):
         return 'skeleton'
     if plan['decisions'] or removals['decisions']:
         return 'sync'
-    if plan.get('style') and plan['style']['required'] and not plan['style']['present']:
-        return 'style'
     return 'ready'
 
 
@@ -75,7 +73,6 @@ def report(ctx, operation, root, name, plan, created_files=(), created_dirs=(), 
         'write_declined': messages.write_declined(messages.language_for(root)) if asks else None,
         'result_message': written(ctx, root, plan, created_files, updated_files, removed_files, ignore, lock_changed)
         if operation == 'setup' and not failed else None,
-        'style': plan.get('style'),
         'updated': list(updated_files), 'outdated': list(plan['updates']),
         'skeleton': {'open': bool(missing or plan['pending'] or plan['updates'] or plan['rule_pending'] or plan['removals']['auto']
                                   or plan['removals']['lock_cleanup']) if operation == 'status' else failed,
@@ -113,8 +110,6 @@ def status(ctx, target):
     root, name, state = detection.detect_target(ctx, target, allow_unconfigured=True)
     plan = inspection.inspect(ctx, root, None)
     plan['kept'] = inspection.kept_files(ctx, root, plan)
-    if state != 'unconfigured':
-        plan['style'] = inspection.style_state(ctx, root)
     evidence = evidence_files.read_evidence(ctx, root) if state != 'unconfigured' else None
     return dict(report(ctx, 'status', root, name, plan, state=state), entries=sorted(os.listdir(root)),
                 association=associations.association_report(ctx, root, evidence))
@@ -142,8 +137,7 @@ def gate(ctx, target, action=None, language=None):
         return {'operation': 'gate', 'ok': False, 'ready': False, 'next': 'stop', 'target': str(target),
                 'reason': reason, 'detail': str(conflict.reason), 'run': '/plugin-manager:setup',
                 'message': messages.gate_message(action, 'stop', lang), 'target_code_executed': False}
-    # the writing style of the documentation only matters for docs
-    ready = bool(data['ok']) and (data['next'] == 'ready' or (data['next'] == 'style' and action != 'docs'))
+    ready = bool(data['ok']) and data['next'] == 'ready'
     reason = '' if ready else messages.GATE_REASONS['en'].get(data['next'], 'the state is not ready')
     detail = '; '.join(str(c.get('reason', '')) for c in data['conflicts']) or None
     return {'operation': 'gate', 'ok': ready, 'ready': ready, 'next': data['next'], 'target': data['target'],

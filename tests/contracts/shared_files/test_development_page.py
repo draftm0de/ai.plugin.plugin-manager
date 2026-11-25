@@ -1,4 +1,4 @@
-"""R48: the managed development pages name every command, variable and CI step of their kind."""
+"""R48: the generated development pages name every command, variable and CI step of their kind."""
 from pathlib import Path
 import re
 import unittest
@@ -17,7 +17,7 @@ class DevelopmentPage(unittest.TestCase):
             steps = re.findall(r'^\s*- run: (.+)$', workflow, re.M)
             self.assertTrue(targets and variables and steps)
             for language in ('de', 'en'):
-                page = (TEMPLATES / kind / 'sync/docs' / language / 'development.md').read_text(encoding='utf-8')
+                page = (TEMPLATES / 'documentation' / kind / 'docs' / language / 'development.md').read_text(encoding='utf-8')
                 with self.subTest(kind=kind, language=language):
                     self.assertEqual([], [t for t in targets if f'| `make {t}` |' not in page])
                     self.assertEqual([], [v for v in sorted(variables) if not re.search('`' + v + '[=`]', page)])

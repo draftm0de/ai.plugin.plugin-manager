@@ -6,15 +6,14 @@
 
 ## Description
 
-Brings a plugin or marketplace repository into the configured state and keeps the shared files current. Call it as often as you like.
+You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
 
 ## Workflow
 
 1. Resolve the language.
 2. Configure plugin or marketplace.
 3. Add and update shared files: it first names the files and writes after your yes; for changed files you decide one by one. Afterwards it lists what it wrote.
-4. If the writing style `docs/style.md` is missing, you pick the template or describe your own.
-5. One line "fully configured".
+4. One line "fully configured".
 
 Which files are shared and what changing one means is described under [Shared files](../files.md).
 

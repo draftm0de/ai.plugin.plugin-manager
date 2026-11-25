@@ -2,7 +2,7 @@
 
 [Deutsch](../de/files.md) | **English**
 
-[Home](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 When `setup` sets up your repository, it puts files into it. So that all plugins and marketplaces work the same way, not all of them are yours. There are two kinds.
 
@@ -17,8 +17,6 @@ Which files are synced in your repository is listed in `.project/plugins/plugin-
 ## Seed files
 
 Seed files are a starting point, for example the `SCOPE.md` of a plugin or `CUSTOM.mk`. `setup` creates them once, when your repository is newly set up. After that they are yours. You fill them, change them or delete them, and nobody overwrites them. A new template does not reach you.
-
-One exception: when `docs/style.md`, the writing style of your documentation, is missing, `setup` asks for it.
 
 ## Who is responsible for what
 
@@ -66,74 +64,11 @@ In a plugin the synced files provide shared rules, checks and CI. `skills/_share
 
 ### Synced
 
-```text
-.
-├── .github/
-│   └── workflows/
-│       └── dm-verify.yml
-├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
-│   ├── standards/
-│   │   ├── coding.md
-│   │   ├── messages.md
-│   │   ├── skills.md
-│   │   └── testing.md
-│   └── prerequisites.md
-├── githooks/
-│   └── pre-commit
-├── scripts/
-│   ├── verify/
-│   │   ├── common.py
-│   │   ├── conventions.py
-│   │   ├── docs.py
-│   │   ├── hashes.py
-│   │   ├── scope.py
-│   │   ├── standards.py
-│   │   └── structure.py
-│   ├── build_hashes.py
-│   ├── plugin.py
-│   └── run_tests.py
-├── skills/
-│   └── _shared/
-│       ├── references/
-│       │   ├── operator-language-helper.md
-│       │   └── operator-language.md
-│       └── scripts/
-│           ├── messages_base.py
-│           └── operator_language.py
-├── tests/
-│   ├── behavior/
-│   │   └── run_cases.py
-│   ├── contracts/
-│   │   └── test_operator_language.py
-│   └── README.md
-├── AGENTS.md
-├── CLAUDE.md
-└── Makefile
-```
+{{PLUGIN_SYNC_TREE}}
 
 ### Seed
 
-```text
-.
-├── assets/
-│   └── icon.png
-├── docs/
-│   ├── architecture.md
-│   └── style.md
-├── tests/
-│   ├── contracts/
-│   │   ├── __init__.py
-│   │   └── test_structure.py
-│   └── __init__.py
-├── .gitignore
-├── CUSTOM.AGENTS.md
-├── CUSTOM.mk
-└── SCOPE.md
-```
+{{PLUGIN_SEED_TREE}}
 
 ## Files and folders of a marketplace
 
@@ -141,56 +76,14 @@ In a marketplace the synced files provide catalog generation, local installation
 
 ### Synced
 
-```text
-.
-├── .github/
-│   └── workflows/
-│       └── dm-verify.yml
-├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
-│   └── prerequisites.md
-├── scripts/
-│   ├── verify/
-│   │   ├── common.py
-│   │   ├── docs.py
-│   │   ├── scope.py
-│   │   ├── standards.py
-│   │   └── structure.py
-│   ├── local_plugins.py
-│   ├── marketplace.py
-│   ├── plugin_payload.py
-│   └── run_tests.py
-├── tests/
-│   ├── contracts/
-│   │   ├── test_local_plugins.py
-│   │   ├── test_marketplace_catalogs.py
-│   │   ├── test_plugin_payload.py
-│   │   └── test_run_tests.py
-│   └── README.md
-├── AGENTS.md
-├── CLAUDE.md
-├── Makefile
-└── SCOPE.md
-```
+{{MARKETPLACE_SYNC_TREE}}
 
 ### Seed
 
-```text
-.
-├── docs/
-│   ├── architecture.md
-│   └── style.md
-├── tests/
-│   ├── contracts/
-│   │   ├── __init__.py
-│   │   └── test_structure.py
-│   └── __init__.py
-├── CUSTOM.AGENTS.md
-├── CUSTOM.mk
-└── local-marketplace.example.json
-```
+{{MARKETPLACE_SEED_TREE}}
 
 `<lang>` stands for each selected documentation language. In `.gitignore` only missing rules are added.
+
+<hr>
+
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

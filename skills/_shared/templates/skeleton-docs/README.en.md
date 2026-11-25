@@ -8,22 +8,10 @@
 
 Nonfunctional development skeleton. Domain requirements and implementation are pending. Confirm purpose and non-goals in SCOPE.md first.
 
-## Quick start
+## ⚡ Quick start
 
 Not implemented yet. How to add the marketplace is described under [Installation](docs/en/installation.md).
 
-## Features
+## 🛠 Features
 
 {{SKILL_FEATURES}}
-
-## Data and privacy
-
-No domain storage is implemented. Local marketplace associations live in ignored files under `.project/`.
-
-## Documentation
-
-[Home](README.en.md) · [Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
-
----
-
-Documentation prepared with Plugin Manager. Source-product ownership remains unchanged.

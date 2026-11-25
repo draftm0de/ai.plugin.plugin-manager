@@ -92,6 +92,6 @@ codex plugin remove plugin-manager@draftmode-ai-plugins
 
 In the desktop apps remove the plugin in the plugin settings.
 
----
+<hr>
 
-Documentation prepared with Plugin Manager. Source-product ownership remains unchanged.
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

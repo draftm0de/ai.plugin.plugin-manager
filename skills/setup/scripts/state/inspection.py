@@ -1,44 +1,9 @@
 """The write-free inspection plan of a target folder."""
-import json
-import re
 from . import fsafe
 from . import preferences
 from . import skeleton_lock
 from . import template_sources
 from .constants import Conflict, LANGUAGE_PATH
-
-
-MANAGED_PAGE = re.compile(r'docs/(de|en)/(?:concepts|development|files)\.md')
-SWITCH_LINE = re.compile(rb'(?m)^(?:\*\*Deutsch\*\* \| \[English\]|\[Deutsch\])\([^)]*\)(?: \| \*\*English\*\*)?\n\n')
-
-
-def single_language(templates, selected):
-    """With one documentation language there is no other page to switch to: the managed pages lose that line."""
-    if len(selected) != 1:
-        return templates
-    return {relative: entry if entry is None or not MANAGED_PAGE.fullmatch(relative) else (SWITCH_LINE.sub(b'', entry[0]), entry[1])
-            for relative, entry in templates.items()}
-
-
-STYLE_PAGE = 'docs/style.md'
-
-
-def style_state(ctx, root):
-    """R38: the writing style of the documentation is required where the kind ships a template for it."""
-    template = ctx.source_root / ctx.template_base.rsplit('/', 1)[0] / 'seed' / STYLE_PAGE
-    return {'path': STYLE_PAGE, 'required': template.is_file(), 'present': (root / STYLE_PAGE).is_file(), 'template': str(template)}
-
-
-def documentation_languages(root):
-    """The selected documentation languages of the repository; none when the settings are missing or unreadable."""
-    path = root / 'docs/documentation.json'
-    try:
-        if path.is_symlink():
-            return set()
-        languages = json.loads(path.read_text(encoding='utf-8'))['documentation']['languages']
-        return {value for value in languages if isinstance(value, str)}
-    except (OSError, ValueError, KeyError, TypeError):
-        return set()
 
 
 def kept_files(ctx, root, plan):
@@ -70,12 +35,7 @@ def inspect(ctx, root, requested_language):
     files, directories, decisions, updates = {}, [], [], []
     removals = {'auto': [], 'decisions': [], 'kept': [], 'unowned': [], 'lock_cleanup': []}
     needed_dirs = set()
-    selected = documentation_languages(root)
-    templates = single_language(templates, selected)
     for relative, entry in templates.items():
-        page = MANAGED_PAGE.fullmatch(relative)
-        if page and page.group(1) not in selected:
-            continue  # managed pages exist only in the selected documentation languages
         accepted = lock.get(relative)
         exists = fsafe.check_chain(root, relative, 'file') != 'missing'
         if entry is None:  # source removed in the parent: ownership evidence in the lock decides

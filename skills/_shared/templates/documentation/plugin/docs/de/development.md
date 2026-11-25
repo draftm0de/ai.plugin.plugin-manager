@@ -72,8 +72,8 @@ Eigene Befehle stehen in `CUSTOM.mk`.
 | `python3 -B scripts/plugin.py check` | das Host-Manifest nicht zu `plugin.json` passt |
 | `python3 -B scripts/verify/structure.py --source .` | Manifeste, Kataloge, Skills oder die Struktur ungültig sind |
 | `python3 -B scripts/verify/standards.py --source .` | die Standards oder `AGENTS.md` abweichen oder Standardtext kopiert ist |
-| `python3 -B scripts/verify/conventions.py --source .` | Befehlsdateien, Meldungen, Fehlercodes, Testordner oder `docs/style.md` nicht passen |
-| `python3 -B scripts/verify/docs.py --source .` | der Doku Seiten, Überschriften oder Linkziele fehlen |
+| `python3 -B scripts/verify/conventions.py --source .` | Befehlsdateien, Meldungen, Fehlercodes oder Testordner nicht passen |
+| `python3 -B scripts/verify/docs.py --source .` | nie: fehlende Seiten, Überschriften oder Linkziele der Doku sind nur Warnungen |
 | `python3 -B scripts/verify/hashes.py --source .` | Hash-Dateien nicht zu den Sync-Vorlagen passen |
 
 Eigene Schritte stehen in einer weiteren Datei unter `.github/workflows/`. Lokal prüfst du dasselbe mit `make test check verify`.
@@ -95,3 +95,7 @@ make check test verify
 ```
 
 Committen und auf den Standard-Branch pushen; installiert wird, was dort liegt. Es gibt keine Versionen, Tags oder Releases. Ein neues Plugin zuerst pushen, danach den Marketplace mit seinem Eintrag.
+
+<hr>
+
+Diese Seite wird automatisch über `/plugin-manager:docs` erstellt. Ändere sie nicht von Hand.

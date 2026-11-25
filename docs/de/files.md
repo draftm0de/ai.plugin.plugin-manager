@@ -18,8 +18,6 @@ Welche Dateien bei dir Sync-Dateien sind, steht in `.project/plugins/plugin-mana
 
 Seed-Dateien sind ein Startpunkt: zum Beispiel `SCOPE.md` eines Plugins oder `CUSTOM.mk`. `setup` legt sie einmal an, wenn dein Repository neu eingerichtet wird. Danach gehören sie dir. Du füllst sie, änderst sie oder löschst sie, und niemand überschreibt sie. Eine neue Vorlage kommt bei dir nicht an.
 
-Eine Ausnahme: Fehlt `docs/style.md`, der Schreibstil deiner Dokumentation, fragt `setup` danach.
-
 ## Wer ist wofür zuständig
 
 | | Sync-Datei | Seed-Datei |
@@ -72,10 +70,6 @@ In einem Plugin sorgen die Sync-Dateien für gemeinsame Regeln, Prüfungen und C
 │   └── workflows/
 │       └── dm-verify.yml
 ├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
 │   ├── standards/
 │   │   ├── coding.md
 │   │   ├── messages.md
@@ -147,10 +141,6 @@ In einem Marketplace sorgen die Sync-Dateien für die Katalog-Erzeugung, die lok
 │   └── workflows/
 │       └── dm-verify.yml
 ├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
 │   └── prerequisites.md
 ├── scripts/
 │   ├── verify/
@@ -194,3 +184,7 @@ In einem Marketplace sorgen die Sync-Dateien für die Katalog-Erzeugung, die lok
 ```
 
 `<lang>` steht für jede gewählte Dokumentationssprache. In `.gitignore` werden nur fehlende Regeln ergänzt.
+
+<hr>
+
+Diese Seite wird automatisch über `/plugin-manager:docs` erstellt. Ändere sie nicht von Hand.

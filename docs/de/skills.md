@@ -8,17 +8,17 @@ Ein Skill ist vergleichbar mit einer Arbeitsanleitung für einen Mitarbeiter.
 
 Er beschreibt, wie der KI-Assistent eine bestimmte Aufgabe erledigen soll, welche Regeln dabei gelten und welche Schritte einzuhalten sind.
 
-Der Plugin Manager bringt vier Skills mit, je einen pro Aufgabe. In Claude Code rufst du sie mit ihrem Namen auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
+Plugin Manager bringt die folgenden Skills mit, je einen pro Aufgabe. In Claude Code rufst du sie mit ihrem Namen auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
 
 ## 📖 Skills
 
-### setup
+### docs
 
-`/plugin-manager:setup`
+`/plugin-manager:docs`
 
-Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
+`docs` kümmert sich um den Aufbau deiner Dokumentation. Einen Teil der Seiten erstellt es selbst, bei den anderen schreibst du die Texte und es kommt nur auf die Struktur an. Fehlende Skill-Seiten legt es an. Was nicht passt, bekommst du gemeldet.
 
-📖 [/plugin-manager:setup – Mehr dazu](skills/setup.md)
+📖 [/plugin-manager:docs – Mehr dazu](skills/docs.md)
 
 ### modify
 
@@ -28,13 +28,13 @@ Mit `modify` änderst du, was dein Repository über sich sagt: den technischen N
 
 📖 [/plugin-manager:modify – Mehr dazu](skills/modify.md)
 
-### docs
+### setup
 
-`/plugin-manager:docs`
+`/plugin-manager:setup`
 
-`docs` kümmert sich um den Aufbau deiner Dokumentation. Es prüft die Struktur und legt fehlende Seiten `skills/<skill>.md` an. Du bekommst einen Bericht, was wo fehlt und was jeder Bereich enthalten soll. Die Texte schreibst du so, dass sie zu deinem Plugin passen.
+Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
 
-📖 [/plugin-manager:docs – Mehr dazu](skills/docs.md)
+📖 [/plugin-manager:setup – Mehr dazu](skills/setup.md)
 
 ### verify
 
@@ -44,6 +44,6 @@ Mit `modify` änderst du, was dein Repository über sich sagt: den technischen N
 
 📖 [/plugin-manager:verify – Mehr dazu](skills/verify.md)
 
----
+<hr>
 
-Dokumentation mit Plugin Manager erstellt.
+Diese Seite wird automatisch über `/plugin-manager:docs` erstellt. Ändere sie nicht von Hand.

@@ -81,9 +81,3 @@ Prüft die Struktur der Dokumentation und legt fehlende Seiten `skills/<skill>.m
 Prüft nur lesend, ob Aufbau, Standards und Dokumentation den Regeln entsprechen.
 
 📖 [/plugin-manager:verify – Mehr dazu](docs/de/skills/verify.md)
-
-Lizenz: [MIT](LICENSE).
-
----
-
-Dokumentation mit Plugin Manager erstellt.

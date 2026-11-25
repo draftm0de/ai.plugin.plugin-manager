@@ -8,17 +8,17 @@ A skill is comparable to a work instruction for an employee.
 
 It describes how the AI assistant is to carry out a certain task, which rules apply and which steps must be followed.
 
-Plugin Manager comes with four skills, one per task. In Claude Code you call them by their name. In Codex and ChatGPT you describe the task or pick the skill.
+Plugin Manager comes with the following skills, one per task. In Claude Code you call them by their name. In Codex and ChatGPT you describe the task or pick the skill.
 
 ## 📖 Skills
 
-### setup
+### docs
 
-`/plugin-manager:setup`
+`/plugin-manager:docs`
 
-You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
+`docs` takes care of how your documentation is built. It creates some of the pages itself; for the others you write the texts and only the structure matters. It creates missing skill pages. What does not fit is reported to you.
 
-📖 [/plugin-manager:setup – More](skills/setup.md)
+📖 [/plugin-manager:docs – More](skills/docs.md)
 
 ### modify
 
@@ -28,13 +28,13 @@ With `modify` you change what your repository says about itself: the technical n
 
 📖 [/plugin-manager:modify – More](skills/modify.md)
 
-### docs
+### setup
 
-`/plugin-manager:docs`
+`/plugin-manager:setup`
 
-`docs` takes care of how your documentation is built. It checks the structure and creates missing `skills/<skill>.md` pages. You get a report of what is missing where and what each area should contain. You write the texts so that they fit your plugin.
+You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
 
-📖 [/plugin-manager:docs – More](skills/docs.md)
+📖 [/plugin-manager:setup – More](skills/setup.md)
 
 ### verify
 
@@ -44,6 +44,6 @@ With `modify` you change what your repository says about itself: the technical n
 
 📖 [/plugin-manager:verify – More](skills/verify.md)
 
----
+<hr>
 
-Documentation prepared with Plugin Manager.
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

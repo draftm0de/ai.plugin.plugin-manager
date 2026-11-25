@@ -6,7 +6,7 @@
 
 ## Beschreibung
 
-Ändert, was ein Repository über sich sagt: technischen Namen, Anzeigenamen und Beschreibung. Ein Marketplace hat keine Beschreibung.
+Mit `modify` änderst du, was dein Repository über sich sagt: den technischen Namen, den Anzeigenamen und die Beschreibung. Ein Marketplace hat keine Beschreibung. Zuerst siehst du, welche Dateien sich ändern würden, auch im Eintrag des Marketplace. Geschrieben wird erst nach deinem Ja. Name und Adresse des Repositorys bleiben, die Dokumentation schreibt `modify` nicht um.
 
 ## Ablauf
 

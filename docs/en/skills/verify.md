@@ -6,7 +6,7 @@
 
 ## Description
 
-Reports whether a repository follows the rules, and what is not yet proven.
+`verify` tells you whether your repository follows the rules. It detects by itself whether it is a plugin or a marketplace and checks structure, shared standards and documentation. On request it also compares `SCOPE.md` with the source code. It only reads: it changes nothing and runs no code of your repository.
 
 ## Workflow
 

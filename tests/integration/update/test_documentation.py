@@ -152,8 +152,8 @@ class DocumentationTests(unittest.TestCase):
         outline = doc.outline()
         self.assertEqual(outline['README.md'][0], 'Schnellstart')
         self.assertEqual(outline['README.en.md'][0], 'Quick start')
-        self.assertEqual(['Überblick'], outline['docs/de/skills.md'])
-        self.assertEqual(['Overview'], outline['docs/en/skills.md'])
+        self.assertEqual(['📖 Skills'], outline['docs/de/skills.md'])
+        self.assertEqual(['📖 Skills'], outline['docs/en/skills.md'])
 
     def test_every_skill_of_the_repository_and_the_scope_are_documentation_sources(self):  # R29
         repo = self.root / 'repository'
@@ -191,7 +191,7 @@ class DocumentationTests(unittest.TestCase):
                     path.write_text(re.sub(r'\{\{[^}]+\}\}', 'Fictional example.', path.read_text()))
                 self.give_icon(output)
                 self.assertEqual([],doc.validate(output))
-                self.assertIn('## Quick start' if default=='en' else '## Schnellstart',(output/'README.md').read_text())
+                self.assertIn('## ⚡ Quick start' if default=='en' else '## ⚡ Schnellstart',(output/'README.md').read_text())
                 if len(languages)==1:
                     self.assertFalse((output/'README.en.md').exists())
                     self.assertFalse((output/'README.de.md').exists())
@@ -199,7 +199,8 @@ class DocumentationTests(unittest.TestCase):
                     self.assertFalse((output/'docs'/other).exists())
                 else:
                     self.assertTrue((output/'README.de.md').is_file())
-                self.assertEqual([],doc.scaffold(self.source,output)['created'])
+                again = doc.scaffold(self.source,output)['created']  # only generated pages are written anew
+                self.assertTrue(all(name.rsplit('/', 1)[1] in doc.GENERATED_PAGES['plugin'] for name in again), again)
 
     def test_policy_rejects_invalid_or_conflicting_choices_before_writes(self):
         for languages,default in (([], 'en'),(['en','en'],'en'),(['fr'],'fr'),(['en'],'de')):
@@ -261,10 +262,10 @@ class DocumentationTests(unittest.TestCase):
         result = doc.scaffold(repo, repo, languages=['en'])
         self.assertEqual(['url'], result['missing_facts'])
         text = (repo / 'docs/en/installation.md').read_text()
-        self.assertIn('{{MARKETPLACE_URL}}', text)
+        self.assertIn('(not set yet)', text)  # stated as open, reported, never invented
+        self.assertNotIn('{{', text)
         self.assertIn('demo@demo-market', text)
         self.assertNotIn('marketplace_url', json.loads((repo / 'docs/documentation.json').read_text()))
-        self.assertIn('placeholders', ' '.join(doc.validate(repo)))
 
     def test_the_recorded_address_wins_and_only_a_plain_github_address_is_accepted(self):  # R35
         repo = self.installation_repo()

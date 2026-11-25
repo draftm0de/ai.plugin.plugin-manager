@@ -6,7 +6,7 @@
 
 ## Description
 
-Changes what a repository says about itself: technical name, display name and description. A marketplace has no description.
+With `modify` you change what your repository says about itself: the technical name, the display name and the description. A marketplace has no description. First you see which files would change, including the marketplace entry. Nothing is written before your yes. The name and address of the repository stay, and `modify` does not rewrite the documentation.
 
 ## Workflow
 

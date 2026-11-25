@@ -6,15 +6,14 @@
 
 ## Beschreibung
 
-Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und hält die gemeinsamen Dateien aktuell. Beliebig oft aufrufbar.
+Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
 
 ## Ablauf
 
 1. Sprache klären.
 2. Plugin oder Marketplace konfigurieren.
 3. Gemeinsame Dateien anlegen und aktualisieren: erst nennt es die Dateien und schreibt nach deinem Ja; für geänderte Dateien entscheidest du je Datei. Danach listet es auf, was es geschrieben hat.
-4. Fehlt der Schreibstil `docs/style.md`, wählst du die Vorlage oder beschreibst deinen eigenen.
-5. Eine Zeile „vollständig konfiguriert“.
+4. Eine Zeile „vollständig konfiguriert“.
 
 Welche Dateien gemeinsam sind und was eine eigene Änderung bedeutet, steht unter [Gemeinsame Dateien](../files.md).
 

@@ -6,7 +6,7 @@
 
 ## Beschreibung
 
-Meldet, ob ein Repository den Regeln entspricht, und was noch nicht belegt ist.
+`verify` sagt dir, ob dein Repository den Regeln entspricht. Es erkennt selbst, ob es ein Plugin oder ein Marketplace ist, und prüft Aufbau, gemeinsame Standards und Dokumentation. Auf Wunsch vergleicht es auch `SCOPE.md` mit dem Quellcode. Es liest nur: Es ändert nichts und führt keinen Code deines Repositorys aus.
 
 ## Ablauf
 

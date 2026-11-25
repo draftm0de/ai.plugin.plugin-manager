@@ -29,6 +29,6 @@ Managed by the plugin manager and identical in every plugin. Do not edit it here
   text); the skill text does not repeat these rules. It follows `messages.md` for every failure and stop.
 - If the plugin has `skills/_shared/references/style.md` (how it talks with its user), every skill reads it after the
   language rules. It never overrides a standard, the operator language or the message layout. The file is optional.
-- `docs/style.md` says how the documentation is written; it is required and read before documentation is written.
+- `docs/style.md` may say how the documentation is written. It is optional: nothing asks for it or checks it.
 - Skill and flow texts do not duplicate wording that belongs to the message catalogue or to this standard.
 - Instruction texts are not product behavior. Test them with contracts and model cases, never as acceptance.

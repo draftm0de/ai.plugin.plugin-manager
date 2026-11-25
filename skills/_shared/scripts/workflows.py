@@ -455,7 +455,7 @@ def associate(root, marketplace, repository=None, drop_missing_old=False, plugin
 def complete_skeleton_documentation(stage, title, marketplace=None):
     """Replace the scaffold pages of a newly staged repository by the finished skeleton pages of
     templates/skeleton-docs (real Markdown, same layout as templates/); never touches existing user documentation."""
-    from documentation import fill_installation, fill_listings, installation_facts, language_policy, page_layout, skill_page, skills_info, template_text, validate
+    from documentation import fill_listings, installation_facts, language_policy, page_layout, skill_page, skills_info, template_text, validate, write_generated_pages
     policy = language_policy(stage)
     skills = skills_info(sorted(p.parent for p in (stage/'skills').glob('*/SKILL.md')))
     facts = installation_facts(stage, marketplace=marketplace)
@@ -465,13 +465,12 @@ def complete_skeleton_documentation(stage, title, marketplace=None):
         manifest['marketplace_url'] = facts['url']
         manifest_path.write_bytes(encode(manifest))
     for relative, (template, _, language) in page_layout(policy).items():
+        if relative.endswith(('/installation.md', '/skills.md', '/concepts.md', '/development.md', '/files.md')):
+            continue  # generated below
         text = template_text(template, policy, base=SKILL/'templates/skeleton-docs')
         pending = 'Noch nicht implementiert.' if language == 'de' else 'Not implemented yet.'
         (stage/relative).parent.mkdir(parents=True, exist_ok=True)
         text = fill_listings(text.replace('{{TITLE}}', title), language, skills, section_text=pending)
-        if relative.endswith('/installation.md'):
-            unknown = '(noch nicht festgelegt)' if language == 'de' else '(not set yet)'  # a new repository states what is open
-            text = re.sub(r'\{\{[A-Z_]+\}\}', unknown, fill_installation(text, facts, language))
         (stage/relative).write_text(text, encoding='utf-8')
     for language in policy['languages']:
         pending = 'Noch nicht implementiert.' if language == 'de' else 'Not implemented yet.'
@@ -479,6 +478,7 @@ def complete_skeleton_documentation(stage, title, marketplace=None):
             target = stage/'docs'/language/'skills'/(name + '.md')
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(skill_page(name, number, policy, language, base=SKILL/'templates/skeleton-docs', text=pending), encoding='utf-8')
+    write_generated_pages(stage, policy, facts, unknown=True)  # a new repository states what is open
     errors = validate(stage)
     if errors:
         raise ValueError('Skeleton documentation validation failed: ' + '; '.join(errors))

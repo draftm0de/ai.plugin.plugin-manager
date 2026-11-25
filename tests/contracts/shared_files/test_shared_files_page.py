@@ -1,12 +1,17 @@
-"""R46: the Manager's documentation shows every shared file of both kinds, with its class, as a tree."""
+"""R46: :docs generates "Shared files" with the trees of what the Manager delivers, and verify requires its headings."""
 from pathlib import Path
+import json
 import re
+import sys
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
-HEADINGS = {'de': {'plugin': '## Dateien und Ordner eines Plugins', 'marketplace': '## Dateien und Ordner eines Marketplace'},
-            'en': {'plugin': '## Files and folders of a plugin', 'marketplace': '## Files and folders of a marketplace'}}
-LABELS = {'de': {'sync': '### Sync', 'seed': '### Seed'}, 'en': {'sync': '### Synced', 'seed': '### Seed'}}
+sys.path.insert(0, str(ROOT / 'skills/_shared/scripts'))
+import documentation  # noqa: E402
+from verify import docs  # noqa: E402
+
+ORDER = (('plugin', 'sync'), ('plugin', 'seed'), ('marketplace', 'sync'), ('marketplace', 'seed'))
 
 
 def template_files(kind, part):
@@ -32,15 +37,39 @@ def tree_files(block):
 
 
 class SharedFilesPage(unittest.TestCase):
-    def test_every_file_of_both_kinds_is_in_its_tree(self):
-        for language, headings in HEADINGS.items():
+    def test_the_four_trees_hold_exactly_what_the_manager_delivers(self):
+        for language in ('de', 'en'):
             text = (ROOT / 'docs' / language / 'files.md').read_text(encoding='utf-8')
-            for kind, heading in headings.items():
-                section = text.split(heading + '\n', 1)[1].split('\n## ', 1)[0]
-                for part, label in LABELS[language].items():
-                    block = section.split(label + '\n\n```text\n', 1)[1].split('\n```', 1)[0]
-                    with self.subTest(language=language, kind=kind, part=part):
-                        self.assertEqual(template_files(kind, part), tree_files(block))
+            blocks = re.findall(r'(?s)```text\n(\.\n.*?)\n```', text)
+            self.assertEqual(len(ORDER), len(blocks))
+            for (kind, part), block in zip(ORDER, blocks):
+                with self.subTest(language=language, kind=kind, part=part):
+                    self.assertEqual(template_files(kind, part), tree_files(block))
+
+    def test_the_committed_pages_are_what_docs_generates(self):
+        policy = documentation.language_policy(ROOT)
+        facts = documentation.installation_facts(ROOT, documentation.read_manifest(ROOT).get('marketplace_url'))
+        for language, name in ((l, n) for l in policy['languages'] for n in documentation.GENERATED_PAGES['plugin']):
+            if name == 'installation.md' and not all(facts.values()):
+                continue  # a fresh clone lacks the local facts
+            skills = [path.parent.name for path in sorted((ROOT / 'skills').glob('*/SKILL.md'))]
+            generated = documentation.generated_page(policy, language, 'plugin', name, facts, root=ROOT, skills=skills)
+            self.assertEqual(generated, (ROOT / 'docs' / language / name).read_text(encoding='utf-8'), name)
+            self.assertIn('/plugin-manager:docs', generated.rstrip().split('\n')[-1])
+
+    def test_a_generated_page_is_refreshed_and_a_changed_heading_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            (root / 'docs').mkdir()
+            (root / 'docs/documentation.json').write_text(json.dumps(
+                {'schema_version': 1, 'documentation': {'languages': ['de'], 'default_language': 'de'}}))
+            self.assertEqual(['docs/de/installation.md', 'docs/de/skills.md', 'docs/de/concepts.md', 'docs/de/development.md', 'docs/de/files.md'], documentation.write_generated_pages(root))
+            self.assertEqual([], documentation.write_generated_pages(root))
+            page = root / 'docs/de/files.md'
+            self.assertFalse([e for e in docs.validate(root) if e.startswith('docs/de/files.md: the headings')])
+            page.write_text(page.read_text().replace('### Seed', '### Eigenes', 1))
+            self.assertTrue([e for e in docs.validate(root) if e.startswith('docs/de/files.md: the headings')])
+            self.assertEqual(['docs/de/files.md'], documentation.write_generated_pages(root))
 
 
 if __name__ == '__main__':

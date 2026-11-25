@@ -2,7 +2,7 @@
 
 [Deutsch](../de/development.md) | **English**
 
-[Home](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 For people who work on this marketplace. You do not need this page to use it.
 
@@ -64,7 +64,7 @@ Your own commands belong into `CUSTOM.mk`.
 | `python3 -B scripts/marketplace.py check` | the host catalogs do not match `marketplace.json` |
 | `python3 -B scripts/verify/structure.py --source .` | manifests, catalogs, skills or the structure are invalid |
 | `python3 -B scripts/verify/standards.py --source .` | `SCOPE.md` or `AGENTS.md` differ |
-| `python3 -B scripts/verify/docs.py --source .` | the documentation lacks pages, headings or link targets |
+| `python3 -B scripts/verify/docs.py --source .` | never: missing pages, headings or link targets of the documentation are only warnings |
 
 Your own steps belong into another file under `.github/workflows/`. Locally you check the same with `make test check verify`.
 
@@ -85,3 +85,7 @@ make check test verify
 ```
 
 Hosts install what lies on the default branch. There are no versions, tags or releases. People who already use the marketplace update it as described under [Installation](installation.md).
+
+<hr>
+
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

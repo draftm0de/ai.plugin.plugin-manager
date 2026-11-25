@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Documentation check (R34, R37): pages, headings and local links. Read-only.
+"""Documentation check (R34, R37): pages, headings and local links; findings are warnings. Read-only.
 Usage: python3 -B scripts/verify/docs.py --source <repository>. Managed by the plugin manager: do not edit."""
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -34,34 +35,58 @@ def strict_json(text):
 
 KINDS = ('plugin', 'marketplace')
 # the documentation structure of both kinds: pages and their level-two headings in order
-OUTLINE = {'plugin': {'README.md': ['Schnellstart', 'Features', 'Daten und Datenschutz', 'Dokumentation'],
-            'README.en.md': ['Quick start', 'Features', 'Data and privacy', 'Documentation'],
+OUTLINE = {'plugin': {'README.md': ['Schnellstart', 'Features'],
+            'README.en.md': ['Quick start', 'Features'],
             'docs/de/installation.md': ['Claude', 'Codex', 'Aktualisieren', 'Entfernen'],
-            'docs/de/skills.md': ['Überblick'],
+            'docs/de/skills.md': ['📖 Skills'],
             'docs/de/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-            'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
+            'docs/de/concepts.md': ['# 💡 Begriffe', '## Marketplace', '## Plugin', '## Skill', '### Ein Beispiel'],
+        'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
             'docs/de/files.md': ['Sync-Dateien', 'Seed-Dateien', 'Wer ist wofür zuständig', 'Eine Sync-Datei ändern', 'Zurück in den Sync', 'Wenn eine Vorlage entfällt', 'Dateien und Ordner eines Plugins', 'Dateien und Ordner eines Marketplace'],
             'docs/en/installation.md': ['Claude', 'Codex', 'Update', 'Remove'],
-            'docs/en/skills.md': ['Overview'],
+            'docs/en/skills.md': ['📖 Skills'],
             'docs/en/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-            'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
+            'docs/en/concepts.md': ['# 💡 Concepts', '## Marketplace', '## Plugin', '## Skill', '### An example'],
+        'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
             'docs/en/files.md': ['Synced files', 'Seed files', 'Who is responsible for what', 'Changing a synced file', 'Back into the sync', 'When a template is removed', 'Files and folders of a plugin', 'Files and folders of a marketplace']},
  'marketplace': {'README.md': ['Was es bietet', 'Für wen', 'Dokumentation'],
                  'README.en.md': ['What it offers', 'Who it is for', 'Documentation'],
                  'docs/de/installation.md': ['Claude', 'Codex', 'Aktualisieren', 'Entfernen'],
                  'docs/de/plugins.md': ['Überblick'],
                  'docs/de/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-                 'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
+                 'docs/de/concepts.md': ['# 💡 Begriffe', '## Marketplace', '## Plugin', '## Skill', '### Ein Beispiel'],
+        'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
                  'docs/de/files.md': ['Sync-Dateien', 'Seed-Dateien', 'Wer ist wofür zuständig', 'Eine Sync-Datei ändern', 'Zurück in den Sync', 'Wenn eine Vorlage entfällt', 'Dateien und Ordner eines Plugins', 'Dateien und Ordner eines Marketplace'],
                  'docs/en/installation.md': ['Claude', 'Codex', 'Update', 'Remove'],
                  'docs/en/plugins.md': ['Overview'],
                  'docs/en/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-                 'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
+                 'docs/en/concepts.md': ['# 💡 Concepts', '## Marketplace', '## Plugin', '## Skill', '### An example'],
+        'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
                  'docs/en/files.md': ['Synced files', 'Seed files', 'Who is responsible for what', 'Changing a synced file', 'Back into the sync', 'When a template is removed', 'Files and folders of a plugin', 'Files and folders of a marketplace']}}
 SECTION_LABELS = {'de': ('Beschreibung', 'Ablauf', 'Beispiel', 'Liest und schreibt'),
                   'en': ('Description', 'Workflow', 'Example', 'Reads and writes')}
-MANAGED_PAGES = ('/concepts.md', '/development.md', '/files.md')
 # pages of the former structure: reported, never converted or deleted
+# generated pages: every heading of level 1 to 3, one to one and in this order (R46)
+EXACT_HEADINGS = {
+    'plugin': {
+        'docs/de/installation.md': ['# ⚡ Installation', '## Claude', '### Claude Desktop App', '### Claude CLI', '## Codex', '### ChatGPT Desktop App', '### Codex CLI', '### ChatGPT Workspace', '## Aktualisieren', '## Entfernen'],
+        'docs/de/concepts.md': ['# 💡 Begriffe', '## Marketplace', '## Plugin', '## Skill', '### Ein Beispiel'],
+        'docs/de/development.md': ['# Entwicklung', '## Voraussetzungen', '## Einrichten', '### Marketplace', '### Plugin', '### Anforderungen und Skills', '## Lokal testen', '## Befehle', '## CI', '## Gemeinsame Dateien', '## Veröffentlichen'],
+        'docs/de/files.md': ['# Gemeinsame Dateien', '## Sync-Dateien', '## Seed-Dateien', '## Wer ist wofür zuständig', '## Eine Sync-Datei ändern', '## Zurück in den Sync', '## Wenn eine Vorlage entfällt', '## Dateien und Ordner eines Plugins', '### Sync', '### Seed', '## Dateien und Ordner eines Marketplace', '### Sync', '### Seed'],
+        'docs/en/installation.md': ['# ⚡ Installation', '## Claude', '### Claude Desktop App', '### Claude CLI', '## Codex', '### ChatGPT Desktop App', '### Codex CLI', '### ChatGPT Workspace', '## Update', '## Remove'],
+        'docs/en/concepts.md': ['# 💡 Concepts', '## Marketplace', '## Plugin', '## Skill', '### An example'],
+        'docs/en/development.md': ['# Development', '## Requirements', '## Set up', '### Marketplace', '### Plugin', '### Requirements and skills', '## Test locally', '## Commands', '## CI', '## Shared files', '## Publish'],
+        'docs/en/files.md': ['# Shared files', '## Synced files', '## Seed files', '## Who is responsible for what', '## Changing a synced file', '## Back into the sync', '## When a template is removed', '## Files and folders of a plugin', '### Synced', '### Seed', '## Files and folders of a marketplace', '### Synced', '### Seed'],
+    },
+    'marketplace': {
+        'docs/de/concepts.md': ['# 💡 Begriffe', '## Marketplace', '## Plugin', '## Skill', '### Ein Beispiel'],
+        'docs/de/development.md': ['# Entwicklung', '## Voraussetzungen', '## Einrichten', '### Marketplace', '### Plugins aufnehmen', '## Lokal testen', '## Befehle', '## CI', '## Gemeinsame Dateien', '## Veröffentlichen'],
+        'docs/de/files.md': ['# Gemeinsame Dateien', '## Sync-Dateien', '## Seed-Dateien', '## Wer ist wofür zuständig', '## Eine Sync-Datei ändern', '## Zurück in den Sync', '## Wenn eine Vorlage entfällt', '## Dateien und Ordner eines Plugins', '### Sync', '### Seed', '## Dateien und Ordner eines Marketplace', '### Sync', '### Seed'],
+        'docs/en/concepts.md': ['# 💡 Concepts', '## Marketplace', '## Plugin', '## Skill', '### An example'],
+        'docs/en/development.md': ['# Development', '## Requirements', '## Set up', '### Marketplace', '### Adding plugins', '## Test locally', '## Commands', '## CI', '## Shared files', '## Publish'],
+        'docs/en/files.md': ['# Shared files', '## Synced files', '## Seed files', '## Who is responsible for what', '## Changing a synced file', '## Back into the sync', '## When a template is removed', '## Files and folders of a plugin', '### Synced', '### Seed', '## Files and folders of a marketplace', '### Synced', '### Seed'],
+    },
+}
 FEATURE_LIMIT = 200  # characters of the short explanation of one skill in the start page of a plugin
 FORMER_PAGES = ('README.md', 'usage.md', 'screens.md', 'faq.md', 'storage.md')
 
@@ -187,7 +212,7 @@ def skill_name(path):
 
 def feature_errors(name, prose, skills, language):
     """The start page of a plugin: one `### :<skill>` entry per skill under Features, short and linked to its description."""
-    section = re.split(r'^## Features$', prose, flags=re.MULTILINE)
+    section = re.split(r'^## (?:[^\w\n]+ )?Features$', prose, flags=re.MULTILINE)
     if len(section) != 2:
         return []  # a missing section is already reported by the heading order
     body = re.split(r'^## ', section[1], flags=re.MULTILINE)[0]
@@ -208,6 +233,31 @@ def feature_errors(name, prose, skills, language):
         elif length > FEATURE_LIMIT:
             errors.append(f'{name}: the explanation of :{skill} has {length} characters, at most {FEATURE_LIMIT}')
     return errors
+
+
+# what belongs into the sections a person writes; named when a section is still empty
+HINTS = {'intro': 'what the plugin is and what you can do with it, in a few sentences',
+         'quick': 'how to install and start, in a few steps',
+         'feature': 'what the skill does for the person, at most %d characters' % FEATURE_LIMIT,
+         0: 'what the skill does, in plain words (shown in skills.md)', 1: 'the steps in their order',
+         2: 'one fictional example of a call or request', 3: 'which files and data the skill reads and what it changes'}
+
+
+def open_sections(name, prose, language):
+    """The sections of a hand-written page that still hold a placeholder, each with what belongs there."""
+    result = []
+    parts = re.split(r'(?m)^(##+ .+)$', prose)
+    for index in range(0, len(parts), 2):
+        heading = parts[index - 1].lstrip('# ').strip() if index else ''
+        if not re.search(r'\{\{[^}]+\}\}', parts[index]):
+            continue
+        bare = re.sub(r'^[^\w:]+', '', heading)
+        if '/skills/' in name:
+            hint = HINTS.get(list(SECTION_LABELS[language]).index(bare)) if bare in SECTION_LABELS[language] else None
+        else:
+            hint = HINTS['feature'] if bare.startswith(':') else HINTS['intro'] if not heading else HINTS['quick']
+        result.append(f'{name}: "{heading or "introduction"}" is still to be written' + (f': {hint}' if hint else ''))
+    return result
 
 
 def validate(output):
@@ -238,17 +288,26 @@ def validate(output):
             continue
         text = path.read_text(encoding='utf-8')
         if re.search(r'\{\{[^}]+\}\}', text):
-            errors.append(f'{name}: unresolved template placeholders')
+            by_hand = name.startswith('README') or '/skills/' in name
+            errors += (open_sections(name, text, language) if by_hand else []) or [f'{name}: unresolved template placeholders']
         if text.count('```') % 2:
             errors.append(f'{name}: unclosed fenced block')
         prose = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
         headings = re.findall(r'^## (.+)$', prose, re.MULTILINE)
-        if headings != required:
-            errors.append(f'{name}: level-two headings must match outline order')
-        if name.endswith('/skills.md'):
+        if name.startswith('README') and kind == 'plugin':  # the start page may carry an icon before a heading
+            headings = [re.sub(r'^[^\w]+', '', heading) for heading in headings]
+        if name in EXACT_HEADINGS[kind]:
+            if re.findall(r'^#{1,3} .+$', prose, re.MULTILINE) != EXACT_HEADINGS[kind][name]:
+                errors.append(f'{name}: the headings must be exactly those of the generated page; run /plugin-manager:docs')
+        elif name.endswith('/skills.md') and listed:  # generated: title, section and one entry per skill, one to one
+            expected = ['# 🛠 Skills', '## 📖 Skills'] + ['### ' + skill for skill in skills]
+            if re.findall(r'^#{1,3} .+$', prose, re.MULTILINE) != expected:
+                errors.append(f'{name}: the headings must be exactly those of the generated page; run /plugin-manager:docs')
             for skill in skills:
-                if f'| [{skill}](skills/{skill}.md) |' not in prose:
-                    errors.append(f'{name}: {skill} has no row in the overview table linking skills/{skill}.md')
+                if f'](skills/{skill}.md)' not in prose:
+                    errors.append(f'{name}: {skill} is not linked to its page skills/{skill}.md')
+        elif headings != required:
+            errors.append(f'{name}: level-two headings must match outline order')
         if name.startswith('README') and kind == 'plugin' and listed:
             errors += feature_errors(name, prose, skills, language)
         if len(re.findall(r'^# ', prose, re.MULTILINE)) != 1:
@@ -291,18 +350,19 @@ def validate(output):
 
 
 def check(source):
-    """R37: without docs/documentation.json no language is selected yet: nothing is checked, and the result says so."""
+    """R37: findings are warnings, never a failure: whether the documentation is written is the developer's decision.
+    Without docs/documentation.json no language is selected yet: nothing is checked, and the result says so."""
     root = Path(source).expanduser().resolve()
     manifest = root / 'docs/documentation.json'
     if not manifest.exists() and not manifest.is_symlink():
-        return {'valid': True, 'check': 'docs', 'documentation': 'not_created', 'errors': []}
+        return {'valid': True, 'check': 'docs', 'documentation': 'not_created', 'warnings': []}
     try:
-        errors = validate(root)
+        warnings = validate(root)
     except (OSError, ValueError) as exc:
-        errors = [str(exc)]
-    result = {'valid': not errors, 'check': 'docs', 'documentation': 'checked', 'errors': errors}
-    if errors:
-        result['next'] = 'Run /plugin-manager:setup for the shared pages and /plugin-manager:docs for the others.'
+        warnings = [str(exc)]
+    result = {'valid': True, 'check': 'docs', 'documentation': 'checked', 'warnings': warnings}
+    if warnings:
+        result['next'] = 'Run /plugin-manager:docs to create the missing pages; write the texts yourself.'
     return result
 
 
@@ -312,7 +372,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     result = check(args.source)
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 0 if result['valid'] else 1
+    if os.environ.get('GITHUB_ACTIONS') == 'true':  # shown on the run in GitHub without failing it
+        for warning in result['warnings']:
+            print('::warning::' + warning.replace('%', '%25').replace('\n', ' '))
+    return 0
 
 
 if __name__ == '__main__':

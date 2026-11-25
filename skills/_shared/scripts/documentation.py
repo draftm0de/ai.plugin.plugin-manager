@@ -11,7 +11,7 @@ import subprocess
 import sys
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from verify.docs import (FORMER_PAGES, KINDS, MANAGED_PAGES, SECTION_LABELS, anchors, check_policy, kind_of,  # noqa: E402,F401
+from verify.docs import (FORMER_PAGES, KINDS, SECTION_LABELS, anchors, check_policy, kind_of,  # noqa: E402,F401
                         language_policy, outline, page_layout, read_manifest, repository_address, safe_target, slug, strict_json, validate)
 
 SKILL = Path(__file__).resolve().parents[1]
@@ -119,8 +119,105 @@ def fill_installation(text, facts, language):
     return text
 
 
+def file_tree(paths):
+    root = {}
+    for path in paths:
+        node = root
+        for part in path.split('/'):
+            node = node.setdefault(part, {})
+    lines = ['.']
+    def walk(node, prefix):
+        entries = sorted(node, key=lambda name: (not node[name], name.lower()))  # folders first
+        for index, name in enumerate(entries):
+            last = index == len(entries) - 1
+            lines.append(prefix + ('└── ' if last else '├── ') + name + ('/' if node[name] else ''))
+            walk(node[name], prefix + ('    ' if last else '│   '))
+    walk(root, '')
+    return '```text\n' + '\n'.join(lines) + '\n```'
+
+
+def shared_files(kind, part):
+    """The files a kind receives: `sync` from its hash file, `seed` from its folder; languages as <lang>."""
+    if part == 'sync':
+        names = strict_json((SKILL / 'manifests' / (kind + '.sync.json')).read_text(encoding='utf-8'))['files']
+    else:
+        base = TEMPLATES / kind / 'seed'
+        names = [path.relative_to(base).as_posix() for path in base.rglob('*') if path.is_file() and '__pycache__' not in path.parts]
+    return {'.gitignore' if name == 'gitignore.txt' else re.sub(r'^docs/(de|en)/', 'docs/<lang>/', name) for name in names}
+
+
+# written anew by docs; the installation page of a plugin also carries the facts of its repository (R35)
+GENERATED_PAGES = {'plugin': ('installation.md', 'skills.md', 'concepts.md', 'development.md', 'files.md'),
+                   'marketplace': ('concepts.md', 'development.md', 'files.md')}
+
+
+def description_of(page, language):
+    """The text of the section "Description" of a skill page up to the first sub-heading, with links as seen from skills.md."""
+    section = re.split(r'(?m)^## %s$' % SECTION_LABELS[language][0], page, maxsplit=1)
+    if len(section) != 2:
+        return ''
+    text = re.split(r'(?m)^(?:##|###) |^---$|^<hr>$', section[1], maxsplit=1)[0].strip()
+    return re.sub(r'\]\((?!https?:|#|\.\./)', '](skills/', text).replace('](../', '](')
+
+
+def skill_entries(root, language, plugin, skills):
+    """One entry per skill: heading, call, its description and the link to its page. A plugin with one skill is called bare."""
+    entries = []
+    for number, name in enumerate(skills, 1):
+        page = safe_target(root, f'docs/{language}/skills/{name}.md')
+        text = description_of(page.read_text(encoding='utf-8'), language) if page.is_file() else ''
+        call = f'/{plugin}' if len(skills) == 1 else f'/{plugin}:{name}'
+        more = {'de': 'Mehr dazu', 'en': 'More'}[language]
+        entries.append(f'### {name}\n\n`{call}`\n\n{text or "{{SKILL_%d_1}}" % number}\n\n📖 [{call} – {more}](skills/{name}.md)')
+    return '\n\n'.join(entries)
+
+
+def generated_page(policy, language, kind, name, facts=None, unknown=False, root=None, skills=()):
+    """A page docs creates itself: fixed text per kind; "Shared files" also gets the trees of what the Manager delivers, the
+    installation page the facts. A missing fact stays a placeholder (verify reports it) unless `unknown` states it as open."""
+    page = template_text(f'docs/{language}/{name}', policy, kind=kind)
+    if name == 'skills.md':
+        manifest = local_json(root / 'plugin.json')
+        plugin = manifest.get('name') or root.name
+        label = (facts or {}).get('label') or plugin
+        page = page.replace('{{PLUGIN_LABEL}}', label).replace('{{SKILL_ENTRIES}}', skill_entries(root, language, plugin, skills))
+    if name == 'installation.md':
+        page = fill_installation(page, facts or {}, language)
+        if unknown:
+            page = re.sub(r'\{\{[A-Z_]+\}\}', {'de': '(noch nicht festgelegt)', 'en': '(not set yet)'}[language], page)
+    for name in ('plugin', 'marketplace'):
+        for part in ('sync', 'seed'):
+            page = page.replace('{{%s_%s_TREE}}' % (name.upper(), part.upper()), file_tree(shared_files(name, part)))
+    return page
+
+
+def write_generated_pages(output, policy=None, facts=None, unknown=False, skills=None):
+    """Create or refresh the generated pages in every selected language; returns the files written."""
+    root = Path(output).expanduser().resolve()
+    policy = policy or language_policy(root)
+    kind = kind_of(root)
+    facts = facts or installation_facts(root, (read_manifest(root) or {}).get('marketplace_url'))
+    if skills is None:
+        skills = [name for name, _ in skills_info(sorted(p.parent for p in (root / 'skills').glob('*/SKILL.md')))] if kind == 'plugin' else []
+    written = []
+    for language in policy['languages']:
+        for number, skill in enumerate(skills, 1):  # a missing page of a skill is created once and then belongs to the person
+            target = safe_target(root, f'docs/{language}/skills/{skill}.md')
+            if not target.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(skill_page(skill, number, policy, language), encoding='utf-8')
+                written.append(str(target.relative_to(root)))
+        for name in GENERATED_PAGES[kind]:
+            target = safe_target(root, f'docs/{language}/{name}')
+            content = generated_page(policy, language, kind, name, facts, unknown, root, skills).encode('utf-8')
+            if not target.is_file() or target.read_bytes() != content:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(content)
+                written.append(str(target.relative_to(root)))
+    return written
+
+
 def fill_listings(text, language, skills=(), plugins=(), section_text=None):
-    text = text.replace('{{SKILL_ROWS}}', '\n'.join('| [%s](skills/%s.md) | %s |' % (name, name, one_line(description)) for name, description in skills))
     text = text.replace('{{SKILL_FEATURES}}', '\n\n'.join('### :%s\n\n%s\n\n📖 [:%s – %s](docs/%s/skills/%s.md)' % (
         name, section_text or '{{FEATURE_%d}}' % number, name, {'de': 'Mehr dazu', 'en': 'More'}[language], language, name)
         for number, (name, _) in enumerate(skills, 1)))
@@ -129,13 +226,10 @@ def fill_listings(text, language, skills=(), plugins=(), section_text=None):
 
 
 def template_text(template, policy, base=None, kind='plugin'):
-    if template.endswith(MANAGED_PAGES):  # managed pages (R36, R42): identical in every repository of the kind, never varied
-        page = (TEMPLATES / kind / 'sync' / template).read_text(encoding='utf-8')
-        return page if len(policy['languages']) > 1 else '\n'.join(
-            line for line in page.split('\n') if not ('Deutsch' in line and 'English' in line and ' | ' in line)).replace('\n\n\n', '\n\n')
     text = ((base or TEMPLATES / 'documentation' / kind) / template).read_text(encoding='utf-8')
     if len(policy['languages']) == 1:
         text = '\n'.join(line for line in text.split('\n') if not ('Deutsch' in line and 'English' in line and ' | ' in line))
+        text = re.sub(r'\n{3,}', '\n\n', text)
     if policy['default_language'] == 'en':
         # Rewrite only root README links; localized guide filenames remain stable.
         text = text.replace('(README.en.md)', '(__EN_ROOT__)').replace('(README.md)', '(README.de.md)') if template.startswith('README') else text.replace('(../../README.en.md)', '(../../__EN_ROOT__)').replace('(../../README.md)', '(../../README.de.md)')
@@ -254,25 +348,23 @@ def scaffold(source, output, title=None, languages=None, default_language=None):
         target = safe_target(root, name)
         if target.exists() and not target.is_file():
             raise ValueError(f'Expected a file: {target}')
+        if name.endswith(tuple('/' + page for page in GENERATED_PAGES[kind])):
+            continue  # generated below, also when it already exists
         if not target.exists():
             text = template_text(template, policy, kind=kind)
             text = fill_listings(text.replace('{{TITLE}}', title or info['name']), language, skills, plugins)
             if name.endswith('/installation.md'):
                 text = fill_installation(text, facts, language)
             plans.append((target, text.encode('utf-8')))
-    for language in policy['languages'] if kind == 'plugin' else ():
-        for number, (name, _) in enumerate(skills, 1):
-            target = safe_target(root, f'docs/{language}/skills/{name}.md')
-            if not target.exists():
-                plans.append((target, skill_page(name, number, policy, language).encode('utf-8')))
     for target, content in plans:
         target.parent.mkdir(parents=True, exist_ok=True)
         with target.open('xb') as handle:
             handle.write(content)
-    return {'created': [str(p.relative_to(root)) for p, _ in plans],
+    generated = write_generated_pages(root, policy, facts, unknown=True, skills=[name for name, _ in skills])
+    return {'created': [str(p.relative_to(root)) for p, _ in plans] + generated,
             'existing_pages_preserved': True,
             'missing_facts': sorted(key for key in ('url', 'market', 'id') if not facts.get(key)),
-            'next': 'Author evidence-based content, replace placeholders, then validate. Scaffold is not finished documentation.'}
+            'next': 'Run validate and report what it names together with missing_facts as warnings. The texts are written by the person.'}
 
 
 def main(argv=None):

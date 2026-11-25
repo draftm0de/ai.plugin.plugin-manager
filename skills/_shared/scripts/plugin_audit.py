@@ -213,14 +213,8 @@ def scaffold_plugin(source, output, languages=None, default_language=None, repos
         for path in folder.rglob('*'):
             if path.is_file():
                 relative = str(path.relative_to(folder))
-                if relative.startswith('docs/') and relative.endswith(('/concepts.md', '/development.md', '/files.md')) and relative.split('/')[1] not in selected:
-                    continue  # managed pages exist only in the selected languages (R36, R42)
                 if part == 'seed' and relative == 'gitignore.txt': relative = '.gitignore'
                 files[relative] = path.read_bytes()
-                if len(selected) == 1 and relative.startswith('docs/') and relative.endswith(('/concepts.md', '/development.md', '/files.md')):
-                    other = 'de' if 'en' in selected else 'en'  # one language: no page to switch to
-                    files[relative] = b'\n'.join(line for line in files[relative].split(b'\n')
-                                                 if (b'](../' + other.encode() + b'/') not in line or b' | ' not in line).replace(b'\n\n\n', b'\n\n')
                 if path.stat().st_mode & 0o111:
                     executables.add(relative)
     for relative in files:

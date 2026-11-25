@@ -17,30 +17,6 @@
       "sha256": "38da2c2572e5a00a8a7173752fda8a8bf926c5f4f1ba7efdd1f2be0c3707fb09",
       "executable": false
     },
-    "docs/de/concepts.md": {
-      "sha256": "7c0c79e67e45dd25d575f87eb07b48d4bde4ebdb409afcfcb75ccdc0dbbba06b",
-      "executable": false
-    },
-    "docs/de/development.md": {
-      "sha256": "fe3e5405c1518c8bfe0efae0d8a20d87c13308dd924d872d88c246413d0410ad",
-      "executable": false
-    },
-    "docs/de/files.md": {
-      "sha256": "6b4a7a0b7afb490bc40fea31bcdb538cfe59275f9fa62c04dc05b781496c2984",
-      "executable": false
-    },
-    "docs/en/concepts.md": {
-      "sha256": "8cf879a9f829ddd319e136270c06944f28c9715aad789b79290739424ee9b01b",
-      "executable": false
-    },
-    "docs/en/development.md": {
-      "sha256": "707f181b33aa0b057485066afd8fd61ec0d4e293bf5586d908a16d1960819dc3",
-      "executable": false
-    },
-    "docs/en/files.md": {
-      "sha256": "1e6a6beffb6ccf67b138e55e889cb693acb531b2e39550f39ecac5fc2059f55b",
-      "executable": false
-    },
     "docs/prerequisites.md": {
       "sha256": "c638698408a7c315eb515fd5c85fae01a3a38946a9e9f20e750ebc2c0b94be71",
       "executable": false
@@ -54,7 +30,7 @@
       "executable": false
     },
     "docs/standards/skills.md": {
-      "sha256": "3e4ab5c9781a27b878e8a50c70661f7cbb25c0af1bb56fdc78fcc5d992822f5e",
+      "sha256": "bff996bf42b905fea0bf15eb15cf56e5514f236529b3bb8b9b687f4d9dd51690",
       "executable": false
     },
     "docs/standards/testing.md": {
@@ -82,11 +58,11 @@
       "executable": false
     },
     "scripts/verify/conventions.py": {
-      "sha256": "7e4ac0b224aa0dc21387d387f5d8a4a60b3aa64d6500130b85ac9d4d7a79697e",
+      "sha256": "42c62ecc241964b54a83afda35698f03471b2ff1874b68ed64ed3801b81478a4",
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "5db615def0b49132c5b0fa52d616f90ed37d4c8291a96937eeb85847cc184b24",
+      "sha256": "2e1f3baf85ed285e7f522c68d721fa309c1013e26be95b3fca7bacfada80b9c8",
       "executable": false
     },
     "scripts/verify/hashes.py": {

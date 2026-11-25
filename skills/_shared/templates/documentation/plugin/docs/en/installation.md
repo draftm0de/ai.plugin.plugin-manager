@@ -1,4 +1,4 @@
-# Installation
+# ⚡ Installation
 
 [Deutsch](../de/installation.md) | **English**
 
@@ -47,6 +47,18 @@ codex plugin add {{PLUGIN_ID}}
 
 Then open a new chat.
 
+### ChatGPT Workspace
+
+As a workspace administrator:
+
+1. Open **Admin → Plugins**.
+2. Select **Add → Import marketplace**.
+3. Enter `{{MARKETPLACE_URL}}` as the repository URL.
+4. Leave **Path** and **Branch/Tag/Commit** empty to use the repository root on the default branch.
+5. Start the import and review the result.
+
+This admin path does not imply identical menus in every ChatGPT interface. No plugin ZIP is required.
+
 ## Update
 
 Claude (terminal):
@@ -80,6 +92,6 @@ codex plugin remove {{PLUGIN_ID}}
 
 In the desktop apps remove the plugin in the plugin settings.
 
----
+<hr>
 
-Documentation prepared with Plugin Manager. Source-product ownership remains unchanged.
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

@@ -2,7 +2,7 @@
 
 [Deutsch](../de/files.md) | **English**
 
-[Home](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 When `setup` sets up your repository, it puts files into it. So that all plugins and marketplaces work the same way, not all of them are yours. There are two kinds.
 
@@ -17,8 +17,6 @@ Which files are synced in your repository is listed in `.project/plugins/plugin-
 ## Seed files
 
 Seed files are a starting point, for example the `SCOPE.md` of a plugin or `CUSTOM.mk`. `setup` creates them once, when your repository is newly set up. After that they are yours. You fill them, change them or delete them, and nobody overwrites them. A new template does not reach you.
-
-One exception: when `docs/style.md`, the writing style of your documentation, is missing, `setup` asks for it.
 
 ## Who is responsible for what
 
@@ -72,10 +70,6 @@ In a plugin the synced files provide shared rules, checks and CI. `skills/_share
 │   └── workflows/
 │       └── dm-verify.yml
 ├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
 │   ├── standards/
 │   │   ├── coding.md
 │   │   ├── messages.md
@@ -147,10 +141,6 @@ In a marketplace the synced files provide catalog generation, local installation
 │   └── workflows/
 │       └── dm-verify.yml
 ├── docs/
-│   ├── <lang>/
-│   │   ├── concepts.md
-│   │   ├── development.md
-│   │   └── files.md
 │   └── prerequisites.md
 ├── scripts/
 │   ├── verify/
@@ -194,3 +184,7 @@ In a marketplace the synced files provide catalog generation, local installation
 ```
 
 `<lang>` stands for each selected documentation language. In `.gitignore` only missing rules are added.
+
+<hr>
+
+This page is created automatically by `/plugin-manager:docs`. Do not edit it by hand.

@@ -64,7 +64,7 @@ Eigene Befehle stehen in `CUSTOM.mk`.
 | `python3 -B scripts/marketplace.py check` | die Host-Kataloge nicht zu `marketplace.json` passen |
 | `python3 -B scripts/verify/structure.py --source .` | Manifeste, Kataloge, Skills oder die Struktur ungültig sind |
 | `python3 -B scripts/verify/standards.py --source .` | `SCOPE.md` oder `AGENTS.md` abweichen |
-| `python3 -B scripts/verify/docs.py --source .` | der Doku Seiten, Überschriften oder Linkziele fehlen |
+| `python3 -B scripts/verify/docs.py --source .` | nie: fehlende Seiten, Überschriften oder Linkziele der Doku sind nur Warnungen |
 
 Eigene Schritte stehen in einer weiteren Datei unter `.github/workflows/`. Lokal prüfst du dasselbe mit `make test check verify`.
 
@@ -85,3 +85,7 @@ make check test verify
 ```
 
 Installiert wird, was auf dem Standard-Branch liegt. Es gibt keine Versionen, Tags oder Releases. Wer den Marketplace schon nutzt, aktualisiert ihn wie unter [Installation](installation.md) beschrieben.
+
+<hr>
+
+Diese Seite wird automatisch über `/plugin-manager:docs` erstellt. Ändere sie nicht von Hand.
