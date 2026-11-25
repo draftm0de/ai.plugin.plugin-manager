@@ -4,29 +4,27 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Start](README.md) · [Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
 {{SUMMARY}}
 
-## Was es tut
-
 {{CONTENT_01}}
 
-## Für wen
+## Schnellstart
 
 {{CONTENT_02}}
 
-## Welches Problem es löst
+## Features
 
-{{CONTENT_03}}
+{{SKILL_FEATURES}}
 
 ## Daten und Datenschutz
 
-{{CONTENT_04}}
+{{CONTENT_03}}
 
 ## Dokumentation
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Start](README.md) · [Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
 ---
 

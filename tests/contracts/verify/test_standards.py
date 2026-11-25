@@ -171,7 +171,7 @@ class StandardsTests(unittest.TestCase):
 
     def test_the_manager_documentation_uses_the_managed_pages(self):  # R36, R42
         for language in ('de', 'en'):
-            for page in ('concepts.md', 'development.md'):
+            for page in ('concepts.md', 'development.md', 'files.md'):
                 self.assertEqual((R / 'skills/_shared/templates/plugin/sync/docs' / language / page).read_bytes(),
                                  (R / 'docs' / language / page).read_bytes(), (language, page))
 

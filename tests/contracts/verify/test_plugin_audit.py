@@ -109,8 +109,7 @@ class AuditTests(unittest.TestCase):
         import documentation
         audit.scaffold_plugin(self.source,self.output,languages=['en'])
         self.assertFalse((self.output/'docs/de').exists())
-        for name in documentation.page_layout(documentation.language_policy(self.output)):
-            page=self.output/name
+        for page in [self.output/'README.md', *(self.output/'docs').rglob('*.md')]:
             page.write_text(re.sub(r'\{\{[^}]+\}\}', 'Fictional example.', page.read_text()))
         report=audit.audit(self.output)
         self.assertEqual('pass',next(c['status'] for c in report['checks'] if c['id']=='documentation'))

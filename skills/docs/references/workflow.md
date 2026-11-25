@@ -103,8 +103,10 @@ Resolve the language policy **per target repository** before writing.
 
 | Page | Content |
 | --- | --- |
-| `README` | Inviting prose from the Purpose and Non-goals of `SCOPE.md`, confirmed requirements and the skill descriptions, never a draft as a feature, with a short section on what the plugin reads and writes. |
-| `docs/<language>/skills.md` | The table of all skills and one section per skill (description in plain words, workflow, one fictional example, what it reads and writes), from `SKILL.md`, flows and source. |
+| `README` (plugin) | The start page of the repository, short and inviting. First, without a heading: what it is in one or two sentences, what you can do with it (a short list), and the skills by name. `Quick start`: how little it takes, in prose, then `### Claude` and `### ChatGPT` with one link per surface to its section of the installation page (`installation.md#claude-cli`, `#claude-desktop-app`, `#codex-cli`, `#chatgpt-desktop-app`; only sections that exist). `Features`: one `### :<skill>` per skill, an explanation of at most 200 characters in the person's words and a link `📖 [:<skill> – <more>](docs/<language>/skills/<skill>.md)` to its subpage. `Data and privacy`: what it reads and writes, in a few sentences. Sources: Purpose and Non-goals of `SCOPE.md`, confirmed requirements and the skill descriptions; never a draft as a feature. Show the draft and write it only after the person's yes. |
+| `README` (marketplace) | What it offers and for whom, from `marketplace.json`. |
+| `docs/<language>/skills.md` | The table of all skills: name (linking `skills/<skill>.md`) and one short purpose. |
+| `docs/<language>/skills/<skill>.md` | One page per skill: description in plain words, workflow, one fictional example, what it reads and writes. It may go into detail with level-three headings. From `SKILL.md`, flows and source. |
 | `docs/<language>/plugins.md` (marketplace) | One row per listed plugin. |
 | `installation.md` | Not written by you: `scaffold` fills it from the repository's facts (plugin and marketplace name, marketplace address). |
 
@@ -133,7 +135,7 @@ Produce the configured languages using the localized headings in `scripts/verify
 ### Pages
 
 - Default language: `README.md`; any additional selected language: `README.<language>.md`.
-- Plugin, each selected language: `README`, `docs/<language>/installation.md`, `skills.md`, `concepts.md`, `development.md` (the last two are managed).
+- Plugin, each selected language: `README`, `docs/<language>/installation.md`, `skills.md`, one `skills/<skill>.md` per skill, `concepts.md`, `development.md` (the last two are managed).
 - Marketplace: the same with `plugins.md` instead of `skills.md`.
 - Pages of the former structure (`usage`, `screens`, `faq`, `storage`, `docs/<language>/README.md`) are reported; they are never converted or deleted by the Manager.
 

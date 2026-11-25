@@ -2,9 +2,7 @@
 
 **Deutsch** | [English](../en/plugins.md)
 
-<img src="../../assets/icon.png" alt="draftmode.io" width="48">
-
-[Start](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
+[Start](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md) · [Entwicklung](development.md) · [Gemeinsame Dateien](files.md)
 
 ## Überblick
 

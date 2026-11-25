@@ -371,14 +371,15 @@ Acceptance: The user documentation of a repository is written from its sources (
 
 | Page | Plugin | Marketplace | Required headings (en / de) |
 | --- | --- | --- | --- |
-| `README.md`, `README.<lang>.md` | yes | yes | Plugin: What it does / Was es tut; Who it is for / Für wen; What it solves / Welches Problem es löst; Data and privacy / Daten und Datenschutz; Documentation / Dokumentation. Marketplace: What it offers / Was es bietet; Who it is for / Für wen; Documentation / Dokumentation |
-| `docs/<lang>/installation.md` | yes | yes | Claude (Desktop, CLI); Codex (Desktop, CLI); Update / Aktualisieren; Remove / Entfernen |
-| `docs/<lang>/skills.md` | yes | no | Overview / Überblick; one section per skill with Description / Beschreibung, Workflow / Ablauf, Example / Beispiel, Reads and writes / Liest und schreibt |
+| `README.md`, `README.<lang>.md` | yes | yes | Plugin: an introduction without a heading (what it is, what you can do with it, the skills), then Quick start / Schnellstart; Features with one `### :<skill>` entry per skill (a short explanation of at most 200 characters and a link with an icon and the name of the skill to its subpage, checked by `verify/docs.py`); Data and privacy / Daten und Datenschutz; Documentation / Dokumentation. Marketplace: What it offers / Was es bietet; Who it is for / Für wen; Documentation / Dokumentation |
+| `docs/<lang>/installation.md` | yes | yes | Claude (Claude Desktop App, Claude CLI); Codex (ChatGPT Desktop App, Codex CLI, ChatGPT Workspace); Update / Aktualisieren; Remove / Entfernen — one level-three section per surface, so that other pages can link to it |
+| `docs/<lang>/skills.md` | yes | no | Overview / Überblick: a table of all skills, each linking its subpage |
+| `docs/<lang>/skills/<skill>.md` | yes | no | Description; Workflow; Example; Reads and writes / Beschreibung; Ablauf; Beispiel; Liest und schreibt (level two, free level-three headings below) |
 | `docs/<lang>/plugins.md` | no | yes | Overview / Überblick |
 | `docs/<lang>/concepts.md` | yes | yes | Marketplace; Plugin; Skill |
 | `docs/<lang>/development.md` | yes | yes | Requirements / Voraussetzungen; Set up / Einrichten; Test locally / Lokal testen; Publish / Veröffentlichen (R42) |
 
-The README starts with the language switch and the links to the pages and then describes the product invitingly in prose; it uses only the Purpose and Non-goals of `SCOPE.md`, confirmed requirements and the skill descriptions and never presents a draft as a feature. `skills.md` starts with a table of all skills (name, one short purpose); `plugins.md` is a table of the plugins of `marketplace.json` (name, description, link to its documentation). The pages `screens`, `faq`, `usage`, `storage` and `docs/<lang>/README.md` are not part of the structure. Existing user text is never converted, overwritten or deleted by the Manager.
+The README starts with the language switch and the links to the pages and then describes the product invitingly in prose; it uses only the Purpose and Non-goals of `SCOPE.md`, confirmed requirements and the skill descriptions and never presents a draft as a feature. `skills.md` is the table of all skills (name linking the subpage, one short purpose); every skill has its own subpage that may describe it in detail; `plugins.md` is a table of the plugins of `marketplace.json` (name, description, link to its documentation). The pages `screens`, `faq`, `usage`, `storage` and `docs/<lang>/README.md` are not part of the structure. Existing user text is never converted, overwritten or deleted by the Manager.
 Source: skills/_shared/scripts/verify/docs.py
 Source: skills/_shared/scripts/documentation.py
 Test: tests/integration/update/test_documentation.py
@@ -393,7 +394,7 @@ Test: tests/integration/update/test_documentation.py
 ## R36: The concepts page is managed
 
 Status: confirmed
-Acceptance: `docs/<lang>/concepts.md` (German and English) explains marketplace, plugin and skill, is identical for every repository of both kinds, and is delivered and kept current by the Manager as a managed file for the selected documentation languages. The page carries no language switch and no link that depends on the default language, because it is identical everywhere; it links the installation page and the skills or plugin list. Setup delivers it only for the languages selected in `docs/documentation.json` (none without that file).
+Acceptance: `docs/<lang>/concepts.md` (German and English) explains marketplace, plugin and skill, is identical for every repository of both kinds, and is delivered and kept current by the Manager as a managed file for the selected documentation languages. The page carries a language switch to the same page of the other language and no link that depends on the default language; with a single documentation language setup delivers it without the switch. it links the installation page and the skills or plugin list. Setup delivers it only for the languages selected in `docs/documentation.json` (none without that file).
 Source: skills/_shared/templates/plugin/sync/docs/en/concepts.md
 Source: skills/_shared/templates/marketplace/sync/docs/en/concepts.md
 Test: tests/integration/project_setup/test_manifest.py
@@ -401,7 +402,7 @@ Test: tests/integration/project_setup/test_manifest.py
 ## R37: verify checks the documentation structure
 
 Status: confirmed
-Acceptance: The documentation check reads, without executing anything, that the pages of R34 for the kind exist in every selected language with their required headings, that every skill has a table row and a section in `skills.md` (marketplace: every listed plugin a row in `plugins.md`), that no unresolved placeholder remains and that local links resolve. Pages of the former structure are reported. Whether the prose is good is not checked. It is its own script (R51) and so part of `make verify`, the CI and the verify skill. Without `docs/documentation.json` no language is selected yet; nothing is checked and the result says `documentation: not_created`.
+Acceptance: The documentation check reads, without executing anything, that the pages of R34 for the kind exist in every selected language with their required headings, that every skill has a table row in `skills.md` and its own subpage with the required headings (marketplace: every listed plugin a row in `plugins.md`), that no unresolved placeholder remains and that local links resolve. Pages of the former structure are reported. Whether the prose is good is not checked. It is its own script (R51) and so part of `make verify`, the CI and the verify skill. Without `docs/documentation.json` no language is selected yet; nothing is checked and the result says `documentation: not_created`.
 Source: skills/_shared/scripts/verify/docs.py
 Test: tests/contracts/verify/test_ci_checks.py
 Test: tests/contracts/verify/test_standards.py
@@ -455,7 +456,7 @@ Test: tests/integration/project_setup/test_manifest.py
 ## R42: The development page is managed
 
 Status: confirmed
-Acceptance: `docs/<lang>/development.md` (German and English, one text per kind) tells a developer what is needed and how a marketplace and a plugin are set up, tested locally and published. Like the concepts page (R36) it is delivered and kept current by the Manager as a synced file for the selected documentation languages, carries no language switch and is linked from the navigation of the generated pages. It states only what the delivered Makefile and the Manager skills do.
+Acceptance: `docs/<lang>/development.md` (German and English, one text per kind) tells a developer what is needed and how a marketplace and a plugin are set up, tested locally and published. Like the concepts page (R36) it is delivered and kept current by the Manager as a synced file for the selected documentation languages, carries the same language switch and is linked from the navigation of the generated pages. It states only what the delivered Makefile and the Manager skills do.
 Source: skills/_shared/templates/plugin/sync/docs/en/development.md
 Source: skills/_shared/templates/marketplace/sync/docs/en/development.md
 Source: skills/_shared/scripts/documentation.py
@@ -499,9 +500,9 @@ Test: tests/integration/project_setup/test_take_back.py
 ## R46: The documentation explains the shared files
 
 Status: confirmed
-Acceptance: The Manager's documentation has a page "Shared files" (German and English) that explains synced and seed files, what changing, deleting, keeping and adopting means, which kept deviations `verify` still reports, and how a file is taken back; it lists every file of both kinds with its class, checked against the template folders. The managed development pages of both kinds carry a short section on the same.
-Source: docs/de/files.md
-Source: docs/en/files.md
+Acceptance: Every plugin and marketplace receives, as a synced page identical in both kinds and linked in the navigation of every documentation page, `docs/<lang>/files.md` "Shared files" (German and English); it explains synced and seed files, what changing, deleting, keeping and adopting means, which kept deviations `verify` still reports, and how a file is taken back; it shows every file of both kinds with its class as a tree, checked against the template folders. The managed development pages of both kinds carry a short section on the same.
+Source: skills/_shared/templates/plugin/sync/docs/de/files.md
+Source: skills/_shared/templates/marketplace/sync/docs/de/files.md
 Source: skills/_shared/templates/plugin/sync/docs/de/development.md
 Source: skills/_shared/templates/marketplace/sync/docs/de/development.md
 Test: tests/contracts/shared_files/test_shared_files_page.py

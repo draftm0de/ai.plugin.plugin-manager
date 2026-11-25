@@ -22,19 +22,27 @@
       "executable": false
     },
     "docs/de/concepts.md": {
-      "sha256": "18aafd74ae5f1cdb4b7a841886b89ab20ea3850e9f0bfebc61274cd9042083a0",
+      "sha256": "2d1ce2ebd4f50a7943f5e9aa79bf9c22c6c99feab74cdf458dc0f84a4d817b33",
       "executable": false
     },
     "docs/de/development.md": {
-      "sha256": "6217258dfde05916f04b8e46ad2d90b60e33d4a887940a84051095d0f8f8d559",
+      "sha256": "9df90e4b14c51e43360a657d611cd4bed9d15a499ffe66d9f4473c2a46a61d74",
+      "executable": false
+    },
+    "docs/de/files.md": {
+      "sha256": "cc81f06488e5979cddb0d63a8bb717fcee4a063a3b31657b7462dc88201c0991",
       "executable": false
     },
     "docs/en/concepts.md": {
-      "sha256": "7f3bf83a8cc3310ce62c3bd9252c831e6fb60d87925e13b987737f802b18faa8",
+      "sha256": "ac5a44f20716dc0dc3ff1f8e0261fb91e9336cf85bbca8d8f23c7c09a3598211",
       "executable": false
     },
     "docs/en/development.md": {
-      "sha256": "00ede61892f648eb088e4417de4f2a36d0813ff416fe7638ba732a9651926d07",
+      "sha256": "d181d00425049d451c6702a32b8ab297382689be18835b1b0be42dd5ada047b3",
+      "executable": false
+    },
+    "docs/en/files.md": {
+      "sha256": "a8cdce940ff8f3d7155a72e8e78da574a556030a3b4e520b68012c9e722c30dd",
       "executable": false
     },
     "docs/prerequisites.md": {
@@ -62,7 +70,7 @@
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "5890887a07259b927623a7d8c7cb6be40455bf2941f99673bad20dc109181d10",
+      "sha256": "5db615def0b49132c5b0fa52d616f90ed37d4c8291a96937eeb85847cc184b24",
       "executable": false
     },
     "scripts/verify/scope.py": {

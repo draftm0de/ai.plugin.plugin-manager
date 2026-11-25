@@ -1,6 +1,8 @@
 # Development
 
-[Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md)
+[Deutsch](../de/development.md) | **English**
+
+[Home](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 For people who work on this plugin. You do not need this page to use it.
 
@@ -13,32 +15,37 @@ For people who work on this plugin. You do not need this page to use it.
 
 ## Set up
 
-1. Have a marketplace: its own repository, set up with `/plugin-manager:setup` as "Marketplace" and cloned locally.
-2. Create the plugin repository on GitHub and clone it.
-3. Run `/plugin-manager:setup` in it, choose "Plugin" and name the marketplace. This writes the marketplace entry and the local association.
-4. Record the requirements in `SCOPE.md` and build the skills under `skills/<skill>/`.
+### Marketplace
+
+To develop a plugin, `:setup` asks you to associate it with a marketplace. So you need a repository that has been set up as a marketplace with `/plugin-manager:setup`.
+
+If you do not have one yet, create an empty repository on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the owner. You set up a marketplace only once; it can hold many plugins.
+
+### Plugin
+
+Every plugin gets its own repository too. Create it on GitHub, clone it, open the folder and call `/plugin-manager:setup`. Choose "Plugin" and name the folder of your marketplace.
+
+The skill asks you step by step for what it needs, for example name, description and licence. After that the shared files are in your repository and the plugin is listed in the marketplace. You commit and push yourself, in both repositories.
+
+### Requirements and skills
+
+First record in `SCOPE.md` what your plugin should and should not do. Then build the skills under `skills/<skill>/`. You need no command of its own for that: you describe to the assistant what you want.
 
 ## Test locally
 
-In the plugin folder:
+A plugin cannot be installed on its own: Claude and Codex always install from a marketplace. For testing, your marketplace therefore builds a separate development marketplace `<name>-dev` from the folders on your machine and installs from it. It knows where your plugin lies from the local association that `:setup` created. It takes all listed plugins; if the folder of one of them is missing, it stops before it installs anything.
 
-```bash
-make sync
-```
-
-```bash
-make check test verify
-```
-
-Install from the marketplace folder:
+You need just one command for that, in the folder of your plugin:
 
 ```bash
 make -C ../<marketplace> install-local TARGET=claude
 ```
 
-Open a new session afterwards. Uncommitted changes are included. For Codex use `TARGET=codex`.
+For Codex use `TARGET=codex`. Open a new session afterwards. Changes you have not committed yet are included. You do not have to generate or check anything first; you do that before you publish.
 
 ## Commands
+
+`plugin.json` is the one file you maintain: name, description, author and address of your plugin. Claude reads a file of its own, the **host manifest** `.claude-plugin/plugin.json`. It is generated from `plugin.json`; you never edit it by hand. When you change `plugin.json`, generate it again, otherwise whoever installs from GitHub gets the old state. Which other files belong to your repository is described under [Shared files](files.md).
 
 All commands run in the root of the repository. `make help` lists them too.
 
@@ -76,5 +83,15 @@ Your own steps belong into another file under `.github/workflows/`. Locally you 
 Plugin Manager keeps some files up to date (synced) and creates others only once (seed). `.project/plugins/plugin-manager/skeleton.json` lists the synced files. Do not change them: your own rules belong into `CUSTOM.AGENTS.md`, your own commands into `CUSTOM.mk`, your own CI steps into another file under `.github/workflows/`. If you change a synced file anyway, `/plugin-manager:setup` asks whether to keep it or adopt the template. If you keep `AGENTS.md`, the `SCOPE.md` of a marketplace or a standard under `docs/standards/`, `verify` fails.
 
 ## Publish
+
+Before the commit, generate the host manifest again if `plugin.json` changed, and check everything:
+
+```bash
+make sync
+```
+
+```bash
+make check test verify
+```
 
 Commit and push to the default branch; hosts install what lies there. There are no versions, tags or releases. Push a new plugin first, then the marketplace with its entry.

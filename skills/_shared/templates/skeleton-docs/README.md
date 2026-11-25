@@ -4,21 +4,17 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Start](README.md) · [Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
-Nicht funktionsfähiges Entwicklungsgerüst; fachliche Anforderungen stehen noch aus.
+Nicht funktionsfähiges Entwicklungsgerüst; fachliche Anforderungen stehen noch aus. Zweck und Nicht-Ziele zuerst in SCOPE.md bestätigen.
 
-## Was es tut
+## Schnellstart
 
-Noch nicht implementiert. Zweck und Nicht-Ziele zuerst in SCOPE.md bestätigen.
+Noch nicht implementiert. Wie man den Marketplace hinzufügt, steht unter [Installation](docs/de/installation.md).
 
-## Für wen
+## Features
 
-Für Mitwirkende, die den Produktumfang festlegen; es gibt noch keine Funktion für Anwender.
-
-## Welches Problem es löst
-
-Wird nach der Bestätigung von SCOPE.md beschrieben.
+{{SKILL_FEATURES}}
 
 ## Daten und Datenschutz
 
@@ -26,7 +22,7 @@ Es ist keine fachliche Speicherung implementiert. Lokale Marketplace-Zuordnungen
 
 ## Dokumentation
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Start](README.md) · [Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
 ---
 

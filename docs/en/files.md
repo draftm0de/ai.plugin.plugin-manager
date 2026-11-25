@@ -1,56 +1,196 @@
 # Shared files
 
-[Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md)
+[Deutsch](../de/files.md) | **English**
 
-Plugin Manager puts files into every plugin and marketplace. There are two classes, and the class decides what you can change.
+[Home](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+
+When `setup` sets up your repository, it puts files into it. So that all plugins and marketplaces work the same way, not all of them are yours. There are two kinds.
+
+## Synced files
+
+Synced files are identical in every repository of the same kind: the rules for the assistant, the check scripts, the `Makefile`, the CI. Their content comes from Plugin Manager, and that is where it is changed. You do not edit them.
+
+**How they reach you:** when there is a new version, you first update the installed Plugin Manager and then call `/plugin-manager:setup` in your repository. It names the files it wants to create, change or delete, and writes after your yes. Nothing in your repository changes by itself. You commit and push.
+
+Which files are synced in your repository is listed in `.project/plugins/plugin-manager/skeleton.json`.
+
+## Seed files
+
+Seed files are a starting point, for example the `SCOPE.md` of a plugin or `CUSTOM.mk`. `setup` creates them once, when your repository is newly set up. After that they are yours. You fill them, change them or delete them, and nobody overwrites them. A new template does not reach you.
+
+One exception: when `docs/style.md`, the writing style of your documentation, is missing, `setup` asks for it.
+
+## Who is responsible for what
 
 | | Synced file | Seed file |
 | --- | --- | --- |
-| Belongs to | Plugin Manager, identical in all repositories | the repository |
-| Created | by `setup`, also when it is missing later | once, when the repository is created |
-| New template | taken over after your yes, with a question per file if you changed it | has no effect |
-| Your change | leads to a question | stays, without a question |
-| Deleted | `setup` creates it again | stays deleted |
-
-Exception: when `docs/style.md` is missing, `setup` asks for the template or for your own style.
+| Who decides the content? | Plugin Manager | you |
+| Who brings it into your repository? | you, with `setup` | `setup`, once during the setup |
+| You changed it | `setup` asks at its next run | nothing happens |
+| You deleted it | `setup` wants to create it again | it stays away |
 
 ## Changing a synced file
 
-Do not change it when there is a file of your own for the purpose:
+Mostly you do not need to, because there is a file of your own for your own things:
 
-| Instead of | Use |
-| --- | --- |
-| `AGENTS.md` | `CUSTOM.AGENTS.md` |
-| `Makefile` | `CUSTOM.mk` |
-| `.github/workflows/dm-verify.yml` | another file under `.github/workflows/` |
+- You want to give the assistant rules of your own: write them into `CUSTOM.AGENTS.md`, not into `AGENTS.md`.
+- You want commands of your own: write them into `CUSTOM.mk`, not into the `Makefile`.
+- You want steps of your own in CI: add another file under `.github/workflows/`, not into `dm-verify.yml`.
 
-If you change it anyway, the next `setup` asks for each file:
+If you change a synced file anyway, nothing happens at first. At the next `setup` it notices that your version differs from the template and asks you about each such file:
 
-- **Keep local file:** your version stays. You are asked again only when your file or the template changes.
-- **Adopt template:** your version is replaced. Save what you want to keep first.
+1. **Keep local file:** your version stays. It asks again only when you change it again or a new template arrives.
+2. **Adopt template:** your version is replaced. Save what you want to keep first, for example with a commit.
 
-`setup` shows no file contents or diff; compare with Git beforehand.
+`setup` does not show the difference; look at it with Git beforehand.
 
-**Keeping has limits:** `AGENTS.md`, in plugins the standards under `docs/standards/` and in marketplaces `SCOPE.md` are binding. When they differ, `verify` and CI fail, even if you chose to keep them.
+**Keeping is not always without consequences.** `AGENTS.md`, in plugins the standards under `docs/standards/` and in marketplaces `SCOPE.md` are binding. When one of them differs, `verify` and CI fail, even if you chose to keep it.
 
 ## Back into the sync
 
-Ask `setup` for it, for example "Take the Makefile back". After your yes the template replaces your version. Or delete the file and run `setup`.
+You kept a file and now want the template after all? `setup` does not ask about it by itself anymore, you have to tell it:
+
+1. Call `setup` and ask for it, for example: "Take the Makefile back into the sync."
+2. It names the file and asks whether it should adopt the template.
+3. After your yes the template replaces your version. From then on the file is like all other synced files again.
+
+It also works without asking: delete the file and call `setup`, then it wants to create it anew.
 
 ## When a template is removed
 
-`setup` removes an unchanged copy by itself. If you changed it, you decide: keep or delete.
+Sometimes Plugin Manager no longer needs a file. If you never changed it, `setup` removes it after naming it and getting your yes. If you changed it, you decide: keep or delete.
 
-## Files of a plugin
+## Files and folders of a plugin
 
-**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `docs/standards/coding.md`, `docs/standards/messages.md`, `docs/standards/skills.md`, `docs/standards/testing.md`, `githooks/pre-commit`, `scripts/build_hashes.py`, `scripts/plugin.py`, `scripts/run_tests.py`, `scripts/verify/common.py`, `scripts/verify/conventions.py`, `scripts/verify/docs.py`, `scripts/verify/hashes.py`, `scripts/verify/scope.py`, `scripts/verify/standards.py`, `scripts/verify/structure.py`, `skills/_shared/references/operator-language-helper.md`, `skills/_shared/references/operator-language.md`, `skills/_shared/scripts/messages_base.py`, `skills/_shared/scripts/operator_language.py`, `tests/README.md`, `tests/behavior/run_cases.py`, `tests/contracts/test_operator_language.py`
+In a plugin the synced files provide shared rules, checks and CI. `skills/_shared/` holds the building blocks every plugin needs for its skills.
 
-**Seed:** `.gitignore`, `CUSTOM.AGENTS.md`, `CUSTOM.mk`, `SCOPE.md`, `assets/icon.png`, `docs/architecture.md`, `docs/style.md`, `tests/__init__.py`, `tests/contracts/__init__.py`, `tests/contracts/test_structure.py`
+### Synced
 
-## Files of a marketplace
+```text
+.
+├── .github/
+│   └── workflows/
+│       └── dm-verify.yml
+├── docs/
+│   ├── <lang>/
+│   │   ├── concepts.md
+│   │   ├── development.md
+│   │   └── files.md
+│   ├── standards/
+│   │   ├── coding.md
+│   │   ├── messages.md
+│   │   ├── skills.md
+│   │   └── testing.md
+│   └── prerequisites.md
+├── githooks/
+│   └── pre-commit
+├── scripts/
+│   ├── verify/
+│   │   ├── common.py
+│   │   ├── conventions.py
+│   │   ├── docs.py
+│   │   ├── hashes.py
+│   │   ├── scope.py
+│   │   ├── standards.py
+│   │   └── structure.py
+│   ├── build_hashes.py
+│   ├── plugin.py
+│   └── run_tests.py
+├── skills/
+│   └── _shared/
+│       ├── references/
+│       │   ├── operator-language-helper.md
+│       │   └── operator-language.md
+│       └── scripts/
+│           ├── messages_base.py
+│           └── operator_language.py
+├── tests/
+│   ├── behavior/
+│   │   └── run_cases.py
+│   ├── contracts/
+│   │   └── test_operator_language.py
+│   └── README.md
+├── AGENTS.md
+├── CLAUDE.md
+└── Makefile
+```
 
-**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `SCOPE.md`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `scripts/local_plugins.py`, `scripts/marketplace.py`, `scripts/plugin_payload.py`, `scripts/run_tests.py`, `scripts/verify/common.py`, `scripts/verify/docs.py`, `scripts/verify/scope.py`, `scripts/verify/standards.py`, `scripts/verify/structure.py`, `tests/README.md`, `tests/contracts/test_local_plugins.py`, `tests/contracts/test_marketplace_catalogs.py`, `tests/contracts/test_plugin_payload.py`, `tests/contracts/test_run_tests.py`
+### Seed
 
-**Seed:** `CUSTOM.AGENTS.md`, `CUSTOM.mk`, `local-marketplace.example.json`, `docs/architecture.md`, `docs/style.md`, `tests/__init__.py`, `tests/contracts/__init__.py`, `tests/contracts/test_structure.py`
+```text
+.
+├── assets/
+│   └── icon.png
+├── docs/
+│   ├── architecture.md
+│   └── style.md
+├── tests/
+│   ├── contracts/
+│   │   ├── __init__.py
+│   │   └── test_structure.py
+│   └── __init__.py
+├── .gitignore
+├── CUSTOM.AGENTS.md
+├── CUSTOM.mk
+└── SCOPE.md
+```
+
+## Files and folders of a marketplace
+
+In a marketplace the synced files provide catalog generation, local installation, checks and CI. What you maintain yourself is mainly `marketplace.json`.
+
+### Synced
+
+```text
+.
+├── .github/
+│   └── workflows/
+│       └── dm-verify.yml
+├── docs/
+│   ├── <lang>/
+│   │   ├── concepts.md
+│   │   ├── development.md
+│   │   └── files.md
+│   └── prerequisites.md
+├── scripts/
+│   ├── verify/
+│   │   ├── common.py
+│   │   ├── docs.py
+│   │   ├── scope.py
+│   │   ├── standards.py
+│   │   └── structure.py
+│   ├── local_plugins.py
+│   ├── marketplace.py
+│   ├── plugin_payload.py
+│   └── run_tests.py
+├── tests/
+│   ├── contracts/
+│   │   ├── test_local_plugins.py
+│   │   ├── test_marketplace_catalogs.py
+│   │   ├── test_plugin_payload.py
+│   │   └── test_run_tests.py
+│   └── README.md
+├── AGENTS.md
+├── CLAUDE.md
+├── Makefile
+└── SCOPE.md
+```
+
+### Seed
+
+```text
+.
+├── docs/
+│   ├── architecture.md
+│   └── style.md
+├── tests/
+│   ├── contracts/
+│   │   ├── __init__.py
+│   │   └── test_structure.py
+│   └── __init__.py
+├── CUSTOM.AGENTS.md
+├── CUSTOM.mk
+└── local-marketplace.example.json
+```
 
 `<lang>` stands for each selected documentation language. In `.gitignore` only missing rules are added.

@@ -1,6 +1,8 @@
 # Development
 
-[Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md)
+[Deutsch](../de/development.md) | **English**
+
+[Home](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
 
 For people who work on this marketplace. You do not need this page to use it.
 
@@ -13,21 +15,31 @@ For people who work on this marketplace. You do not need this page to use it.
 
 ## Set up
 
-1. Create the marketplace repository on GitHub and clone it.
-2. Run `/plugin-manager:setup` in it and choose "Marketplace".
-3. Create and clone a plugin repository, run `/plugin-manager:setup` in it, choose "Plugin" and name this marketplace. This writes the entry in `marketplace.json` and the local association.
+### Marketplace
+
+A marketplace is a repository of its own. Create it on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the owner. After that the catalog `marketplace.json` and the shared files are in your repository.
+
+### Adding plugins
+
+Every plugin gets its own repository. Create it, clone it, open the folder and call `/plugin-manager:setup`. Choose "Plugin" and name the folder of this marketplace.
+
+This writes the entry in `marketplace.json` and the local association with which you test the plugins on your machine later. You commit and push yourself, in both repositories.
 
 ## Test locally
 
-In the marketplace folder:
+The marketplace is the place Claude and Codex install from; the plugins themselves live in repositories of their own. For testing it builds a separate development marketplace `<name>-dev` from the folders on your machine and installs from it. Where the plugins lie is recorded in the local association that `:setup` creates. If the folder of a listed plugin is missing, it stops before it installs anything.
+
+You need just one command, in the folder of the marketplace:
 
 ```bash
 make install-local TARGET=claude
 ```
 
-This installs the local state of every listed plugin as a separate development marketplace `<name>-dev`, uncommitted changes included. Open a new session afterwards. For Codex use `TARGET=codex`.
+For Codex use `TARGET=codex`. Open a new session afterwards. Uncommitted changes are included. You do not have to generate or check anything first; you do that before you publish.
 
 ## Commands
+
+`marketplace.json` is the one file you maintain: the name of the marketplace and the list of its plugins. Claude and Codex each read a **host catalog** of their own, `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`. Both are generated from `marketplace.json`; you never edit them by hand. Which other files belong to your repository is described under [Shared files](files.md).
 
 All commands run in the root of the repository. `make help` lists them too.
 

@@ -1,118 +1,48 @@
-# Skills
+# 🛠 Skills
 
 **Deutsch** | [English](../en/skills.md)
 
-<img src="../../assets/icon.png" alt="draftmode.io" width="48">
+[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md) · [Entwicklung](development.md) · [Gemeinsame Dateien](files.md)
 
-[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
+Ein Skill ist vergleichbar mit einer Arbeitsanleitung für einen Mitarbeiter.
 
-Fünf Skills, je einer pro Aufgabe. In Claude Code rufst du sie mit `/plugin-manager:<skill>` auf.
+Er beschreibt, wie der KI-Assistent eine bestimmte Aufgabe erledigen soll, welche Regeln dabei gelten und welche Schritte einzuhalten sind.
 
-## Überblick
+Der Plugin Manager bringt vier Skills mit, je einen pro Aufgabe. In Claude Code rufst du sie mit ihrem Namen auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
 
-| Skill | Wofür |
-| --- | --- |
-| [docs](#docs) | Dokumentation aus den Quellen schreiben |
-| [modify](#modify) | Name, Anzeigename, Beschreibung ändern |
-| [setup](#setup) | Einrichten und aktuell halten |
-| [verify](#verify) | Nur lesend prüfen |
+## 📖 Skills
 
-## docs
+### setup
 
-### Beschreibung
+`/plugin-manager:setup`
 
-Schreibt oder aktualisiert die Dokumentation eines Plugins oder Marketplace in den gewählten Sprachen, aus `SCOPE.md`, den Skills und dem Quellcode.
+Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
 
-### Ablauf
+📖 [/plugin-manager:setup – Mehr dazu](skills/setup.md)
 
-1. Prüft, ob das Repository eingerichtet ist und der Schreibstil `docs/style.md` vorhanden ist.
-2. Liest die Quellen und klärt Offenes mit dir.
-3. Schreibt README, Installation, Skills beziehungsweise Plugin-Liste und Begriffe.
-4. Prüft Struktur und Links.
+### modify
 
-### Beispiel
+`/plugin-manager:modify`
 
-`/plugin-manager:docs` nach einem neuen Skill: Die Skills-Seite bekommt seinen Abschnitt.
+Mit `modify` änderst du, was dein Repository über sich sagt: den technischen Namen, den Anzeigenamen und die Beschreibung. Ein Marketplace hat keine Beschreibung. Zuerst siehst du, welche Dateien sich ändern würden, auch im Eintrag des Marketplace. Geschrieben wird erst nach deinem Ja. Name und Adresse des Repositorys bleiben, die Dokumentation schreibt `modify` nicht um.
 
-### Liest und schreibt
+📖 [/plugin-manager:modify – Mehr dazu](skills/modify.md)
 
-Liest den Schreibstil und die Quellen des Repositorys, ohne deren Code auszuführen. Schreibt README und Seiten unter `docs/`, vorhandene eigene Texte bleiben.
+### docs
 
+`/plugin-manager:docs`
 
-## modify
+`docs` kümmert sich um den Aufbau deiner Dokumentation. Es prüft die Struktur und legt fehlende Seiten `skills/<skill>.md` an. Du bekommst einen Bericht, was wo fehlt und was jeder Bereich enthalten soll. Die Texte schreibst du so, dass sie zu deinem Plugin passen.
 
-### Beschreibung
+📖 [/plugin-manager:docs – Mehr dazu](skills/docs.md)
 
-Ändert, was ein Repository über sich sagt: technischen Namen, Anzeigenamen und Beschreibung. Ein Marketplace hat keine Beschreibung.
+### verify
 
-### Ablauf
+`/plugin-manager:verify`
 
-1. Prüft, ob das Repository eingerichtet ist.
-2. Fragt, was sich ändern soll.
-3. Zeigt alle betroffenen Dateien, ohne zu schreiben.
-4. Schreibt erst nach deinem Ja.
-5. Nennt die nächsten Schritte: Dokumentation mit `docs` auffrischen, Änderungen selbst committen und pushen.
+`verify` sagt dir, ob dein Repository den Regeln entspricht. Es erkennt selbst, ob es ein Plugin oder ein Marketplace ist, und prüft Aufbau, gemeinsame Standards und Dokumentation. Auf Wunsch vergleicht es auch `SCOPE.md` mit dem Quellcode. Es liest nur: Es ändert nichts und führt keinen Code deines Repositorys aus.
 
-### Beispiel
-
-„Gib dem Plugin den Anzeigenamen Bewerbungs-Coach.“
-
-### Liest und schreibt
-
-Liest die Konfiguration und den zugehörigen Marketplace. Schreibt die Manifeste und, beim Plugin, den Eintrag im Marketplace, wenn dessen Ordner auf deinem Rechner verfügbar ist. Benennst du einen Marketplace um, werden die betroffenen Plugins nur genannt, nicht verändert.
-
-
-## setup
-
-### Beschreibung
-
-Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und hält die gemeinsamen Dateien aktuell. Beliebig oft aufrufbar.
-
-### Ablauf
-
-1. Sprache klären.
-2. Plugin oder Marketplace konfigurieren.
-3. Gemeinsame Dateien anlegen und aktualisieren: erst nennt es die Dateien und schreibt nach deinem Ja; für geänderte Dateien entscheidest du je Datei. Danach listet es auf, was es geschrieben hat.
-4. Fehlt der Schreibstil `docs/style.md`, wählst du die Vorlage oder beschreibst deinen eigenen.
-5. Eine Zeile „vollständig konfiguriert“.
-
-Welche Dateien gemeinsam sind und was eine eigene Änderung bedeutet, steht unter [Gemeinsame Dateien](files.md).
-
-Eine Datei, die du behalten hast, holst du zurück, indem du `setup` darum bittest, zum Beispiel „Nimm das Makefile wieder in den Sync“.
-
-Jedes Plugin gehört zu genau einem Marketplace. Willst du ihn wechseln oder liegt sein Ordner jetzt woanders, bitte `setup` darum.
-
-In Plugins liegt auch ein Git-Hook, der die Standards vor jedem Commit prüft. Er läuft erst, wenn du ihn einmal pro Klon aktivierst: `git config core.hooksPath githooks`.
-
-### Beispiel
-
-`/plugin-manager:setup` in einem leeren, geklonten Repository.
-
-### Liest und schreibt
-
-Liest den Ordner und den ausgewählten Marketplace. Schreibt Verwaltungsdateien unter `.project/`, eine Regel in `.gitignore`, die gemeinsamen Dateien, den Schreibstil und beim Anlegen das Gerüst. Beim Anlegen eines Plugins und beim Wechsel des Marketplace ändert es auch den ausgewählten Marketplace-Ordner, beim Wechsel zusätzlich den bisherigen. Gelöscht werden nur gemeinsame Dateien, deren Vorlage entfallen ist: unveränderte von selbst, geänderte nur nach deiner Entscheidung.
-
-
-## verify
-
-### Beschreibung
-
-Meldet, ob ein Repository den Regeln entspricht, und was noch nicht belegt ist.
-
-### Ablauf
-
-1. Erkennt selbst, ob Plugin oder Marketplace.
-2. Prüft die Struktur, bei Plugins auch die Standards und gemeinsamen Anweisungen, und die Dokumentation.
-3. Meldet eine noch offene Einrichtung, ohne sie auszuführen.
-4. Auf Wunsch vergleicht es `SCOPE.md` mit dem Quellcode.
-
-### Beispiel
-
-`/plugin-manager:verify` vor dem Pushen.
-
-### Liest und schreibt
-
-Liest das Repository. Schreibt nichts und führt keinen Code des Repositorys aus. Dieselbe Prüfung läuft in der CI, samt Doku-Struktur und, wo ein Plugin Dateien im Sync hält, den Hash-Dateien.
+📖 [/plugin-manager:verify – Mehr dazu](skills/verify.md)
 
 ---
 

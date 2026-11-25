@@ -18,19 +18,27 @@
       "executable": false
     },
     "docs/de/concepts.md": {
-      "sha256": "47a2919cb1990832fca32401aba6f0ac94af198fd7d67370188401d1242953a4",
+      "sha256": "7c0c79e67e45dd25d575f87eb07b48d4bde4ebdb409afcfcb75ccdc0dbbba06b",
       "executable": false
     },
     "docs/de/development.md": {
-      "sha256": "76cfcf4d1ad6433f0432597c4a75b183a26e966c27cfda99205378874414774d",
+      "sha256": "fe3e5405c1518c8bfe0efae0d8a20d87c13308dd924d872d88c246413d0410ad",
+      "executable": false
+    },
+    "docs/de/files.md": {
+      "sha256": "6b4a7a0b7afb490bc40fea31bcdb538cfe59275f9fa62c04dc05b781496c2984",
       "executable": false
     },
     "docs/en/concepts.md": {
-      "sha256": "7ae340e2b493bc55eb10660688f0e64b157d3004a5b2541684b3e2ddbcacca1a",
+      "sha256": "8cf879a9f829ddd319e136270c06944f28c9715aad789b79290739424ee9b01b",
       "executable": false
     },
     "docs/en/development.md": {
-      "sha256": "12c336e216e7ac047b950bdbc3067b9f582dc6b5757ff362aef7c48dc544264a",
+      "sha256": "707f181b33aa0b057485066afd8fd61ec0d4e293bf5586d908a16d1960819dc3",
+      "executable": false
+    },
+    "docs/en/files.md": {
+      "sha256": "1e6a6beffb6ccf67b138e55e889cb693acb531b2e39550f39ecac5fc2059f55b",
       "executable": false
     },
     "docs/prerequisites.md": {
@@ -78,7 +86,7 @@
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "5890887a07259b927623a7d8c7cb6be40455bf2941f99673bad20dc109181d10",
+      "sha256": "5db615def0b49132c5b0fa52d616f90ed37d4c8291a96937eeb85847cc184b24",
       "executable": false
     },
     "scripts/verify/hashes.py": {

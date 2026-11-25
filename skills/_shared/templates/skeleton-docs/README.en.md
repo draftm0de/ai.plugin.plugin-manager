@@ -4,21 +4,17 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
+[Home](README.en.md) · [Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
 
-Nonfunctional development skeleton. Domain requirements and implementation are pending.
+Nonfunctional development skeleton. Domain requirements and implementation are pending. Confirm purpose and non-goals in SCOPE.md first.
 
-## What it does
+## Quick start
 
-Not implemented yet. Confirm purpose and non-goals in SCOPE.md first.
+Not implemented yet. How to add the marketplace is described under [Installation](docs/en/installation.md).
 
-## Who it is for
+## Features
 
-For contributors defining the product scope; there is no end-user function yet.
-
-## What it solves
-
-Described after SCOPE.md is confirmed.
+{{SKILL_FEATURES}}
 
 ## Data and privacy
 
@@ -26,7 +22,7 @@ No domain storage is implemented. Local marketplace associations live in ignored
 
 ## Documentation
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
+[Home](README.en.md) · [Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
 
 ---
 

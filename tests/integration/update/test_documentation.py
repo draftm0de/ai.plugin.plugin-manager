@@ -100,8 +100,9 @@ class DocumentationTests(unittest.TestCase):
 
     def test_scaffold_is_bilingual_preserves_existing_and_references_the_single_icon(self):
         result = doc.scaffold(self.source, self.output, languages=['de','en'])
-        self.assertEqual(len(doc.outline()), 10)
-        self.assertEqual(len(result['created']), 11)  # documentation.json, two READMEs and eight pages
+        self.assertEqual(len(doc.outline()), 12)
+        skills = len(list(self.source.rglob('SKILL.md')))
+        self.assertEqual(len(result['created']), 13 + 2 * skills)  # documentation.json, two READMEs, ten pages and one per skill and language
         self.assertFalse((self.output / 'docs/assets').exists())  # no second copy of the icon
         self.assertIn('assets/icon.png', (self.output / 'README.md').read_text())
         self.assertIn('assets/icon.png is missing', ' '.join(doc.validate(self.output)))
@@ -149,8 +150,8 @@ class DocumentationTests(unittest.TestCase):
 
     def test_english_and_german_templates_have_localized_headings(self):
         outline = doc.outline()
-        self.assertEqual(outline['README.md'][0], 'Was es tut')
-        self.assertEqual(outline['README.en.md'][0], 'What it does')
+        self.assertEqual(outline['README.md'][0], 'Schnellstart')
+        self.assertEqual(outline['README.en.md'][0], 'Quick start')
         self.assertEqual(['Überblick'], outline['docs/de/skills.md'])
         self.assertEqual(['Overview'], outline['docs/en/skills.md'])
 
@@ -185,13 +186,12 @@ class DocumentationTests(unittest.TestCase):
                 doc.scaffold(self.source, output, languages=languages, default_language=default)
                 policy = doc.language_policy(output)
                 pages = doc.page_layout(policy)
-                self.assertEqual(5 * len(languages),len(pages))
-                for name in pages:
-                    path = output / name
+                self.assertEqual(6 * len(languages),len(pages))
+                for path in output.rglob('*.md'):  # also the page of every skill
                     path.write_text(re.sub(r'\{\{[^}]+\}\}', 'Fictional example.', path.read_text()))
                 self.give_icon(output)
                 self.assertEqual([],doc.validate(output))
-                self.assertIn('## Who it is for' if default=='en' else '## Für wen',(output/'README.md').read_text())
+                self.assertIn('## Quick start' if default=='en' else '## Schnellstart',(output/'README.md').read_text())
                 if len(languages)==1:
                     self.assertFalse((output/'README.en.md').exists())
                     self.assertFalse((output/'README.de.md').exists())

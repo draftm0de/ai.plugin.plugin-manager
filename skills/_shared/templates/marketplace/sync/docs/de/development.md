@@ -1,6 +1,8 @@
 # Entwicklung
 
-[Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md)
+**Deutsch** | [English](../en/development.md)
+
+[Start](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md) · [Entwicklung](development.md) · [Gemeinsame Dateien](files.md)
 
 Für alle, die an diesem Marketplace arbeiten. Zum Benutzen brauchst du diese Seite nicht.
 
@@ -13,21 +15,31 @@ Für alle, die an diesem Marketplace arbeiten. Zum Benutzen brauchst du diese Se
 
 ## Einrichten
 
-1. Marketplace-Repository auf GitHub anlegen und klonen.
-2. Darin `/plugin-manager:setup` ausführen und „Marketplace“ wählen.
-3. Plugin-Repository anlegen und klonen, darin `/plugin-manager:setup` ausführen, „Plugin“ wählen und diesen Marketplace nennen. Der Eintrag in `marketplace.json` und die lokale Zuordnung entstehen dabei.
+### Marketplace
+
+Ein Marketplace ist ein eigenes Repository. Lege es auf GitHub an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Eigentümer. Danach liegen der Katalog `marketplace.json` und die gemeinsamen Dateien in deinem Repository.
+
+### Plugins aufnehmen
+
+Jedes Plugin bekommt sein eigenes Repository. Lege es an, klone es, öffne den Ordner und rufe `/plugin-manager:setup` auf. Wähle „Plugin“ und nenne den Ordner dieses Marketplace.
+
+Dabei entstehen der Eintrag in `marketplace.json` und die lokale Zuordnung, mit der du die Plugins später auf deinem Rechner testest. Committen und pushen machst du selbst, in beiden Repositorys.
 
 ## Lokal testen
 
-Im Marketplace-Ordner:
+Der Marketplace ist der Ort, aus dem Claude und Codex installieren; die Plugins selbst liegen in eigenen Repositorys. Zum Testen baut er aus den Ordnern auf deinem Rechner einen eigenen Entwicklungs-Marketplace `<name>-dev` und installiert daraus. Wo die Plugins liegen, steht in der lokalen Zuordnung, die `:setup` anlegt. Fehlt der Ordner eines gelisteten Plugins, bricht er ab, bevor er etwas installiert.
+
+Du brauchst nur einen Befehl, im Ordner des Marketplace:
 
 ```bash
 make install-local TARGET=claude
 ```
 
-Das installiert die lokalen Stände aller gelisteten Plugins als eigenen Entwicklungs-Marketplace `<name>-dev`, auch nicht committete Änderungen. Danach eine neue Sitzung öffnen. Für Codex `TARGET=codex`.
+Für Codex nimmst du `TARGET=codex`. Öffne danach eine neue Sitzung. Auch nicht committete Änderungen sind dabei. Vorher musst du nichts erzeugen oder prüfen; das machst du, bevor du veröffentlichst.
 
 ## Befehle
+
+`marketplace.json` ist die eine Datei, die du pflegst: der Name des Marketplace und die Liste seiner Plugins. Claude und Codex lesen jeweils einen eigenen **Host-Katalog**, `.claude-plugin/marketplace.json` und `.agents/plugins/marketplace.json`. Beide werden aus `marketplace.json` erzeugt; du bearbeitest sie nie von Hand. Welche Dateien sonst zu deinem Repository gehören, steht unter [Gemeinsame Dateien](files.md).
 
 Alle Befehle laufen im Stamm des Repositorys. `make help` listet sie auch.
 

@@ -34,30 +34,35 @@ def strict_json(text):
 
 KINDS = ('plugin', 'marketplace')
 # the documentation structure of both kinds: pages and their level-two headings in order
-OUTLINE = {'plugin': {'README.md': ['Was es tut', 'Für wen', 'Welches Problem es löst', 'Daten und Datenschutz', 'Dokumentation'],
-            'README.en.md': ['What it does', 'Who it is for', 'What it solves', 'Data and privacy', 'Documentation'],
+OUTLINE = {'plugin': {'README.md': ['Schnellstart', 'Features', 'Daten und Datenschutz', 'Dokumentation'],
+            'README.en.md': ['Quick start', 'Features', 'Data and privacy', 'Documentation'],
             'docs/de/installation.md': ['Claude', 'Codex', 'Aktualisieren', 'Entfernen'],
             'docs/de/skills.md': ['Überblick'],
             'docs/de/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
             'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
+            'docs/de/files.md': ['Sync-Dateien', 'Seed-Dateien', 'Wer ist wofür zuständig', 'Eine Sync-Datei ändern', 'Zurück in den Sync', 'Wenn eine Vorlage entfällt', 'Dateien und Ordner eines Plugins', 'Dateien und Ordner eines Marketplace'],
             'docs/en/installation.md': ['Claude', 'Codex', 'Update', 'Remove'],
             'docs/en/skills.md': ['Overview'],
             'docs/en/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-            'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish']},
+            'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
+            'docs/en/files.md': ['Synced files', 'Seed files', 'Who is responsible for what', 'Changing a synced file', 'Back into the sync', 'When a template is removed', 'Files and folders of a plugin', 'Files and folders of a marketplace']},
  'marketplace': {'README.md': ['Was es bietet', 'Für wen', 'Dokumentation'],
                  'README.en.md': ['What it offers', 'Who it is for', 'Documentation'],
                  'docs/de/installation.md': ['Claude', 'Codex', 'Aktualisieren', 'Entfernen'],
                  'docs/de/plugins.md': ['Überblick'],
                  'docs/de/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
                  'docs/de/development.md': ['Voraussetzungen', 'Einrichten', 'Lokal testen', 'Befehle', 'CI', 'Gemeinsame Dateien', 'Veröffentlichen'],
+                 'docs/de/files.md': ['Sync-Dateien', 'Seed-Dateien', 'Wer ist wofür zuständig', 'Eine Sync-Datei ändern', 'Zurück in den Sync', 'Wenn eine Vorlage entfällt', 'Dateien und Ordner eines Plugins', 'Dateien und Ordner eines Marketplace'],
                  'docs/en/installation.md': ['Claude', 'Codex', 'Update', 'Remove'],
                  'docs/en/plugins.md': ['Overview'],
                  'docs/en/concepts.md': ['Marketplace', 'Plugin', 'Skill'],
-                 'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish']}}
+                 'docs/en/development.md': ['Requirements', 'Set up', 'Test locally', 'Commands', 'CI', 'Shared files', 'Publish'],
+                 'docs/en/files.md': ['Synced files', 'Seed files', 'Who is responsible for what', 'Changing a synced file', 'Back into the sync', 'When a template is removed', 'Files and folders of a plugin', 'Files and folders of a marketplace']}}
 SECTION_LABELS = {'de': ('Beschreibung', 'Ablauf', 'Beispiel', 'Liest und schreibt'),
                   'en': ('Description', 'Workflow', 'Example', 'Reads and writes')}
-MANAGED_PAGES = ('/concepts.md', '/development.md')
+MANAGED_PAGES = ('/concepts.md', '/development.md', '/files.md')
 # pages of the former structure: reported, never converted or deleted
+FEATURE_LIMIT = 200  # characters of the short explanation of one skill in the start page of a plugin
 FORMER_PAGES = ('README.md', 'usage.md', 'screens.md', 'faq.md', 'storage.md')
 
 
@@ -180,6 +185,31 @@ def skill_name(path):
     return found.group(1).strip().strip('"\'') if found else path.parent.name
 
 
+def feature_errors(name, prose, skills, language):
+    """The start page of a plugin: one `### :<skill>` entry per skill under Features, short and linked to its description."""
+    section = re.split(r'^## Features$', prose, flags=re.MULTILINE)
+    if len(section) != 2:
+        return []  # a missing section is already reported by the heading order
+    body = re.split(r'^## ', section[1], flags=re.MULTILINE)[0]
+    parts = re.split(r'^### (.+)$', body, flags=re.MULTILINE)
+    entries = dict(zip((title.strip() for title in parts[1::2]), parts[2::2]))
+    errors = [f'{name}: Features lacks the entry ### :{skill}' for skill in skills if ':' + skill not in entries]
+    errors += [f'{name}: Features names {title}, which is no skill of the plugin' for title in entries if title[1:] not in skills or title[:1] != ':']
+    for skill in skills:
+        text = entries.get(':' + skill)
+        if text is None:
+            continue
+        if f'](docs/{language}/skills/{skill}.md)' not in text:
+            errors.append(f'{name}: the feature :{skill} needs a link to docs/{language}/skills/{skill}.md')
+        lines = [line for line in text.split('\n') if line.strip() and not re.fullmatch(r'\W*\[[^\]]*\]\([^)]*\)\s*', line)]
+        length = len(' '.join(line.strip() for line in lines))
+        if not length:
+            errors.append(f'{name}: the feature :{skill} has no explanation')
+        elif length > FEATURE_LIMIT:
+            errors.append(f'{name}: the explanation of :{skill} has {length} characters, at most {FEATURE_LIMIT}')
+    return errors
+
+
 def validate(output):
     root = Path(output).expanduser().resolve()
     errors = []
@@ -190,6 +220,12 @@ def validate(output):
     kind = kind_of(root)
     pages = page_layout(policy, kind)
     skills = [skill_name(p) for p in sorted((root / 'skills').glob('*/SKILL.md'))] if kind == 'plugin' else []
+    for language in policy['languages'] if kind == 'plugin' else ():  # one subpage per skill
+        for skill in skills:
+            pages[f'docs/{language}/skills/{skill}.md'] = (None, list(SECTION_LABELS[language]), language)
+        for extra in sorted((root / 'docs' / language / 'skills').glob('*.md')):
+            if skills and extra.stem not in skills:
+                errors.append(f'docs/{language}/skills/{extra.name}: no skill of the plugin has this name')
     listed = bool(skills)  # documentation written outside the repository has no skills/ to compare with
     for language in policy['languages']:
         for former in FORMER_PAGES:
@@ -207,27 +243,25 @@ def validate(output):
             errors.append(f'{name}: unclosed fenced block')
         prose = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
         headings = re.findall(r'^## (.+)$', prose, re.MULTILINE)
-        found_skills = skills if listed else headings[len(required):]
-        expected = required + found_skills if name.endswith('/skills.md') else required
-        if headings != expected:
-            errors.append(f'{name}: level-two headings must match outline order' + (' (Overview, then one section per skill)' if name.endswith('/skills.md') else ''))
+        if headings != required:
+            errors.append(f'{name}: level-two headings must match outline order')
         if name.endswith('/skills.md'):
-            sections = re.split(r'^## .+$', prose, flags=re.MULTILINE)[2:]
-            for skill, section in zip(found_skills, sections):
-                if re.findall(r'^### (.+)$', section, re.MULTILINE) != list(SECTION_LABELS[language]):
-                    errors.append(f'{name}: {skill} needs the sections ' + ', '.join(SECTION_LABELS[language]))
-                if listed and '| [' + skill + '](' not in prose:
-                    errors.append(f'{name}: {skill} has no row in the overview table')
+            for skill in skills:
+                if f'| [{skill}](skills/{skill}.md) |' not in prose:
+                    errors.append(f'{name}: {skill} has no row in the overview table linking skills/{skill}.md')
+        if name.startswith('README') and kind == 'plugin' and listed:
+            errors += feature_errors(name, prose, skills, language)
         if len(re.findall(r'^# ', prose, re.MULTILINE)) != 1:
             errors.append(f'{name}: expected exactly one page title')
         if re.search(r'(?:/Users/|/home/[^/\s]+/|[A-Za-z]:\\Users\\)', text):
             errors.append(f'{name}: machine-specific path')
-        if len(policy['languages']) > 1 and not name.endswith(MANAGED_PAGES):  # managed pages carry no language switch
+        if len(policy['languages']) > 1:
             other = 'en' if language == 'de' else 'de'
             if name.startswith('README'):
                 counterpart = 'README.md' if other == policy['default_language'] else f'README.{other}.md'
             else:
-                counterpart = '../' + other + '/' + path.name
+                tail = name.split('/', 2)[2]  # below docs/<language>/
+                counterpart = '../' * (tail.count('/') + 1) + other + '/' + tail
             if f']({counterpart})' not in prose:
                 errors.append(f'{name}: missing language counterpart link')
         links = re.findall(r'\]\(([^\s)]+)(?:\s+"[^"]*")?\)', prose)

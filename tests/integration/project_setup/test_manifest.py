@@ -67,7 +67,7 @@ class ManifestTests(unittest.TestCase):
     def test_marketplace_classes_follow_the_scope(self):
         sync = load('marketplace.sync.json')
         self.assertEqual({'AGENTS.md', 'CLAUDE.md', 'Makefile', 'SCOPE.md', 'scripts/local_plugins.py', 'scripts/marketplace.py', 'scripts/plugin_payload.py',
-                          'scripts/run_tests.py', 'scripts/verify/common.py', 'scripts/verify/structure.py', 'scripts/verify/standards.py', 'scripts/verify/docs.py', 'scripts/verify/scope.py', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
+                          'scripts/run_tests.py', 'scripts/verify/common.py', 'scripts/verify/structure.py', 'scripts/verify/standards.py', 'scripts/verify/docs.py', 'scripts/verify/scope.py', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'docs/de/files.md', 'docs/en/files.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
                           'tests/contracts/test_local_plugins.py', 'tests/contracts/test_marketplace_catalogs.py',
                           'tests/contracts/test_plugin_payload.py', 'tests/contracts/test_run_tests.py'}, set(sync['files']))  # R40
         seed = set(files_below(TEMPLATES / 'marketplace/seed'))
@@ -83,7 +83,7 @@ class ManifestTests(unittest.TestCase):
     def test_plugin_classes_follow_the_scope(self):
         sync = set(load('plugin.sync.json')['files'])
         self.assertTrue({'CLAUDE.md', 'Makefile', 'scripts/plugin.py', 'scripts/build_hashes.py', 'scripts/verify/common.py', 'scripts/verify/structure.py', 'scripts/verify/standards.py', 'scripts/verify/conventions.py', 'scripts/verify/docs.py', 'scripts/verify/hashes.py', 'scripts/verify/scope.py', 'scripts/run_tests.py',
-                         'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md', 'skills/_shared/references/operator-language-helper.md', 'skills/_shared/scripts/messages_base.py', 'tests/behavior/run_cases.py', 'tests/contracts/test_operator_language.py', 'githooks/pre-commit', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'AGENTS.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
+                         'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md', 'skills/_shared/references/operator-language-helper.md', 'skills/_shared/scripts/messages_base.py', 'tests/behavior/run_cases.py', 'tests/contracts/test_operator_language.py', 'githooks/pre-commit', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'docs/de/files.md', 'docs/en/files.md', 'AGENTS.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
                          'docs/standards/coding.md', 'docs/standards/messages.md', 'docs/standards/testing.md', 'docs/standards/skills.md'} == sync)  # R16: no setup flow; R27: the standards
         seed = set(files_below(TEMPLATES / 'plugin/seed'))
         self.assertTrue({'CUSTOM.AGENTS.md', 'SCOPE.md', 'assets/icon.png', 'CUSTOM.mk', 'gitignore.txt', 'docs/architecture.md'} <= seed)

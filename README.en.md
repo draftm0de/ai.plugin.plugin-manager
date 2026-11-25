@@ -4,29 +4,81 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
+[Home](README.en.md) · [Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
 
-With the Plugin Manager your plugins are all built the same way: set up, documented, checked and published under your control.
+Plugin Manager is a plugin that lets you create, develop and maintain, in one standard way,
 
-## What it does
+- **plugins** and
+- **marketplaces**.
 
-The Manager sets up plugin and marketplace repositories and keeps their shared files current. It gives every plugin the same standards for code, messages, tests and skills, writes the documentation from the sources, changes names and descriptions, checks the structure.
+Its own skills (`:setup`, `:docs`, `:modify`, `:verify`) guide you through each step.
 
-## Who it is for
+The manager also rolls out what your repository needs: shared files and folders, standards, check scripts, a `Makefile` and the GitHub CI. Before it writes, it names the files and asks you.
 
-For developers and teams who maintain skills as installable plugins for Claude or Codex and want all their plugins to follow the same rules.
+## ⚡ Quick start
 
-## What it solves
+### Installation
 
-Otherwise every new plugin starts from scratch: its own folders, its own rules, its own error messages, documentation that lags behind the code. The Manager lays the common ground, carries changes to it into each plugin and reports what deviates.
+You add the marketplace once and install Plugin Manager from it.
 
-## Data and privacy
+#### Claude
 
-The Manager writes into the repository you select and, when a plugin is created, renamed, described or associated, into the folder of its marketplace. This covers management files under `.project/`, the shared files, documentation and, after your yes, changes to name or description. It never commits, pushes or publishes and reads no credentials or private data. What each skill reads and writes is listed with the skill. The AI host processes the sources under its own terms.
+- [Claude CLI](docs/en/installation.md#claude-cli)
+- [Claude Desktop App](docs/en/installation.md#claude-desktop-app)
 
-## Documentation
+#### ChatGPT
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md) · [Shared files](docs/en/files.md)
+- [Codex CLI](docs/en/installation.md#codex-cli)
+- [ChatGPT Desktop App](docs/en/installation.md#chatgpt-desktop-app)
+
+### Setup
+
+`/plugin-manager:setup`
+
+Run `:setup` to configure your connected folder as a plugin or a marketplace. The skill guides you through the configuration with questions.
+
+In Claude Code you call the skills as above. In Codex and ChatGPT you describe the task or pick the skill.
+
+### Building a plugin
+
+You do not need a skill call to develop. After the setup you open the folder of your plugin and simply describe what you want. Your repository brings the rules for the assistant with it: it reads `AGENTS.md`, your requirements in `SCOPE.md` and the shared standards for code, messages, tests and skills.
+
+First you clarify what the plugin should and should not do, and record that in `SCOPE.md`. What you have not confirmed does not count as a requirement. Only then does the assistant build the skills under `skills/`, with tests. With `make verify` or `/plugin-manager:verify` you can check at any time that everything still follows the rules.
+
+An example prompt:
+
+```text
+I want a plugin that turns my meeting notes into a task list.
+Every task should have a responsible person and, if one is mentioned, a date.
+First ask me what is unclear and record the requirements in SCOPE.md.
+Build the skill only after I have confirmed the requirements.
+```
+
+## 🛠 Features
+
+### :setup
+
+Configures your repository as a plugin or marketplace and keeps its synced files in sync. Before writing it names the files and asks you.
+
+📖 [/plugin-manager:setup – More](docs/en/skills/setup.md)
+
+### :docs
+
+Checks the structure of the documentation and creates missing `skills/<skill>.md` pages. You get a report of what is missing where and what each area should contain.
+
+📖 [/plugin-manager:docs – More](docs/en/skills/docs.md)
+
+### :modify
+
+Changes the name, display name and description. Shows the changes first and writes only after your yes.
+
+📖 [/plugin-manager:modify – More](docs/en/skills/modify.md)
+
+### :verify
+
+Checks, read-only, that structure, standards and documentation follow the rules.
+
+📖 [/plugin-manager:verify – More](docs/en/skills/verify.md)
 
 License: [MIT](LICENSE).
 

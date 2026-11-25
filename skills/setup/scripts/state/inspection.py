@@ -8,7 +8,16 @@ from . import template_sources
 from .constants import Conflict, LANGUAGE_PATH
 
 
-MANAGED_PAGE = re.compile(r'docs/(de|en)/(?:concepts|development)\.md')
+MANAGED_PAGE = re.compile(r'docs/(de|en)/(?:concepts|development|files)\.md')
+SWITCH_LINE = re.compile(rb'(?m)^(?:\*\*Deutsch\*\* \| \[English\]|\[Deutsch\])\([^)]*\)(?: \| \*\*English\*\*)?\n\n')
+
+
+def single_language(templates, selected):
+    """With one documentation language there is no other page to switch to: the managed pages lose that line."""
+    if len(selected) != 1:
+        return templates
+    return {relative: entry if entry is None or not MANAGED_PAGE.fullmatch(relative) else (SWITCH_LINE.sub(b'', entry[0]), entry[1])
+            for relative, entry in templates.items()}
 
 
 STYLE_PAGE = 'docs/style.md'
@@ -62,6 +71,7 @@ def inspect(ctx, root, requested_language):
     removals = {'auto': [], 'decisions': [], 'kept': [], 'unowned': [], 'lock_cleanup': []}
     needed_dirs = set()
     selected = documentation_languages(root)
+    templates = single_language(templates, selected)
     for relative, entry in templates.items():
         page = MANAGED_PAGE.fullmatch(relative)
         if page and page.group(1) not in selected:

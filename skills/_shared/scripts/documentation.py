@@ -47,14 +47,17 @@ def plugins_info(root):
     return result
 
 
-def skill_sections(skills, language, text=None):
-    """One section per skill with the required sub-headings; `text` fills them, else a placeholder to author."""
-    lines = []
-    for number, (name, _) in enumerate(skills, 1):
-        lines += ['## ' + name, '']
-        for part, label in enumerate(SECTION_LABELS[language], 1):
-            lines += ['### ' + label, '', text or '{{SKILL_%d_%d}}' % (number, part), '']
-    return '\n'.join(lines).rstrip('\n')
+def skill_page(skill, number, policy, language, base=None, text=None):
+    """The subpage of one skill; `text` fills its sections, else placeholders to author."""
+    page = ((base or TEMPLATES / 'documentation' / 'plugin') / 'docs' / language / 'skill.md').read_text(encoding='utf-8')
+    if len(policy['languages']) == 1:
+        page = '\n'.join(line for line in page.split('\n') if not ('Deutsch' in line and 'English' in line and ' | ' in line))
+    if policy['default_language'] == 'en':
+        page = page.replace('(../../../README.en.md)', '(../../../__EN__)').replace('(../../../README.md)', '(../../../README.de.md)').replace('__EN__', 'README.md')
+    page = page.replace('{{SKILL_NAME}}', skill)
+    for part in range(1, len(SECTION_LABELS[language]) + 1):
+        page = page.replace('{{SECTION_%d}}' % part, text or '{{SKILL_%d_%d}}' % (number, part))
+    return page
 
 
 def origin_of(folder):
@@ -117,15 +120,19 @@ def fill_installation(text, facts, language):
 
 
 def fill_listings(text, language, skills=(), plugins=(), section_text=None):
-    text = text.replace('{{SKILL_ROWS}}', '\n'.join('| [%s](#%s) | %s |' % (name, slug(name), one_line(description)) for name, description in skills))
-    text = text.replace('{{SKILL_SECTIONS}}', skill_sections(skills, language, section_text))
+    text = text.replace('{{SKILL_ROWS}}', '\n'.join('| [%s](skills/%s.md) | %s |' % (name, name, one_line(description)) for name, description in skills))
+    text = text.replace('{{SKILL_FEATURES}}', '\n\n'.join('### :%s\n\n%s\n\n📖 [:%s – %s](docs/%s/skills/%s.md)' % (
+        name, section_text or '{{FEATURE_%d}}' % number, name, {'de': 'Mehr dazu', 'en': 'More'}[language], language, name)
+        for number, (name, _) in enumerate(skills, 1)))
     return text.replace('{{PLUGIN_ROWS}}', '\n'.join('| %s | %s | %s |' % (one_line(name), one_line(description), '[' + name + '](' + link + ')' if link else '')
                                                     for name, description, link in plugins))
 
 
 def template_text(template, policy, base=None, kind='plugin'):
     if template.endswith(MANAGED_PAGES):  # managed pages (R36, R42): identical in every repository of the kind, never varied
-        return (TEMPLATES / kind / 'sync' / template).read_text(encoding='utf-8')
+        page = (TEMPLATES / kind / 'sync' / template).read_text(encoding='utf-8')
+        return page if len(policy['languages']) > 1 else '\n'.join(
+            line for line in page.split('\n') if not ('Deutsch' in line and 'English' in line and ' | ' in line)).replace('\n\n\n', '\n\n')
     text = ((base or TEMPLATES / 'documentation' / kind) / template).read_text(encoding='utf-8')
     if len(policy['languages']) == 1:
         text = '\n'.join(line for line in text.split('\n') if not ('Deutsch' in line and 'English' in line and ' | ' in line))
@@ -253,6 +260,11 @@ def scaffold(source, output, title=None, languages=None, default_language=None):
             if name.endswith('/installation.md'):
                 text = fill_installation(text, facts, language)
             plans.append((target, text.encode('utf-8')))
+    for language in policy['languages'] if kind == 'plugin' else ():
+        for number, (name, _) in enumerate(skills, 1):
+            target = safe_target(root, f'docs/{language}/skills/{name}.md')
+            if not target.exists():
+                plans.append((target, skill_page(name, number, policy, language).encode('utf-8')))
     for target, content in plans:
         target.parent.mkdir(parents=True, exist_ok=True)
         with target.open('xb') as handle:
