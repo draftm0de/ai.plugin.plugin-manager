@@ -20,7 +20,7 @@ class StyleTests(unittest.TestCase):
         code, data, _ = self.box.call('gate', '--action', 'docs', '--message-language', 'de')
         self.assertEqual((1, False), (code, data['ready']))
         self.assertIn('der Schreibstil docs/style.md fehlt', data['message'])
-        for action in ('modify', 'publish'):
+        for action in ('modify',):
             self.assertEqual(0, self.box.call('gate', '--action', action)[0], action)
 
     def test_the_template_is_copied_once_and_never_changed(self):

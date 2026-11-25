@@ -8,7 +8,7 @@ import unittest
 from tests.support.plugin_fixture import materialize
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file())
-NAMES = {'setup', 'docs', 'modify', 'verify', 'publish'}
+NAMES = {'setup', 'docs', 'modify', 'verify'}
 
 
 class SkillEntrypointTests(unittest.TestCase):
@@ -22,12 +22,12 @@ class SkillEntrypointTests(unittest.TestCase):
             for relative in re.findall(r'`(\.\./_shared/[^`]+)`', text):
                 self.assertTrue((path.parent/relative.split(' ', 1)[0]).is_file(), relative)
         self.assertFalse((root/'skills/_shared/SKILL.md').exists())
-        for relative in ('WORKFLOWS.md', 'references/publish.md', 'references/prerequisites.md',
-                         'scripts/publish_plan.py', 'scripts/workflows.py', 'scripts/verify.py',
-                         'scripts/documentation.py', 'templates/plugin/seed/Makefile', 'templates/marketplace/seed/Makefile'):
+        for relative in ('WORKFLOWS.md', 'references/prerequisites.md',
+                         'scripts/workflows.py', 'scripts/verify.py',
+                         'scripts/documentation.py', 'templates/plugin/sync/Makefile', 'templates/marketplace/sync/Makefile'):
             self.assertTrue((root/'skills/_shared'/relative).is_file(), relative)
 
-    def test_source_has_exactly_five_public_skills(self):
+    def test_source_has_exactly_four_public_skills(self):
         self.check_inventory(ROOT)
         manifest = json.loads((ROOT/'plugin.json').read_text())
         self.assertEqual('./skills/verify/SKILL.md', manifest['extensions']['com.openai']['onboardingSkill'])

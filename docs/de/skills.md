@@ -4,7 +4,7 @@
 
 <img src="../../assets/icon.png" alt="draftmode.io" width="48">
 
-[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md)
+[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
 
 Fünf Skills, je einer pro Aufgabe. In Claude Code rufst du sie mit `/plugin-manager:<skill>` auf.
 
@@ -14,7 +14,6 @@ Fünf Skills, je einer pro Aufgabe. In Claude Code rufst du sie mit `/plugin-man
 | --- | --- |
 | [docs](#docs) | Dokumentation aus den Quellen schreiben |
 | [modify](#modify) | Name, Anzeigename, Beschreibung ändern |
-| [publish](#publish) | Kontrolliert veröffentlichen |
 | [setup](#setup) | Einrichten und aktuell halten |
 | [verify](#verify) | Nur lesend prüfen |
 
@@ -52,7 +51,7 @@ Liest den Schreibstil und die Quellen des Repositorys, ohne deren Code auszufüh
 2. Fragt, was sich ändern soll.
 3. Zeigt alle betroffenen Dateien, ohne zu schreiben.
 4. Schreibt erst nach deinem Ja.
-5. Nennt die nächsten Schritte: Dokumentation mit `docs` auffrischen, Änderungen mit `publish` veröffentlichen.
+5. Nennt die nächsten Schritte: Dokumentation mit `docs` auffrischen, Änderungen selbst committen und pushen.
 
 ### Beispiel
 
@@ -61,31 +60,6 @@ Liest den Schreibstil und die Quellen des Repositorys, ohne deren Code auszufüh
 ### Liest und schreibt
 
 Liest die Konfiguration und den zugehörigen Marketplace. Schreibt die Manifeste und, beim Plugin, den Eintrag im Marketplace, wenn dessen Ordner auf deinem Rechner verfügbar ist. Benennst du einen Marketplace um, werden die betroffenen Plugins nur genannt, nicht verändert.
-
-
-## publish
-
-### Beschreibung
-
-Bereitet eine Veröffentlichung vor und führt sie nur mit deiner Freigabe aus, über einen geprüften Pull Request.
-
-### Ablauf
-
-1. Prüft, ob das Repository eingerichtet ist.
-2. Zeigt den Diff, die Commit-Nachricht und die Prüfungen.
-3. Wartet auf deine Freigabe.
-4. Erstellt Branch, Commit, Push und Pull Request.
-5. Merged nach erfolgreichen Checks und Reviews, wenn deine Freigabe das umfasst.
-
-Ein leeres Repository ohne ersten Commit ist ein Sonderfall: Der erste Commit und der direkte Push brauchen eine eigene Freigabe. Tags und Releases entstehen nicht. Details: [Ablauf der Veröffentlichung](publish.md).
-
-### Beispiel
-
-„Bereite die Änderungen an der Dokumentation zur Veröffentlichung vor.“
-
-### Liest und schreibt
-
-Liest den Diff und die Git-Angaben. Schreibt erst nach der Freigabe in Git und GitHub; sein Protokoll liegt außerhalb des Repositorys.
 
 
 ## setup
@@ -130,7 +104,7 @@ Meldet, ob ein Repository den Regeln entspricht, und was noch nicht belegt ist.
 
 ### Beispiel
 
-`/plugin-manager:verify` vor einer Veröffentlichung.
+`/plugin-manager:verify` vor dem Pushen.
 
 ### Liest und schreibt
 

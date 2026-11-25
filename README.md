@@ -4,13 +4,13 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md)
+[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
 
-Mit dem Plugin Manager entstehen Plugins, die alle gleich aufgebaut sind: eingerichtet, dokumentiert, geprüft und kontrolliert veröffentlicht.
+Mit dem Plugin Manager entstehen Plugins, die alle gleich aufgebaut sind: eingerichtet, dokumentiert, geprüft und gepflegt.
 
 ## Was es tut
 
-Der Manager richtet Plugin- und Marketplace-Repositories ein und hält ihre gemeinsamen Dateien aktuell. Er gibt jedem Plugin dieselben Standards für Code, Meldungen, Tests und Skills, schreibt die Dokumentation aus den Quellen, ändert Namen und Beschreibung, prüft die Struktur und bereitet Veröffentlichungen vor.
+Der Manager richtet Plugin- und Marketplace-Repositories ein und hält ihre gemeinsamen Dateien aktuell. Er gibt jedem Plugin dieselben Standards für Code, Meldungen, Tests und Skills, schreibt die Dokumentation aus den Quellen, ändert Namen und Beschreibung und prüft die Struktur.
 
 ## Für wen
 
@@ -22,13 +22,13 @@ Jedes neue Plugin beginnt sonst von vorn: eigene Ordner, eigene Regeln, eigene F
 
 ## Daten und Datenschutz
 
-Der Manager schreibt in das Repository, das du auswählst, und, wenn ein Plugin angelegt, umbenannt, beschrieben oder zugeordnet wird, in den Ordner seines Marketplace. Dazu gehören: Verwaltungsdateien unter `.project/`, die gemeinsamen Dateien, Dokumentation und, nach deinem Ja, Änderungen an Name oder Beschreibung. Er commitet, pusht und veröffentlicht nie ohne deine Freigabe und liest keine Zugangsdaten oder privaten Daten. Was ein Skill liest und schreibt, steht bei jedem Skill. Der KI-Host verarbeitet die Quellen nach seinen eigenen Bedingungen.
+Der Manager schreibt in das Repository, das du auswählst, und, wenn ein Plugin angelegt, umbenannt, beschrieben oder zugeordnet wird, in den Ordner seines Marketplace. Dazu gehören: Verwaltungsdateien unter `.project/`, die gemeinsamen Dateien, Dokumentation und, nach deinem Ja, Änderungen an Name oder Beschreibung. Er commitet, pusht und veröffentlicht nie und liest keine Zugangsdaten oder privaten Daten. Was ein Skill liest und schreibt, steht bei jedem Skill. Der KI-Host verarbeitet die Quellen nach seinen eigenen Bedingungen.
 
 ## Dokumentation
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md)
+[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
 
-Weiterführend: [Ablauf der Veröffentlichung](docs/de/publish.md). Lizenz: [MIT](LICENSE).
+Lizenz: [MIT](LICENSE).
 
 ---
 

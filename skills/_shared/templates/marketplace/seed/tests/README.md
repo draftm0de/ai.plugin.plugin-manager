@@ -1,8 +1,8 @@
 # Tests / Tests
 
-Use `make test` for deterministic unit, integration and contract checks. `make test-unit`, `make test-integration` and `make test-contracts` select a layer. `make test-native` is separate and requires isolated host profiles; `make test-behavior` is only for explicitly authorized model tests. Missing suites report `NOT RUN`, not acceptance. No model or host test is included by default.
+Use `make test` for the deterministic unit, integration and contract checks; `make test TEST_GROUP=<name>` selects a component. Other layers run directly: `python3 -B scripts/run_tests.py --kind unit|integration|contracts|native`. Missing suites report `NOT RUN`, not acceptance.
 
-`make test` prüft deterministische Unit-, Integrations- und Vertragstests. Einzelbereiche: `make test-unit`, `make test-integration`, `make test-contracts`. Native Host- und Modelltests sind ausdrücklich getrennt. Fehlende Suiten melden `NOT RUN`, keine erfolgreiche Abnahme.
+`make test` prüft deterministische Unit-, Integrations- und Vertragstests; `make test TEST_GROUP=<name>` wählt eine Komponente. Andere Ebenen direkt: `python3 -B scripts/run_tests.py --kind unit|integration|contracts|native`. Fehlende Suiten melden `NOT RUN`, keine erfolgreiche Abnahme.
 
 Place tests under `tests/unit/`, `tests/integration/`, `tests/contracts/`, `tests/native/` or `tests/behavior/`, with optional skill/component subdirectories. Add `__init__.py` to discovered unittest directories. Fictional data belongs under `tests/fixtures/`, helpers under `tests/support/`. Create only needed directories. The scaffold provides structural contract checks only; add actual product tests before claiming behavior acceptance.
 

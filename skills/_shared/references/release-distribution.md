@@ -1,6 +1,6 @@
 # Repository distribution
 
-Plugin repositories own plugin.json, skills/, assets/ and host plugin manifests. Separate marketplaces own marketplace.json and both host catalogs pointing at external plugin repositories. Only the existing ai.plugins/plugins/plugin-manager is embedded. Generate/check plugin metadata with sync-plugin/check-plugin and marketplace catalogs with sync-marketplace/check-marketplace.
+Plugin repositories own plugin.json, skills/, assets/ and host plugin manifests. Separate marketplaces own marketplace.json and both host catalogs pointing at external plugin repositories; a marketplace embeds no plugin. Generate/check plugin metadata with `make sync` / `make check` in the plugin, and the marketplace catalogs with the same targets in the marketplace.
 
 No manifest version, tag, GitHub Release, plugin ZIP is required by this workflow. Claude Code falls back to the source commit when neither manifest nor catalog sets a version. Codex Git marketplace upgrades refresh installed copies after repository changes; do not promise that every refresh path watches only commits. Desktop account synchronization varies. Ask users to refresh/sync the marketplace and open a new chat; verify actual content when testing an update.
 

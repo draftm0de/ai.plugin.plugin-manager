@@ -1,6 +1,6 @@
 # Concepts
 
-[Installation](installation.md) · [Skills](skills.md)
+[Installation](installation.md) · [Skills](skills.md) · [Development](development.md)
 
 ## Marketplace
 

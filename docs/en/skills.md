@@ -4,7 +4,7 @@
 
 <img src="../../assets/icon.png" alt="draftmode.io" width="48">
 
-[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md)
 
 Five skills, one per task. In Claude Code you call them with `/plugin-manager:<skill>`.
 
@@ -14,7 +14,6 @@ Five skills, one per task. In Claude Code you call them with `/plugin-manager:<s
 | --- | --- |
 | [docs](#docs) | Write documentation from the sources |
 | [modify](#modify) | Change name, display name, description |
-| [publish](#publish) | Publish under control |
 | [setup](#setup) | Set up and keep current |
 | [verify](#verify) | Check, read-only |
 
@@ -52,7 +51,7 @@ Changes what a repository says about itself: technical name, display name and de
 2. Asks what should change.
 3. Shows every affected file without writing.
 4. Writes only after your yes.
-5. Names the next steps: refresh the documentation with `docs`, publish the changes with `publish`.
+5. Names the next steps: refresh the documentation with `docs`, commit and push the changes yourself.
 
 ### Example
 
@@ -61,31 +60,6 @@ Changes what a repository says about itself: technical name, display name and de
 ### Reads and writes
 
 Reads the configuration and the associated marketplace. Writes the manifests and, for a plugin, its marketplace entry if the marketplace folder is available on your machine. When you rename a marketplace, the affected plugins are only listed, not changed.
-
-
-## publish
-
-### Description
-
-Prepares a publication and carries it out only with your approval, through a checked pull request.
-
-### Workflow
-
-1. Checks that the repository is set up.
-2. Shows the diff, the commit message and the checks.
-3. Waits for your approval.
-4. Creates branch, commit, push and pull request.
-5. Merges after passing checks and reviews, if your approval covers that.
-
-An empty repository without a first commit is a special case: the first commit and the direct push need their own approval. No tags or releases are created. Details: [publication workflow](publish.md).
-
-### Example
-
-"Prepare the documentation changes for publication."
-
-### Reads and writes
-
-Reads the diff and the Git facts. Writes to Git and GitHub only after approval; its journal lies outside the repository.
 
 
 ## setup

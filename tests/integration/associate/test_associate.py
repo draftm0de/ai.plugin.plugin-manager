@@ -83,7 +83,7 @@ class AssociateTests(AssociateBase):
         result = flow.associate(self.plugin, second)
         self.assertEqual(('fictional-market', 'second-market', False, False),
                          (result['from']['name'], result['to']['name'], result['published'], result['old_catalog_entry_remains']))
-        self.assertIn('publish', result['next'])
+        self.assertIn('push', result['next'])
         self.assertIn('config.json', result['next'])  # committed files changed: the person has to know
         self.assertEqual({'schema_version': 1, 'marketplace_path': os.path.relpath(second, self.plugin)}, self.local())
         self.assertEqual('second-market', self.config()['marketplace']['name'])
@@ -96,25 +96,7 @@ class AssociateTests(AssociateBase):
         for market, config in ((self.market, old), (second, new)):  # both host catalogs of both marketplaces are regenerated
             for path, data in flow.catalog_files(market, config).items():
                 self.assertEqual(data, path.read_bytes(), str(path))
-        self.assertEqual('second-market-dev', self.make(self.plugin, 'install-local', 'codex')['marketplace'])
-
-    def test_install_local_has_no_marketplace_override(self):  # R21
-        self.configured()
-        second = self.second_market()
-        script = self.plugin / 'scripts/plugin.py'
-        run = subprocess.run([sys.executable, '-B', str(script), 'install-local', '--target', 'codex', '--dry-run',
-                              '--marketplace', str(second)], capture_output=True, text=True, cwd=self.plugin)
-        self.assertEqual(2, run.returncode)  # invalid invocation, no such option
-        self.assertIn('--marketplace', run.stderr)
-        # the former make variable is ignored: the marketplace comes only from local.json
-        out = json.loads(subprocess.check_output(['make', '-s', 'install-local', 'TARGET=codex', 'DRY_RUN=1',
-                                                  'MARKETPLACE=' + str(second)], cwd=self.plugin, text=True))
-        self.assertEqual('fictional-market-dev', out['marketplace'])
-        self.assertNotIn('MARKETPLACE', (self.plugin / 'Makefile').read_text())
-        for relative in ('scripts/plugin.py', 'scripts/plugin_payload.py'):
-            path = ROOT / 'skills/_shared/templates/marketplace/sync' / relative if relative == 'scripts/plugin_payload.py' else self.plugin / relative
-            self.assertNotIn('marketplace_root', path.read_text(), relative)
-            self.assertNotIn('pass --marketplace PATH', path.read_text(), relative)
+        self.assertEqual('second-market-dev', self.make(second, 'install-local', 'codex')['marketplace'])
 
     def test_failed_write_rolls_back_all_three_repositories(self):
         self.configured()
@@ -234,18 +216,6 @@ class AssociateTests(AssociateBase):
         self.assertEqual(0, ignored.returncode)
         self.assertNotEqual(0, subprocess.run(['git', '-C', str(self.plugin), 'check-ignore', '-q', CONFIG]).returncode)  # config is committed
 
-    def test_runtime_reads_local_json_and_has_no_fallback(self):
-        self.configured()
-        engine = [sys.executable, '-B', str(self.plugin / 'scripts/plugin.py'), 'install-local', '--target', 'codex', '--dry-run']
-        self.assertEqual(0, subprocess.run(engine, cwd=self.plugin, capture_output=True, text=True).returncode)
-        (self.plugin / LOCAL).unlink()
-        legacy = self.plugin / '.local/marketplace.json'
-        legacy.parent.mkdir(exist_ok=True)
-        legacy.write_text(json.dumps({'marketplace': os.path.relpath(self.market, self.plugin)}))
-        run = subprocess.run(engine, cwd=self.plugin, capture_output=True, text=True)
-        self.assertNotEqual(0, run.returncode)  # the former file is no fallback
-        self.assertIn('plugin-manager (associate)', run.stderr)
-
     def test_cli_has_associate_and_no_configure(self):
         self.configured()
         second = self.second_market()
@@ -258,14 +228,6 @@ class AssociateTests(AssociateBase):
                              capture_output=True, text=True)
         self.assertEqual(2, old.returncode)  # the former operation is gone, no alias
         self.assertFalse(hasattr(flow, 'configure'))
-
-    def test_runtime_messages_name_the_associate_flow_not_configure(self):
-        market = ROOT / 'skills/_shared/templates/marketplace/sync'
-        for relative in ('scripts/plugin_payload.py', 'scripts/verify.py'):
-            text = (market / relative).read_text()
-            self.assertNotIn('run configure', text)
-        self.assertIn('plugin-manager (associate)', (market / 'scripts/plugin_payload.py').read_text())
-
 
 if __name__ == '__main__':
     unittest.main()

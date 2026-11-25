@@ -4,7 +4,7 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 {{SUMMARY}}
 
@@ -26,7 +26,7 @@
 
 ## Documentation
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 ---
 

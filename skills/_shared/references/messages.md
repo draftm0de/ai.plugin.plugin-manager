@@ -28,7 +28,7 @@ The setup action could not be completed, because the folder /Users/demo/plugin.a
 Please either initialise a Git repository in an IDE (for example VS Code) or run `git init` in a terminal in that folder. Then call /plugin-manager:setup again.
 ```
 
-- The first paragraph names what the person asked for (setup, docs, modify, publish), never a helper or flow, says
+- The first paragraph names what the person asked for (setup, docs, modify), never a helper or flow, says
   "could not be completed" (a deliberate stop: "was stopped"), then `because` and the cause. The cause names the
   folder or file by its path and has no exit codes, JSON field names (`ok`, `checks`, `conflicts`, `changed`),
   script, helper or generator names, no words such as schema, evidence, hash, lock, transaction, manifest or
@@ -71,4 +71,4 @@ A failure without a catalogue code gets the "cause not known" message from the s
   show the raw error text once in a code block under the heading "Technical details"; on no, end.
 - Never invent a cause, never run a repair command, never retry silently.
 
-The stop of `docs`, `modify` and `publish` at a closed gate (`flows/gate.md`) is produced the same way (`gate_message`).
+The stop of `docs` and `modify` at a closed gate (`flows/gate.md`) is produced the same way (`gate_message`).

@@ -101,7 +101,7 @@ def conflict_result(operation, target, conflict):
 
 
 def gate(ctx, target, action=None, language=None):
-    """Write-free answer to: may a writing skill other than setup (docs, publish) start? Open means the
+    """Write-free answer to: may a writing skill other than setup (docs, modify) start? Open means the
     state is not ready; the caller stops and points to /plugin-manager:setup. Never writes and runs no flow.
     The stop message comes from messages.py, in `language` (else the saved operator language, else English)."""
     lang = messages.language_for(target, language)

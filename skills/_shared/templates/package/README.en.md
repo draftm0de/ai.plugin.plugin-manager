@@ -8,13 +8,11 @@ In Claude: `/plugin-manager:verify SOURCE_PATH`, with the equivalent `/plugin-ma
 
 [Workflow and limitations](skills/_shared/WORKFLOWS.md)
 
-## Publish with approval
+## Publishing
 
-`/plugin-manager:publish SOURCE` prepares the diff, commit message and PR. Approval covers feature-branch setup, commit, push, PR, checks and merge. No versions, tags or releases. Publish new plugin repositories before their marketplace entries. The journal helper performs no publication itself. [Workflow](skills/_shared/references/publish.md).
+You commit and push yourself; what lies on the default branch is installed. Push new plugin repositories before their marketplace entries. No versions, tags or releases.
 
-PRs require an observed existing base branch. An empty remote with unborn local HEAD needs a separate plan explicitly approving the first commit and direct push without a PR. Initial commits are never automatic. Schema-4 journals also bind Codex manifest modification, addition and removal outside selected files.
-
-Management tools require Git and Python 3.10+; Make is only a convenience wrapper. Management needs the selected host CLI only for automatic local installation/updates; explicitly requested model tests also need an authenticated CLI. Publish uses a sufficiently capable GitHub connector or alternatively authenticated gh; no GitLab MRs. First verify remote read, push, PR create/read, checks, rules and controlled merge capabilities and permissions. Report missing capabilities specifically; never install tools automatically. No additional Python packages, release Actions or version/tag requirements.
+Management tools require Git and Python 3.10+; Make is only a convenience wrapper. Management needs the selected host CLI only for automatic local installation/updates; explicitly requested model tests also need an authenticated CLI. No additional Python packages.
 
 Local snapshots read the current checkout including uncommitted changes, regardless of branch. After edits or branch switches run `install-local` and open a new host session. Local tests require no commit, push or PR. Keep one shared `<marketplace-id>-dev`, with no additional marketplaces per branch.
 
@@ -22,4 +20,4 @@ The local association of a plugin with its one marketplace is set up and changed
 
 ## Skills
 
-`setup`, `docs`, `modify`, `verify` and `publish`; the marketplace association of a plugin is a flow of setup. Shared rules: `skills/_shared/WORKFLOWS.md`.
+`setup`, `docs`, `modify` and `verify`; the marketplace association of a plugin is a flow of setup. Shared rules: `skills/_shared/WORKFLOWS.md`.

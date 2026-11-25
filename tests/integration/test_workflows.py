@@ -22,10 +22,10 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
             self.assertTrue(result['valid'],result)
             self.assertTrue(result['local_development']['complete'],result)
         for host in ('claude','codex'):
-            result=self.make(self.plugin,'install-local',host)
+            result=self.make(self.market,'install-local',host)
             self.assertEqual({'new-plugin','existing-plugin'},set(result['plugins']))
             skill=existing/'skills/existing-plugin/SKILL.md';skill.write_text(skill.read_text()+'\nFictional change\n')
-            update=self.make(existing,'install-local',host)
+            update=self.make(self.market,'install-local',host)
             self.assertNotEqual(result['plugins']['existing-plugin']['version'],update['plugins']['existing-plugin']['version'])
         shutil.rmtree(self.market/'.local')
         report=verify.verify(self.market)
@@ -46,14 +46,14 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
         subprocess.run([sys.executable,'-B',str(helper),'create','--kind','plugin', '--license', 'deferred','--root',str(plugin),'--marketplace',str(market),'--skeleton','--name','installed-plugin','--display-name','Fictional Plugin','--description','Fictional fixture','--author','Fictional Publisher','--languages','en'],cwd=self.root,check=True,capture_output=True)
         self.assertTrue(verify.verify(plugin)['valid'])
         self.assertFalse((market/'plugins/plugin-manager').exists())
-        self.assertEqual('installed-market-dev',self.make(plugin,'install-local','codex')['marketplace'])
+        self.assertEqual('installed-market-dev',self.make(market,'install-local','codex')['marketplace'])
 
 
     def test_python_snapshots_and_verify_need_neither_make_nor_host_cli(self):
         self.create()
         env=dict(os.environ,PATH='')
-        result=subprocess.run([sys.executable,'-B',str(self.plugin/'scripts/plugin.py'),'install-local','--target','codex','--dry-run'],
-                              cwd=self.plugin,env=env,check=True,capture_output=True,text=True)
+        result=subprocess.run([sys.executable,'-B',str(self.market/'scripts/local_plugins.py'),'install-local','--target','codex','--dry-run'],
+                              cwd=self.market,env=env,check=True,capture_output=True,text=True)
         report=json.loads(result.stdout)
         self.assertFalse(report['executed'])
         self.assertEqual('fictional-market-dev',report['marketplace'])

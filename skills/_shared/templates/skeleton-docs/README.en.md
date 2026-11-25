@@ -4,7 +4,7 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 Nonfunctional development skeleton. Domain requirements and implementation are pending.
 
@@ -26,7 +26,7 @@ No domain storage is implemented. Local marketplace associations live in ignored
 
 ## Documentation
 
-[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Skills](docs/en/skills.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 ---
 

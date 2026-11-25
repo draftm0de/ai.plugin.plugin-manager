@@ -30,7 +30,7 @@ def main(argv=None, source_root=None, manager_root=None):
     mark.add_argument('--kind', required=True, help='Configured kind (a directory with a manifest under templates/, for the Manager plugin or marketplace)')
     mark.add_argument('--artifact', required=True, help='Name of the created plugin or marketplace')
     closed = commands.add_parser('gate', help='Write-free: is the workpackage ready for a writing skill other than setup (exit 1 if not)')
-    closed.add_argument('--action', choices=('docs', 'modify', 'publish'), help='The gated skill; names it in the stop message')
+    closed.add_argument('--action', choices=('docs', 'modify'), help='The gated skill; names it in the stop message')
     closed.add_argument('--message-language', choices=messages.LANGUAGES, help='Language of the message: the language of the person\'s text; default the saved operator language, else English')
     unknown = commands.add_parser('explain', help='Write-free: the finished message for an error no command reported (cause not known)')
     unknown.add_argument('--action', required=True, choices=tuple(messages.ACTIONS), help='What the person asked for')

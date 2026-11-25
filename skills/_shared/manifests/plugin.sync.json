@@ -9,12 +9,24 @@
       "sha256": "d50241a8f54f9b9dc16bcc0c741754b2f3b9017c0dd4e9358068c74f6a31a638",
       "executable": false
     },
+    "Makefile": {
+      "sha256": "dcc8aa109295067c095486c475db37cf908fc1378ba4e5c9de24c947b2bbe4c9",
+      "executable": false
+    },
     "docs/de/concepts.md": {
-      "sha256": "be2ec28363573749552bdf02bd885e660a5155e4c9079d30bb5dabb0d6ef38ac",
+      "sha256": "47a2919cb1990832fca32401aba6f0ac94af198fd7d67370188401d1242953a4",
+      "executable": false
+    },
+    "docs/de/development.md": {
+      "sha256": "9c86167e3e75fca6f875992bb0667aea409472b8b17a9fd268a8c43c7900651e",
       "executable": false
     },
     "docs/en/concepts.md": {
-      "sha256": "dcbecd91b249a4cdaa4f99171eeea832fa4e88be7e9cf8481fb07c63878609cc",
+      "sha256": "7ae340e2b493bc55eb10660688f0e64b157d3004a5b2541684b3e2ddbcacca1a",
+      "executable": false
+    },
+    "docs/en/development.md": {
+      "sha256": "5eaadabdaa0ad886c977efb88f339fb56be6e0f7ca2d27f46aca378f291c365b",
       "executable": false
     },
     "docs/standards/coding.md": {
@@ -38,15 +50,15 @@
       "executable": true
     },
     "scripts/plugin.py": {
-      "sha256": "c9023a6afbce46cd67c0c422911aa515deb639f24f25f8ae6abf591964ab9661",
+      "sha256": "50c43c6e2ba1a2c8c3733a2620f6501cb2ce1f4388467678adc075ac41dd4cde",
       "executable": false
     },
     "scripts/run_tests.py": {
-      "sha256": "1e8c301250633b36ae4123f2b35454a5ce57e0792a746d910cf9afd3f882344c",
+      "sha256": "210e1c86b5c90ce9770fc2f1bc5df1724315187a8b3c0999cf01e9db79e5f96d",
       "executable": false
     },
     "scripts/verify.py": {
-      "sha256": "cb4938a3ea52c767a87bab4b036b120b6e6241fe64ce980d4fa72e98e7d765e4",
+      "sha256": "1b375b48940ae49e192318c847f5643df9406ea89d1cadb65618dc6655c9bdc4",
       "executable": false
     },
     "skills/_shared/references/operator-language-helper.md": {

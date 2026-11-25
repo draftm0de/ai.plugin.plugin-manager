@@ -8,7 +8,7 @@ from . import template_sources
 from .constants import Conflict, LANGUAGE_PATH
 
 
-CONCEPTS_PAGE = re.compile(r'docs/(de|en)/concepts\.md')
+MANAGED_PAGE = re.compile(r'docs/(de|en)/(?:concepts|development)\.md')
 
 
 STYLE_PAGE = 'docs/style.md'
@@ -56,9 +56,9 @@ def inspect(ctx, root, requested_language):
     needed_dirs = set()
     selected = documentation_languages(root)
     for relative, entry in templates.items():
-        page = CONCEPTS_PAGE.fullmatch(relative)
+        page = MANAGED_PAGE.fullmatch(relative)
         if page and page.group(1) not in selected:
-            continue  # the managed concepts page exists only in the selected documentation languages
+            continue  # managed pages exist only in the selected documentation languages
         accepted = lock.get(relative)
         exists = fsafe.check_chain(root, relative, 'file') != 'missing'
         if entry is None:  # source removed in the parent: ownership evidence in the lock decides

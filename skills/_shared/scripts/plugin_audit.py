@@ -108,26 +108,21 @@ def audit(root):
     add('standards:scope', 'fail' if copied else 'pass',
         'SCOPE.md or CUSTOM.AGENTS.md copies standard text (keep only the plugin goal there): ' + copied[0][:80] + '...' if copied else
         'SCOPE.md and CUSTOM.AGENTS.md hold no copy of a standard; contradictions with the standards need `verify --review`')
-    makefile = root / 'Makefile'
-    make = makefile.read_text() if makefile.is_file() else ''
-    marker_start = '# Local development and repository metadata'
-    marker_end = '# End plugin commands'
-    def command_block(text):
-        if text.count(marker_start) != 1 or text.count(marker_end) != 1:
-            return None
-        return text.split(marker_start, 1)[1].split(marker_end, 1)[0]
-    expected_block = command_block((SKILL / 'templates/plugin/seed/Makefile').read_text())
-    outside = make.replace(marker_start + (command_block(make) or '') + marker_end, '')
-    overrides = bool(re.search(r'^(?:install|update|package|install-local|check-plugin|sync-plugin)\s*:', outside, re.MULTILINE))
-    valid_make = command_block(make) == expected_block and not overrides and 'plugin.mk' not in make
-    add('installer:make', 'pass' if valid_make else 'fail', 'Makefile must contain canonical local-development and metadata recipes without duplicate or retired targets')
+    makefile, managed = root / 'Makefile', SKILL / 'templates/plugin/sync/Makefile'
+    same_make = makefile.is_file() and not makefile.is_symlink() and makefile.read_bytes() == managed.read_bytes()
+    add('installer:make', 'pass' if same_make else 'fail',
+        'Matches the managed Makefile' if same_make else 'Missing or changed; own targets belong into CUSTOM.mk, run /plugin-manager:setup to bring the managed file back')
     try:
         spec = importlib.util.spec_from_file_location('trusted_plugin_template', template / 'scripts/plugin.py')
         engine = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(engine)
         engine.ROOT = root
         engine.repository_metadata(check=True)
-        _, portable, _ = engine.payload()  # In-memory only; never execute target code.
+        spec = importlib.util.spec_from_file_location('trusted_payload_template', SKILL / 'templates/marketplace/sync/scripts/plugin_payload.py')
+        packaging = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(packaging)
+        packaging.ROOT = root
+        _, portable, _ = packaging.payload()  # In-memory only; never execute target code.
         py_errors, py_warnings = python_payload(portable)
         add('python_payload', 'fail' if py_errors else ('warning' if py_warnings else 'pass'),
             '; '.join(py_errors + py_warnings) if py_errors or py_warnings else
@@ -218,8 +213,8 @@ def scaffold_plugin(source, output, languages=None, default_language=None, repos
         for path in folder.rglob('*'):
             if path.is_file():
                 relative = str(path.relative_to(folder))
-                if relative.startswith('docs/') and relative.endswith('/concepts.md') and relative.split('/')[1] not in selected:
-                    continue  # the managed concepts page exists only in the selected languages (R36)
+                if relative.startswith('docs/') and relative.endswith(('/concepts.md', '/development.md')) and relative.split('/')[1] not in selected:
+                    continue  # managed pages exist only in the selected languages (R36, R42)
                 if part == 'seed' and relative == 'gitignore.txt': relative = '.gitignore'
                 if part == 'seed' and relative == 'ci.yml': relative = '.github/workflows/validate.yml'
                 files[relative] = path.read_bytes()

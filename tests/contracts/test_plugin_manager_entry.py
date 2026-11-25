@@ -291,12 +291,12 @@ class EntryTextTests(unittest.TestCase):
 
     def test_command_wrapper_and_specialist_skills_unchanged(self):
         self.assertIn('/skills/setup/SKILL.md', (ROOT / 'commands/setup.md').read_text())
-        # R23: docs and publish use the read-only gate, verify the read-only status; none of them calls a writing operation
-        for name in ('docs', 'verify', 'publish'):
+        # R23: docs uses the read-only gate, verify the read-only status; none of them calls a writing operation
+        for name in ('docs', 'verify'):
             skill = (ROOT / 'skills' / name / 'SKILL.md').read_text()
             for writer in ('setup_state.py" setup', 'setup_state.py" record', 'setup_state.py" sync', 'setup_state.py" language'):
                 self.assertNotIn(writer, skill)
-        self.assertNotIn('setup_state', (ROOT / 'skills/_shared/templates/plugin/seed/Makefile').read_text())
+        self.assertNotIn('setup_state', (ROOT / 'skills/_shared/templates/plugin/sync/Makefile').read_text())
         # R23: the helper exists only in the Manager; no template ships it to generated plugins
         shipped = sorted(str(p.relative_to(ROOT / 'skills/_shared/templates')) for p in (ROOT / 'skills/_shared/templates').rglob('*')
                          if 'setup_state' in p.name)

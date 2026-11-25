@@ -66,12 +66,12 @@ class ManifestTests(unittest.TestCase):
 
     def test_marketplace_classes_follow_the_scope(self):
         sync = load('marketplace.sync.json')
-        self.assertEqual({'CLAUDE.md', 'scripts/local_plugins.py', 'scripts/marketplace.py', 'scripts/plugin_payload.py',
-                          'scripts/run_tests.py', 'scripts/verify.py', 'docs/de/concepts.md', 'docs/en/concepts.md',
+        self.assertEqual({'AGENTS.md', 'CLAUDE.md', 'Makefile', 'SCOPE.md', 'scripts/local_plugins.py', 'scripts/marketplace.py', 'scripts/plugin_payload.py',
+                          'scripts/run_tests.py', 'scripts/verify.py', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md',
                           'tests/contracts/test_local_plugins.py', 'tests/contracts/test_marketplace_catalogs.py',
                           'tests/contracts/test_plugin_payload.py', 'tests/contracts/test_run_tests.py'}, set(sync['files']))  # R40
         seed = set(files_below(TEMPLATES / 'marketplace/seed'))
-        self.assertEqual({'Makefile', 'AGENTS.md', 'SCOPE.md', 'docs/architecture.md', 'docs/prerequisites.md', 'docs/style.md', 'local-marketplace.example.json',
+        self.assertEqual({'CUSTOM.mk', 'CUSTOM.AGENTS.md', 'docs/architecture.md', 'docs/prerequisites.md', 'docs/style.md', 'local-marketplace.example.json',
                           'tests/README.md', 'tests/__init__.py', 'tests/contracts/__init__.py', 'tests/contracts/test_structure.py'}, seed)
         manifest = load('marketplace.json')
         self.assertEqual('marketplace.json', manifest['product'])
@@ -82,16 +82,16 @@ class ManifestTests(unittest.TestCase):
 
     def test_plugin_classes_follow_the_scope(self):
         sync = set(load('plugin.sync.json')['files'])
-        self.assertTrue({'CLAUDE.md', 'scripts/plugin.py', 'scripts/verify.py', 'scripts/run_tests.py',
-                         'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md', 'skills/_shared/references/operator-language-helper.md', 'skills/_shared/scripts/messages_base.py', 'tests/behavior/run_cases.py', 'tests/contracts/test_operator_language.py', 'githooks/pre-commit', 'docs/de/concepts.md', 'docs/en/concepts.md', 'AGENTS.md',
+        self.assertTrue({'CLAUDE.md', 'Makefile', 'scripts/plugin.py', 'scripts/verify.py', 'scripts/run_tests.py',
+                         'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md', 'skills/_shared/references/operator-language-helper.md', 'skills/_shared/scripts/messages_base.py', 'tests/behavior/run_cases.py', 'tests/contracts/test_operator_language.py', 'githooks/pre-commit', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'AGENTS.md',
                          'docs/standards/coding.md', 'docs/standards/messages.md', 'docs/standards/testing.md', 'docs/standards/skills.md'} == sync)  # R16: no setup flow; R27: the standards
         seed = set(files_below(TEMPLATES / 'plugin/seed'))
-        self.assertTrue({'CUSTOM.AGENTS.md', 'SCOPE.md', 'assets/icon.png', 'Makefile', 'ci.yml', 'gitignore.txt', 'docs/architecture.md',
+        self.assertTrue({'CUSTOM.AGENTS.md', 'SCOPE.md', 'assets/icon.png', 'CUSTOM.mk', 'ci.yml', 'gitignore.txt', 'docs/architecture.md',
                          'docs/prerequisites.md', 'tests/README.md'} <= seed)
         self.assertEqual('plugin.json', load('plugin.json')['product'])
 
     def test_marketplace_makefile_is_minimal(self):
-        text = (TEMPLATES / 'marketplace/seed/Makefile').read_text()
+        text = (TEMPLATES / 'marketplace/sync/Makefile').read_text()
         for target in ('install-local:', 'test:'):
             self.assertIn(target, text)
         for gone in ('update-local', 'plugin-verify', 'marketplace-verify', 'plugin-create', 'marketplace-create', 'configure'):

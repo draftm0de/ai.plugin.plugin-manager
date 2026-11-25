@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / '_shared/scripts'))
 import workflows as flow  # noqa: E402
 
 NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
-PUBLISH_NOTE = ('The changed files are committed files left unversioned; publish them through /plugin-manager:publish '
+PUBLISH_NOTE = ('The changed files are committed files left unversioned; commit and push them yourself '
                 '(plugin and marketplace repositories separately). Nothing was committed, pushed, installed or published.')
 DOCS_NOTE = ('Call forms (/<name>:<skill>, <name>@<marketplace>), documentation and tests that name the old values are not '
              'rewritten here; refresh the documentation with /plugin-manager:docs.')

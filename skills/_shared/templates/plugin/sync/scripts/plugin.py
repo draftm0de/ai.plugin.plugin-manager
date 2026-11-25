@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
-"""Validate repository imports and manage local development snapshots. Never publish implicitly."""
+"""Generate or validate the committed host metadata of this plugin. Never publishes or installs."""
 import argparse
-import hashlib
-import importlib.util
 import json
-from pathlib import Path
 import re
-import shutil
-import subprocess
 import sys
-import tempfile
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MARKER = '.zyris-generated'
 CONFIG_KEY = 'io.zyris.distribution'
 
 
@@ -150,158 +144,14 @@ def repository_metadata(check=False):
     return {'valid': True, 'files': list(expected), 'updated': [] if check else drift}
 
 
-# Dot-named files that skeleton templates legitimately need. Exact names, files only,
-# and only below a `templates` folder of a skill; every other dot path stays excluded.
-TEMPLATE_DOT_FILES = frozenset({'.gitignore.tpl', '.gitkeep'})
-
-
-def allowed_resource(destination, relative, part):
-    parts = relative.parts
-    return (destination == 'skills' and part in TEMPLATE_DOT_FILES and part == parts[-1]
-            and 'templates' in parts[:-1] and not any(p.startswith('.') for p in parts[:-1]))
-
-
-def payload():
-    manifest, skill_root, market, extra = configuration()
-    # Host metadata is derived from the portable manifest; no duplicate version source.
-    claude = {key: manifest[key] for key in ('name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords') if key in manifest}
-    display_name = manifest.get('extensions', {}).get('com.openai', {}).get('interface', {}).get('displayName')
-    if display_name:
-        claude['displayName'] = display_name
-    files = {}
-    def collect(folder, destination):
-        if not folder.exists():
-            return
-        if folder.is_symlink():
-            raise ValueError('Symlink in distributable source')
-        for path in sorted(folder.rglob('*')):
-            relative = path.relative_to(folder)
-            if path.is_symlink():
-                raise ValueError(f'Symlink in distributable source: {relative}')
-            if any(part.startswith('.env') for part in relative.parts) or path.suffix in ('.key', '.pem'):
-                raise ValueError(f'Private file in distributable source: {relative}')
-            if any((part.startswith('.') and not allowed_resource(destination, relative, part)) or part in ('__pycache__','node_modules','dist') for part in relative.parts) or path.suffix in ('.pyc', '.pyo', '.pyd'):
-                continue
-            if path.is_file():
-                files[str(Path(destination) / relative)] = read_file(path)
-    collect(skill_root, 'skills')
-    collect(ROOT / 'assets', 'assets')
-    for name in ('LICENSE', 'LICENSE.md', 'LICENSE.txt'):
-        if (ROOT / name).exists():
-            files[name] = read_file(ROOT / name)
-    for destination, origin in extra.items():
-        data = read_file(source_path(ROOT, origin))
-        if destination in files and files[destination] != data:
-            raise ValueError('Conflicting distribution destination: ' + destination)
-        files[destination] = data
-    # Default package description is derived, not another manually maintained README.
-    files.setdefault('README.md', ('# ' + manifest['name'] + '\n\n' + manifest['description'] +
-        '\n\nThis plugin bundles its canonical skills. Activate it in your host and ask for its capabilities. '
-        'Its source instructions define usage and limitations. Local packaging does not publish or install the plugin. '
-        'Review host permissions and test behavior before deploying to production.\n').encode())
-    commands = {}
-    if (ROOT / 'commands').is_symlink():
-        raise ValueError('Commands directory must not be a symlink')
-    for path in sorted((ROOT / 'commands').glob('*.md')):
-        commands['commands/' + path.name] = read_file(path)
-    onboarding = manifest.get('extensions', {}).get('com.openai', {}).get('onboardingSkill')
-    if onboarding and onboarding.removeprefix('./') not in files:
-        raise ValueError('onboardingSkill does not exist in packaged payload')
-    interface = manifest.get('extensions', {}).get('com.openai', {}).get('interface', {})
-    for field in ('logo', 'composerIcon'):
-        value = interface.get(field)
-        if value and value.removeprefix('./') not in files:
-            raise ValueError('Host asset missing from payload: ' + field)
-    fingerprint = hashlib.sha256(json.dumps(manifest, sort_keys=True).encode())
-    for name, content in sorted({**files, **commands}.items()):
-        fingerprint.update(name.encode() + b'\0' + content + b'\0')
-    # Local snapshots use a content-derived cache identifier.
-    # Direct repository imports use the unversioned manifests checked into Git.
-    version = '0.0.0-dev.h' + fingerprint.hexdigest()[:12]
-    manifest['version'] = claude['version'] = version
-    # Local build configuration is not a runtime host extension.
-    if 'extensions' in manifest:
-        manifest['extensions'].pop(CONFIG_KEY, None)
-    encode = lambda data: (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode()
-    return version, dict(files, **{'plugin.json': encode(manifest)}), dict(files, **commands, **{'.claude-plugin/plugin.json': encode(claude)})
-
-
-def codex_payload(portable):
-    manifest = strict_json(portable['plugin.json'])
-    codex = {key: manifest[key] for key in ('name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords') if key in manifest}
-    codex['skills'] = './skills/'
-    interface = manifest.get('extensions', {}).get('com.openai', {}).get('interface')
-    if interface:
-        codex['interface'] = interface
-    files = {name: content for name, content in portable.items() if name != 'plugin.json'}
-    files['.codex-plugin/plugin.json'] = (json.dumps(codex, ensure_ascii=False, indent=2) + '\n').encode()
-    return files
-
-
-# Ignored, machine-specific path of the one marketplace this plugin belongs to (written by plugin-manager associate).
-LOCAL_ASSOCIATION = '.project/plugins/plugin-manager/local.json'
-
-
-def install_local(target, dry_run=False):
-    """Resolve the one marketplace of this plugin from its local association; no override, no fallback."""
-    if target not in ('claude', 'codex'):
-        raise ValueError('Local development supports claude or codex')
-    selected = None
-    path = source_path(ROOT, LOCAL_ASSOCIATION)
-    if path.exists():
-        local = strict_json(read_file(path))
-        if (not isinstance(local, dict) or set(local) != {'schema_version', 'marketplace_path'} or type(local['schema_version']) is not int
-                or local['schema_version'] != 1 or not isinstance(local['marketplace_path'], str) or not local['marketplace_path'].strip()):
-            raise ValueError('Unsupported ' + LOCAL_ASSOCIATION + '; run plugin-manager (associate) to write it again')
-        selected = local['marketplace_path']
-    if selected:
-        selected = Path(selected).expanduser()
-        if not selected.is_absolute():
-            selected = ROOT / selected
-    if not selected:
-        raise ValueError('Local marketplace unavailable; run plugin-manager (associate)')
-    selected = Path(selected).resolve()
-    helper = selected / 'scripts/local_plugins.py'
-    if not helper.is_file() or helper.is_symlink():
-        raise ValueError('Selected marketplace is unavailable or lacks local development tooling')
-    catalog = strict_json(read_file(selected / 'marketplace.json'))
-    name = configuration()[0]['name']
-    local_file = selected / '.local/marketplace.json'
-    sources = strict_json(read_file(local_file)).get('sources', {}) if local_file.exists() else {}
-    linked = False
-    for entry in catalog['plugins']:
-        path = entry.get('path') if 'path' in entry else sources.get(entry.get('name'))
-        if path:
-            candidate = Path(path).expanduser()
-            candidate = candidate if candidate.is_absolute() else selected / candidate
-            if candidate.resolve() == ROOT.resolve() and (entry.get('name', name) == name):
-                linked = True
-    if not linked:
-        raise ValueError('Plugin is not locally associated with the selected marketplace; run plugin-manager (associate)')
-    spec = importlib.util.spec_from_file_location('selected_local_marketplace', helper)
-    shared = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(shared)
-    return shared.install_local(target, dry_run, root=selected)
-
-
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, epilog='Git + Python 3.10+ management tools; Make optional. Local snapshots use the current checkout on any branch. After edits/branch switches run install-local and start a new host session. No commit/push/PR; host CLI only for automatic installation.')
-    sub = parser.add_subparsers(dest='command', required=True)
-    for command in ('install-local',):
-        action = sub.add_parser(command)
-        action.add_argument('--target', choices=('claude', 'codex'), default='claude')
-        action.add_argument('--dry-run', action='store_true')
-    check = sub.add_parser('check')
-    sub.add_parser('sync')
+    parser = argparse.ArgumentParser(description=__doc__, epilog='Git + Python 3.10+; Make is optional. Local installation is run in the marketplace of this plugin (make install-local there).')
+    parser.add_argument('command', choices=('check', 'sync'))
     args = parser.parse_args(argv)
     try:
-        if args.command in ('check', 'sync'):
-            result = repository_metadata(check=args.command == 'check')
-        else:
-            result = install_local(args.target, args.dry_run)
-        print(json.dumps(result, indent=2))
+        print(json.dumps(repository_metadata(check=args.command == 'check'), indent=2))
         return 0
-    except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as exc:
+    except (OSError, ValueError, KeyError) as exc:
         print(f'ERROR: {exc}', file=sys.stderr)
         return 1
 

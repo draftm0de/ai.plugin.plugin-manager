@@ -36,7 +36,7 @@ class CaseDefinitionTests(unittest.TestCase):
         prompt = run_skills.build_prompt(CASES['modify_shows_consequences_and_asks_before_writing'])
         self.assertIn((ROOT / 'skills/modify/SKILL.md').read_text().strip().splitlines()[2], prompt)
         self.assertIn('--dry-run', prompt)
-        self.assertNotIn('**publish**: read `references/publish.md`', prompt)  # an excerpt, not the whole file
+        self.assertNotIn('## Repository distribution', prompt)  # an excerpt, not the whole file
 
 
 class GradingTests(unittest.TestCase):

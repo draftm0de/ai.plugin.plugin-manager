@@ -1,6 +1,6 @@
 {
   "name": "plugin-manager",
-  "description": "Manage marketplaces and separate skill plugins: creation, association, documentation, validation and approval-gated publication.",
+  "description": "Manage marketplaces and separate skill plugins: creation, association, documentation and validation.",
   "author": {
     "name": "Peter Fux",
     "url": "https://draftmode.io"

@@ -4,7 +4,7 @@
 
 <img src="../../assets/icon.png" alt="draftmode.io" width="48">
 
-[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md)
+[Start](../../README.md) · [Installation](installation.md) · [Skills](skills.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
 
 Du fügst den Marketplace einmal hinzu und installierst daraus {{PLUGIN_LABEL}}. Zugang, Repository-Berechtigungen und die Richtlinien deiner Organisation gelten. Die Menübezeichnungen entsprechen der jeweiligen App und können abweichen.
 

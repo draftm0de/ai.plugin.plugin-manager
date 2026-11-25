@@ -170,10 +170,11 @@ class StandardsTests(unittest.TestCase):
         for path in (R / 'skills').rglob('*.py'):
             self.assertNotIn('core.hooksPath githooks', path.read_text(), path)
 
-    def test_the_manager_documentation_uses_the_managed_concepts_pages(self):  # R36
+    def test_the_manager_documentation_uses_the_managed_pages(self):  # R36, R42
         for language in ('de', 'en'):
-            self.assertEqual((R / 'skills/_shared/templates/plugin/sync/docs' / language / 'concepts.md').read_bytes(),
-                             (R / 'docs' / language / 'concepts.md').read_bytes(), language)
+            for page in ('concepts.md', 'development.md'):
+                self.assertEqual((R / 'skills/_shared/templates/plugin/sync/docs' / language / page).read_bytes(),
+                                 (R / 'docs' / language / page).read_bytes(), (language, page))
 
     def test_a_plugin_without_its_documentation_style_is_a_finding_and_the_runtime_style_is_optional(self):  # R38
         self.assertTrue((self.plugin / 'docs/style.md').is_file())

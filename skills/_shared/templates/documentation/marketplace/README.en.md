@@ -4,7 +4,7 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/en/installation.md) · [Plugins](docs/en/plugins.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Plugins](docs/en/plugins.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 {{SUMMARY}}
 
@@ -18,7 +18,7 @@
 
 ## Documentation
 
-[Installation](docs/en/installation.md) · [Plugins](docs/en/plugins.md) · [Concepts](docs/en/concepts.md)
+[Installation](docs/en/installation.md) · [Plugins](docs/en/plugins.md) · [Concepts](docs/en/concepts.md) · [Development](docs/en/development.md)
 
 ---
 

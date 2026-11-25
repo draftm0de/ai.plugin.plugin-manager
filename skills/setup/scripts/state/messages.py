@@ -10,7 +10,7 @@ LANGUAGES = ('en', 'de')
 DEFAULT_LANGUAGE = 'en'
 
 # action names as the person knows them; the headline names what was asked for, never a helper or flow
-ACTIONS = {'setup': 'setup', 'docs': 'docs', 'modify': 'modify', 'publish': 'publish', 'verify': 'verify'}
+ACTIONS = {'setup': 'setup', 'docs': 'docs', 'modify': 'modify', 'verify': 'verify'}
 
 HEADLINE = {
     'en': 'The {action} action could not be completed, because {cause}.',

@@ -13,6 +13,9 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_f
 SPEC = importlib.util.spec_from_file_location('plugin_build', ROOT / 'scripts/plugin.py')
 plugin = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(plugin)
+SPEC = importlib.util.spec_from_file_location('plugin_packaging', ROOT / 'skills/_shared/templates/marketplace/sync/scripts/plugin_payload.py')
+packaging = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(packaging)
 
 
 class PluginTests(unittest.TestCase):
@@ -28,7 +31,7 @@ class PluginTests(unittest.TestCase):
                 self.assertNotIn('install.sh', files)
                 self.assertFalse(any(n.startswith(('tests/', '.git/')) for n in files))
                 prefix = 'skills/_shared/'
-                for name in ('WORKFLOWS.md', 'scripts/documentation.py', 'templates/plugin/seed/Makefile', 'templates/documentation/plugin/docs/de/skills.md'):
+                for name in ('WORKFLOWS.md', 'scripts/documentation.py', 'templates/plugin/sync/Makefile', 'templates/documentation/plugin/docs/de/skills.md'):
                     self.assertIn(prefix + name, files)
                 self.assertNotIn(prefix + 'templates/plugin/seed/plugin.mk', files)
                 self.assertEqual(files['assets/icon.png'], files[prefix + 'assets/icon.png'])
@@ -41,11 +44,11 @@ class PluginTests(unittest.TestCase):
             for folder in ('skills', 'assets'):
                 shutil.copytree(ROOT / folder, root / folder)
             shutil.copy2(ROOT / 'plugin.json', root / 'plugin.json')
-            with patch.object(plugin, 'ROOT', root):
-                before = plugin.payload()[0]
+            with patch.object(packaging, 'ROOT', root):
+                before = packaging.payload()[0]
                 with (root / 'skills/_shared/references/documentation-layout.md').open('a') as handle:
                     handle.write('\nA revised documentation rule.\n')
-                after = plugin.payload()[0]
+                after = packaging.payload()[0]
                 self.assertNotEqual(before, after)
 
     def test_isolated_plugin_scaffolds_without_developer_checkout(self):

@@ -8,13 +8,11 @@ In Claude: `/plugin-manager:verify QUELLPFAD`, entsprechend `/plugin-manager:set
 
 [Workflow und Grenzen](skills/_shared/WORKFLOWS.md)
 
-## Veröffentlichen mit Freigabe
+## Veröffentlichen
 
-`/plugin-manager:publish QUELLPFAD` bereitet Diff, Commit-Nachricht und PR vor. Nach Freigabe folgen Feature-Branch, Commit, Push, PR, Prüfungen und Merge. Keine Versionen, Tags oder Releases. Neue Plugin-Repositories vor ihren Marketplace-Einträgen veröffentlichen. Der Journalhelfer veröffentlicht selbst nichts. [Workflow](skills/_shared/references/publish.md).
+Du committest und pushst selbst; installiert wird, was auf dem Standard-Branch liegt. Neue Plugin-Repositories vor ihren Marketplace-Einträgen pushen. Keine Versionen, Tags oder Releases.
 
-PRs benötigen einen belegten bestehenden Basisbranch. Für ein leeres Remote ohne lokalen HEAD ist ein eigener Plan mit ausdrücklicher Freigabe für ersten Commit und direkten Push ohne PR erforderlich. Es gibt keine automatischen Initial-Commits. Schema-4-Journale binden auch Änderungen, Hinzufügen und Entfernen des Codex-Manifests außerhalb der Dateiauswahl.
-
-Git und Python 3.10+ sind für die Verwaltungswerkzeuge erforderlich; Make ist nur ein Komfortzugang. Für die Verwaltung wird die Host-CLI nur bei automatischer lokaler Installation/Aktualisierung benötigt; ausdrücklich gestartete Modelltests benötigen ebenfalls eine authentifizierte CLI. Publish verwendet einen ausreichend leistungsfähigen GitHub-Connector oder alternativ authentifiziertes gh; keine GitLab-MRs. Vorher Remote-Lesen, Push, PR-Erstellung/-Lesen, Checks, Regeln und kontrolliertes Mergen samt Rechten prüfen. Fehlende Fähigkeiten konkret melden, keine Werkzeuge automatisch installieren. Keine zusätzlichen Python-Pakete, Release-Actions oder Versions-/Tag-Pflichten.
+Git und Python 3.10+ sind für die Verwaltungswerkzeuge erforderlich; Make ist nur ein Komfortzugang. Für die Verwaltung wird die Host-CLI nur bei automatischer lokaler Installation/Aktualisierung benötigt; ausdrücklich gestartete Modelltests benötigen ebenfalls eine authentifizierte CLI. Keine zusätzlichen Python-Pakete.
 
 Lokale Snapshots lesen den aktuellen Checkout einschließlich uncommitteter Änderungen, unabhängig vom Branch. Nach Änderungen oder Branchwechsel `install-local` ausführen und eine neue Host-Sitzung öffnen. Kein Commit, Push oder PR ist für lokale Tests erforderlich. Es bleibt bei einem gemeinsamen `<marketplace-id>-dev`, ohne zusätzliche Marketplaces pro Branch.
 
@@ -22,4 +20,4 @@ Die lokale Zuordnung eines Plugins zu seinem einen Marketplace richtet `plugin-m
 
 ## Skills
 
-`setup`, `docs`, `modify`, `verify` und `publish`; die Marketplace-Zuordnung eines Plugins ist ein Flow von setup. Gemeinsame Regeln: `skills/_shared/WORKFLOWS.md`.
+`setup`, `docs`, `modify` und `verify`; die Marketplace-Zuordnung eines Plugins ist ein Flow von setup. Gemeinsame Regeln: `skills/_shared/WORKFLOWS.md`.

@@ -1,4 +1,4 @@
-"""R23 state rule: the read-only `gate` answers whether a writing skill (docs, publish) may start."""
+"""R23 state rule: the read-only `gate` answers whether a writing skill (docs, modify) may start."""
 import re
 import unittest
 
@@ -39,7 +39,7 @@ class GateTests(SyncBase):
 
     def test_the_message_names_the_gated_skill_and_has_the_same_structure_for_every_cause(self):
         shapes = set()
-        for action in ('docs', 'modify', 'publish'):
+        for action in ('docs', 'modify'):
             code, data, _ = self.box.call('gate', '--action', action)
             self.assertEqual(1, code)
             self.assertTrue(data['message'].startswith('The ' + action + ' action was stopped, because this folder is not set up yet'))

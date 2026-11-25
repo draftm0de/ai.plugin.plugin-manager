@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "plugin-manager",
-  "description": "Manage marketplaces and separate skill plugins: creation, association, documentation, validation and approval-gated publication.",
+  "description": "Manage marketplaces and separate skill plugins: creation, association, documentation and validation.",
   "author": {
     "name": "Peter Fux",
     "url": "https://draftmode.io"
@@ -27,8 +27,7 @@
         "websiteURL": "https://draftmode.io",
         "defaultPrompt": [
           "Document a local skill repository",
-          "Verify a plugin repository",
-          "Prepare a plugin publication for my approval"
+          "Verify a plugin repository"
         ]
       }
     },

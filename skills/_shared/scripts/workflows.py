@@ -449,7 +449,7 @@ def associate(root, marketplace, repository=None, drop_missing_old=False, plugin
             'to': {'name': target['name'], 'path': os.path.relpath(market, root)},
             'old_catalog_entry_remains': (not same) and (not renamed) and old is None, 'renamed': renamed,
             'next': 'Committed files changed and are unversioned: config.json of the plugin, marketplace.json and the host catalogs of the marketplaces involved. '
-                    'Review them in their repositories and publish them through publish. Nothing was committed, pushed, installed or published.'}
+                    'Review, commit and push them in their repositories yourself. Nothing was committed, pushed, installed or published.'}
 
 
 def complete_skeleton_documentation(stage, title, marketplace=None):

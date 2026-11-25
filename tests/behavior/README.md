@@ -7,9 +7,9 @@ the review harness below and have not been executed merely by adding the specifi
 Run explicitly from the Manager checkout (model calls may consume credits):
 
 ```sh
-make test-behavior CLI=claude
-make test-behavior CLI=codex
-make test-behavior CLI=claude CASE=correct_consent
+make test-behavior-review CLI=claude
+make test-behavior-review CLI=codex
+make test-behavior-review CLI=claude CASE=correct_consent
 python3 -B tests/behavior/run_review.py --list
 ```
 
@@ -52,4 +52,4 @@ before a yes). The cases are in `tests/fixtures/skills/cases.json`; the determin
 are `tests/unit/behavior/test_skill_cases.py`.
 
 This evaluates the instruction texts with a model. It does not test host routing (`/plugin-manager:<skill>` reaching the
-skill); that needs a host, see `make test-native` and `make install-local`. Model calls may consume credits and answers vary.
+skill); that needs a host, see `make test-native` and `make install-local` in the marketplace. Model calls may consume credits and answers vary.

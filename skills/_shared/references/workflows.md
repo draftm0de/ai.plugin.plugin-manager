@@ -73,6 +73,8 @@ A plugin belongs to exactly one marketplace. Requires the configuration evidence
 
 ## Local development and verification
 
+In the marketplace folder:
+
 ```sh
 make verify
 make install-local TARGET=claude
@@ -85,7 +87,7 @@ All selected marketplace plugins need local checkouts before installation. Prefl
 
 Only `create --kind marketplace|plugin` and `associate` are accepted. init is unsupported. No automatic choice, migration or creation.
 
-Before writing local associations, proposed root and `.local/.gitignore` rules are evaluated by real Git in an isolated repository. Global excludes cannot conceal unsafe repository rules. Negations that expose `.local/marketplace.json` or the plugin's `.project/plugins/plugin-manager/local.json` cause an actionable error before either repository is written; existing rules, mappings and content remain unchanged. Review conflicting rules explicitly, then retry. Creation never makes initial commits. For a repository without HEAD, use the explicitly approved initial-publication mode in [publish.md](publish.md), or use an existing remote PR base.
+Before writing local associations, proposed root and `.local/.gitignore` rules are evaluated by real Git in an isolated repository. Global excludes cannot conceal unsafe repository rules. Negations that expose `.local/marketplace.json` or the plugin's `.project/plugins/plugin-manager/local.json` cause an actionable error before either repository is written; existing rules, mappings and content remain unchanged. Review conflicting rules explicitly, then retry. Creation never makes initial commits. The first commit of a repository without HEAD is made by the person.
 
 Snapshots read the current checkout including uncommitted changes, regardless of branch. After changes or a branch switch, run install-local and open a new host session. Local testing requires no commit, push or PR and uses the same development marketplace across branches. plugin-manager (associate) is the normal setup path for the association of a plugin; local-marketplace.example.json is an optional manual copy template for the marketplace side. Runtime reads the plugin's marketplace path only from .project/plugins/plugin-manager/local.json and the plugin checkouts only from the marketplace's .local/marketplace.json; never commit local mappings.
 

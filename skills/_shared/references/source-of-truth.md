@@ -18,7 +18,7 @@ The plugin project root uses the same neutral base structure across products:
 `Makefile`. Local-development and metadata recipes live directly in Makefile.
 `skills/<name>/` is the canonical runtime source for every host. Root `scripts/`
 holds development tooling; runtime helpers belong with their capability.
-Plugin host metadata is derived from `plugin.json` by `make sync-plugin`; `make check-plugin` detects drift. Plugins have no marketplace catalogs. A separate marketplace owns `marketplace.json` and derives both host catalogs with `make sync-marketplace`; `make check-marketplace` checks drift. Repository versions are omitted. Only the existing Manager remains embedded in ai.plugins.
+Plugin host metadata is derived from `plugin.json` by `make sync`; `make check` detects drift. Plugins have no marketplace catalogs. A separate marketplace owns `marketplace.json` and derives both host catalogs with `make sync-marketplace`; `make check-marketplace` checks drift. Repository versions are omitted. Only the existing Manager remains embedded in ai.plugins.
 
 Create additional directories only for real functionality. For example,
 `commands/` holds the documentation plugin's shipped Claude action entry points;

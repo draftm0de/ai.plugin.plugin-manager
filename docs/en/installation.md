@@ -4,7 +4,7 @@
 
 <img src="../../assets/icon.png" alt="draftmode.io" width="48">
 
-[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Skills](skills.md) · [Concepts](concepts.md) · [Development](development.md)
 
 You add the marketplace once and install Plugin Manager from it. Account access, repository permissions and your organisation's policies apply. Menu labels are those of the app and may differ.
 

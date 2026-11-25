@@ -42,8 +42,9 @@ def strict_json(text):
 KINDS = ('plugin', 'marketplace')
 SECTION_LABELS = {'de': ('Beschreibung', 'Ablauf', 'Beispiel', 'Liest und schreibt'),
                   'en': ('Description', 'Workflow', 'Example', 'Reads and writes')}
+MANAGED_PAGES = ('/concepts.md', '/development.md')
 # pages of the former structure: reported, never converted or deleted
-FORMER_PAGES = ('README.md', 'usage.md', 'screens.md', 'faq.md', 'storage.md', 'development.md')
+FORMER_PAGES = ('README.md', 'usage.md', 'screens.md', 'faq.md', 'storage.md')
 
 
 def outline(kind='plugin'):
@@ -204,7 +205,7 @@ def page_layout(policy, kind='plugin'):
 
 
 def template_text(template, policy, base=None, kind='plugin'):
-    if template.endswith('/concepts.md'):  # the managed page (R36): identical in every repository of the kind, never varied
+    if template.endswith(MANAGED_PAGES):  # managed pages (R36, R42): identical in every repository of the kind, never varied
         return (TEMPLATES / kind / 'sync' / template).read_text(encoding='utf-8')
     text = ((base or TEMPLATES / 'documentation' / kind) / template).read_text(encoding='utf-8')
     if len(policy['languages']) == 1:
@@ -430,7 +431,7 @@ def validate(output):
             errors.append(f'{name}: expected exactly one page title')
         if re.search(r'(?:/Users/|/home/[^/\s]+/|[A-Za-z]:\\Users\\)', text):
             errors.append(f'{name}: machine-specific path')
-        if len(policy['languages']) > 1 and not name.endswith('/concepts.md'):  # the managed page carries no language switch
+        if len(policy['languages']) > 1 and not name.endswith(MANAGED_PAGES):  # managed pages carry no language switch
             other = 'en' if language == 'de' else 'de'
             if name.startswith('README'):
                 counterpart = 'README.md' if other == policy['default_language'] else f'README.{other}.md'

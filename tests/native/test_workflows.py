@@ -12,10 +12,10 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
         def run(args,cwd=self.market):
             return subprocess.run(args,cwd=cwd,env=env,capture_output=True,text=True,check=True,timeout=60)
         for host in ('claude','codex'):
-            run(['make','-s','install-local','TARGET='+host],self.plugin)
+            run(['make','-s','install-local','TARGET='+host])
             for path in (self.plugin,existing):
                 skill=path/'skills'/path.name/'SKILL.md';skill.write_text(skill.read_text()+'\nUpdated fictional '+host+' content.\n')
-            run(['make','-s','install-local','TARGET='+host],existing)
+            run(['make','-s','install-local','TARGET='+host])
             if host=='claude':
                 listing=json.loads(run(['claude','plugin','list','--json']).stdout)
             for path in (self.plugin,existing):

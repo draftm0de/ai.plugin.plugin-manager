@@ -100,8 +100,8 @@ class DocumentationTests(unittest.TestCase):
 
     def test_scaffold_is_bilingual_preserves_existing_and_references_the_single_icon(self):
         result = doc.scaffold(self.source, self.output, languages=['de','en'])
-        self.assertEqual(len(doc.outline()), 8)
-        self.assertEqual(len(result['created']), 9)  # documentation.json, two READMEs and six pages
+        self.assertEqual(len(doc.outline()), 10)
+        self.assertEqual(len(result['created']), 11)  # documentation.json, two READMEs and eight pages
         self.assertFalse((self.output / 'docs/assets').exists())  # no second copy of the icon
         self.assertIn('assets/icon.png', (self.output / 'README.md').read_text())
         self.assertIn('assets/icon.png is missing', ' '.join(doc.validate(self.output)))
@@ -185,7 +185,7 @@ class DocumentationTests(unittest.TestCase):
                 doc.scaffold(self.source, output, languages=languages, default_language=default)
                 policy = doc.language_policy(output)
                 pages = doc.page_layout(policy)
-                self.assertEqual(4 * len(languages),len(pages))
+                self.assertEqual(5 * len(languages),len(pages))
                 for name in pages:
                     path = output / name
                     path.write_text(re.sub(r'\{\{[^}]+\}\}', 'Fictional example.', path.read_text()))

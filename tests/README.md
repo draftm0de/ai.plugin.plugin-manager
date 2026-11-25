@@ -18,10 +18,7 @@ Im jeweiligen Repository / From the relevant repository:
 
 ```sh
 make test                    # unit + integration + contracts
-make test-unit
-make test-integration
-make test-contracts
-make test-native             # explicit, isolated hosts only
+python3 -B scripts/run_tests.py --kind unit|integration|contracts
 make test-behavior           # explicit model calls, when configured
 python3 -B scripts/run_tests.py --kind deterministic --list
 ```
@@ -30,9 +27,9 @@ python3 -B scripts/run_tests.py --kind deterministic --list
 
 `make test` never runs native tests, regardless of environment flags. An absent layer reports `NOT RUN`, which is not a passed test. Unknown `TEST_GROUP` values or import errors fail. Tools are never installed automatically.
 
-Im Manager kann `make test TEST_GROUP=publish` oder `make test-integration TEST_GROUP=plugin-create` eine Komponente auswählen. `make test-native` im ai.plugins-Stamm führt die Marketplace- und Manager-Hosttests aus. Native Tests verändern keine persönlichen Installationen. Der Coach hat derzeit keine eigene native Suite; seine Host-Abnahme bleibt separat. Der Manager besitzt [Review-Modelltests](behavior/README.md) über `make test-behavior CLI=claude|codex`. Der Coach hat Coaching-Modelltests und zusätzlich `make test-journey CLI=claude`. Modelltests können Credits verbrauchen; sie werden nicht mit dem normalen Testlauf gestartet.
+Im Manager wählt `make test TEST_GROUP=plugin-create` eine Komponente aus. `make test-native` (aus `CUSTOM.mk`) führt die Hosttests aus, ohne persönliche Installationen zu verändern. Modelltests: `make test-behavior`, `make test-behavior-review` und `make test-behavior-skills`; sie können Credits verbrauchen und laufen nie mit dem normalen Testlauf.
 
-In the Manager, `make test TEST_GROUP=publish` or `make test-integration TEST_GROUP=plugin-create` selects a component. Root `make test-native` in ai.plugins runs marketplace and Manager host tests. Native tests never change personal installations. The Coach currently has no dedicated native suite; host acceptance remains separate. The Manager has [review model tests](behavior/README.md) via `make test-behavior CLI=claude|codex`. The Coach has coaching model tests and also `make test-journey CLI=claude`. Model tests may consume credits and never run with the default suite.
+In the Manager, `make test TEST_GROUP=plugin-create` selects a component. `make test-native` (from `CUSTOM.mk`) runs the host tests without changing personal installations. Model tests: `make test-behavior`, `make test-behavior-review` and `make test-behavior-skills`; they may consume credits and never run with the default suite.
 
 Regressionen gehören zur jeweiligen Testart, nicht in einen eigenen regression-Ordner. CI verwendet weiterhin `make test`. Testdaten bleiben fiktiv; Modellartefakte liegen ignoriert unter `.tmp/tests/`. Erfolgreiche lokale Tests ersetzen keine veröffentlichte GitHub-/GUI-Abnahme.
 

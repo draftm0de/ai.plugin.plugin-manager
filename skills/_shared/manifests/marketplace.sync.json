@@ -1,16 +1,36 @@
 {
   "schema_version": 1,
   "files": {
+    "AGENTS.md": {
+      "sha256": "959056d4e31df3022dfde254c82bada637ada0c149a303b8785dbf2a463bfe2b",
+      "executable": false
+    },
     "CLAUDE.md": {
       "sha256": "d50241a8f54f9b9dc16bcc0c741754b2f3b9017c0dd4e9358068c74f6a31a638",
       "executable": false
     },
+    "Makefile": {
+      "sha256": "37fb5c70da38a2fcf53863c7730a4a6cb588bcffbe259334686a325159d2d56e",
+      "executable": false
+    },
+    "SCOPE.md": {
+      "sha256": "aa5615c7c86317ef590fcef1c9862d81e91edc6da3d246c2764938ca46cb13ba",
+      "executable": false
+    },
     "docs/de/concepts.md": {
-      "sha256": "d4d32642bc2f67d666b472eb14d30b9ae3e6e90467ae75d804069c37c43ed160",
+      "sha256": "18aafd74ae5f1cdb4b7a841886b89ab20ea3850e9f0bfebc61274cd9042083a0",
+      "executable": false
+    },
+    "docs/de/development.md": {
+      "sha256": "6e9a23b6f57670f6d0f2715d3a0917c57772acb6232436e6bd2ec8585946f9cf",
       "executable": false
     },
     "docs/en/concepts.md": {
-      "sha256": "ea8c9409c1bbf92bf008aebd793f5b970c38a9460178633b33ec7a3c90ae5b53",
+      "sha256": "7f3bf83a8cc3310ce62c3bd9252c831e6fb60d87925e13b987737f802b18faa8",
+      "executable": false
+    },
+    "docs/en/development.md": {
+      "sha256": "4d9e80581684ad67e5ef64f7f9e8bf19db8c12dc3a941476612bda8d39c28dbd",
       "executable": false
     },
     "scripts/local_plugins.py": {
@@ -22,15 +42,15 @@
       "executable": false
     },
     "scripts/plugin_payload.py": {
-      "sha256": "c9023a6afbce46cd67c0c422911aa515deb639f24f25f8ae6abf591964ab9661",
+      "sha256": "f287c186b50edc87db15943c7db611f8d2b3a2565404bdb4e1ac3d907c636059",
       "executable": false
     },
     "scripts/run_tests.py": {
-      "sha256": "1e8c301250633b36ae4123f2b35454a5ce57e0792a746d910cf9afd3f882344c",
+      "sha256": "210e1c86b5c90ce9770fc2f1bc5df1724315187a8b3c0999cf01e9db79e5f96d",
       "executable": false
     },
     "scripts/verify.py": {
-      "sha256": "cb4938a3ea52c767a87bab4b036b120b6e6241fe64ce980d4fa72e98e7d765e4",
+      "sha256": "1b375b48940ae49e192318c847f5643df9406ea89d1cadb65618dc6655c9bdc4",
       "executable": false
     },
     "tests/contracts/test_local_plugins.py": {

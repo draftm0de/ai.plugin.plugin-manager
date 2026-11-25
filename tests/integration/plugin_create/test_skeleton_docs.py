@@ -12,7 +12,7 @@ class SkeletonDocsTests(unittest.TestCase):
     def test_every_outline_page_exists_finished_with_only_the_title_placeholder(self):
         outline = json.loads((SHARED / 'templates/outline.json').read_text(encoding='utf-8'))['plugin']
         for template, headings in outline.items():
-            if template.endswith('/concepts.md'):
+            if template.endswith(('/concepts.md', '/development.md')):  # managed pages (R36, R42)
                 continue  # the managed page (R36), not part of the skeleton templates
             with self.subTest(page=template):
                 text = (SHARED / 'templates/skeleton-docs' / template).read_text(encoding='utf-8')
@@ -28,7 +28,7 @@ class SkeletonDocsTests(unittest.TestCase):
         self.assertFalse((SHARED / 'templates/skeleton-content.json').exists())
         outline = json.loads((SHARED / 'templates/outline.json').read_text(encoding='utf-8'))['plugin']
         found = {str(p.relative_to(SHARED / 'templates/skeleton-docs')) for p in (SHARED / 'templates/skeleton-docs').rglob('*.md')}
-        self.assertEqual({page for page in outline if not page.endswith('/concepts.md')}, found)
+        self.assertEqual({page for page in outline if not page.endswith(('/concepts.md', '/development.md'))}, found)
 
     def test_each_kind_has_a_template_for_every_page_of_its_outline(self):  # R34
         outline = json.loads((SHARED / 'templates/outline.json').read_text(encoding='utf-8'))
@@ -37,9 +37,9 @@ class SkeletonDocsTests(unittest.TestCase):
         self.assertIn('docs/en/plugins.md', outline['marketplace'])
         for kind, pages in outline.items():
             found = {str(p.relative_to(SHARED / 'templates/documentation' / kind)) for p in (SHARED / 'templates/documentation' / kind).rglob('*.md')}
-            self.assertEqual({page for page in pages if not page.endswith('/concepts.md')}, found, kind)
+            self.assertEqual({page for page in pages if not page.endswith(('/concepts.md', '/development.md'))}, found, kind)
             for page in pages:
-                if page.endswith('/concepts.md'):
+                if page.endswith(('/concepts.md', '/development.md')):
                     self.assertTrue((SHARED / 'templates' / kind / 'sync' / page).is_file(), (kind, page))
 
 

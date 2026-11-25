@@ -4,7 +4,7 @@ Structure and design of every documentation. How the texts sound is the reposito
 
 ## Structure
 
-Use a repeatable reader journey: understand (README) → install → look up each skill (workflow, example, what it reads and writes) → read the concepts. Use tables for parallel choices and numbered lists for sequential actions. Separate user tasks from developer internals.
+Use a repeatable reader journey: understand (README) → install → look up each skill (workflow, example, what it reads and writes) → read the concepts → for developers, the development page. `concepts.md` and `development.md` are managed pages: never write or change them. Use tables for parallel choices and numbered lists for sequential actions. Separate user tasks from developer internals.
 
 The `templates/outline.json` filenames and level-two headings are the structural contract. Keep their order. Use level-three headings for project-specific detail; do not create empty sections. If a section does not apply, say so briefly with the factual reason. Put a consistent relative navigation row on each page under `docs/`.
 
