@@ -16,7 +16,7 @@ HELPER = SETUP_SCRIPTS / 'setup_state.py'
 DRIVER = ROOT / 'tests/support/run_state.py'  # the real command line with a context given in code
 # Files of the real skeleton whose delivery the delivery/integration tests check. keep.md and remove.md (manual
 # sync-test sources) are deliberately not listed: they may disappear from the real parent. Rule tests of the sync
-# do not use this list at all; they use FictionalSandbox with fixed fictional bytes (see tests/README.md).
+# do not use this list at all; they use FictionalSandbox with fixed fictional bytes (see tests/CUSTOM.README.md).
 FILES = ('CLAUDE.md', 'scripts/plugin.py', 'scripts/verify.py', 'scripts/run_tests.py',
          'AGENTS.md', 'docs/standards/coding.md', 'docs/standards/messages.md', 'docs/standards/testing.md', 'docs/standards/skills.md',
          'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md')
