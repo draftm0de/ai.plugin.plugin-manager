@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p/'Makefile').is_file())
-SPEC = importlib.util.spec_from_file_location('scope_verifier', ROOT/'skills/_shared/scripts/verify.py')
+SPEC = importlib.util.spec_from_file_location('scope_verifier', ROOT/'skills/_shared/scripts/verify/__init__.py')
 verify = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(verify)
 

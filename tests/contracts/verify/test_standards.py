@@ -86,13 +86,6 @@ class StandardsTests(unittest.TestCase):
         for name in NAMES:
             self.assertEqual((SOURCE / name).read_bytes(), (R / 'docs/standards' / name).read_bytes(), name)
         self.assertTrue(skill_verify.verify(R, 'plugin')['structure_valid'])
-        canonical = (R / 'skills/_shared/scripts/verify.py').read_bytes()
-        for relative in ('scripts/verify.py', 'skills/_shared/templates/plugin/sync/scripts/verify.py', 'skills/_shared/templates/marketplace/sync/scripts/verify.py'):
-            self.assertEqual(canonical, (R / relative).read_bytes(), relative)
-        rules = (R / 'skills/_shared/scripts/docs_rules.py').read_bytes()  # R37: the structure rules travel with verify
-        for relative in ('scripts/docs_rules.py', 'skills/_shared/templates/plugin/sync/scripts/docs_rules.py',
-                         'skills/_shared/templates/marketplace/sync/scripts/docs_rules.py'):
-            self.assertEqual(rules, (R / relative).read_bytes(), relative)
 
     def errors(self):
         return ' '.join(skill_verify.verify(self.plugin, 'plugin').get('errors', []))
@@ -106,8 +99,6 @@ class StandardsTests(unittest.TestCase):
         (self.plugin / 'commands').mkdir(exist_ok=True)
         for name in ('fictional-example', 'second'):
             (self.plugin / 'commands' / (name + '.md')).write_text('Run the skill.\n')
-        self.assertIn('level-two headings', self.errors())  # R37: the new skill has no section yet
-        workflows.complete_skeleton_documentation(self.plugin, 'Fictional')
         self.assertTrue(skill_verify.verify(self.plugin, 'plugin')['structure_valid'])
 
     def test_the_failure_layout_exists_only_in_the_message_module(self):  # R32
@@ -151,7 +142,7 @@ class StandardsTests(unittest.TestCase):
 
     def test_the_plugin_copy_of_the_verifier_finds_a_changed_standard_through_the_committed_lock(self):  # R33
         self.lock_standards()
-        command = (sys.executable, '-B', 'scripts/verify.py', '--source', '.', '--kind', 'plugin')
+        command = (sys.executable, '-B', 'scripts/verify/standards.py', '--source', '.', '--kind', 'plugin')
         self.assertEqual(0, self.run_copy(*command).returncode, self.run_copy(*command).stdout)
         standard = self.plugin / 'docs/standards/testing.md'
         standard.write_text(standard.read_text() + 'my own rule\n')
@@ -161,7 +152,7 @@ class StandardsTests(unittest.TestCase):
 
     def test_the_ci_of_a_new_plugin_runs_the_verifier(self):  # R33
         workflow = (self.plugin / '.github/workflows/dm-verify.yml').read_text()  # R44
-        self.assertIn('run: python3 -B scripts/verify.py --source . --kind plugin', workflow)
+        self.assertIn('run: python3 -B scripts/verify/standards.py --source .', workflow)
 
     def test_the_managed_pre_commit_hook_is_silent_when_valid_and_stops_with_the_findings_when_not(self):  # R33
         hook = self.plugin / 'githooks/pre-commit'

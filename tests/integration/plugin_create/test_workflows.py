@@ -133,7 +133,7 @@ class PluginCreateWorkflowTests(WorkflowFixture, unittest.TestCase):
         result=self.create()
         self.assertEqual('personal tooling',(self.plugin/'scripts/plugin.py').read_text())  # left to the skeleton and sync flows
         self.assertTrue((self.plugin/'plugin.json').exists())
-        self.assertTrue((self.plugin/'scripts/verify.py').exists())  # missing common files are still created
+        self.assertTrue((self.plugin/'scripts/verify/structure.py').exists())  # missing common files are still created
         self.assertEqual('skeleton',result['implementation_status'])
 
     def test_clone_missing_checkout_and_no_remote_creation(self):
@@ -247,13 +247,12 @@ class PluginCreateWorkflowTests(WorkflowFixture, unittest.TestCase):
         review = verify.scope_review(self.plugin)
         self.assertEqual('needs_attention', review['status'])
         self.assertEqual('unverified', review['semantic_status'])
-        cli = subprocess.run([sys.executable, '-B', str(flow.SKILL/'scripts/verify.py'),
-                              '--source', str(self.plugin), '--review'], capture_output=True, text=True)
+        cli = subprocess.run([sys.executable, '-B', str(flow.SKILL/'scripts/verify/scope.py'),
+                              '--source', str(self.plugin)], capture_output=True, text=True)
         self.assertEqual(1, cli.returncode)
         cli_report = json.loads(cli.stdout)
-        self.assertTrue(cli_report['structure_valid'])
-        self.assertEqual('needs_attention', cli_report['review']['status'])
-        self.assertFalse(cli_report['review']['target_code_executed'])
+        self.assertEqual('needs_attention', cli_report['status'])
+        self.assertFalse(cli_report['target_code_executed'])
         self.assertFalse((self.plugin/'LICENSE').exists())
         self.assertNotEqual(0, subprocess.run(['git','-C',str(self.plugin),'rev-parse','--verify','HEAD'],capture_output=True).returncode)
 
@@ -330,8 +329,7 @@ class PluginCreateWorkflowTests(WorkflowFixture, unittest.TestCase):
         result = flow.create_plugin(self.plugin, self.market, skeleton=True, name='new-plugin',
             display_name='Fictional Plugin', author='Fixture', languages=['en'], license='deferred')
         self.assertEqual(original, (self.plugin/'README.md').read_text())
-        self.assertFalse(result['checks']['plugin']['structure_valid'])  # R37: verify names the documentation
-        self.assertIn('documentation does not match', result['checks']['plugin']['errors'][0])
+        self.assertTrue(result['checks']['plugin']['structure_valid'])  # the documentation is its own check (R51)
         self.assertEqual('needs_attention', result['checks']['status'])
         self.assertFalse(result['checks']['documentation']['valid'])
         self.assertIn('Resolve', result['next'])

@@ -88,7 +88,7 @@ def grade(case, report):
 
 
 def build_prompt(case, target):
-    spec=importlib.util.spec_from_file_location('trusted_review_verifier',SHARED/'scripts/verify.py')
+    spec=importlib.util.spec_from_file_location('trusted_review_verifier',SHARED/'scripts/verify/__init__.py')
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     structure=module.verify(target);review=module.scope_review(target)
     rules=(ROOT/'skills/verify/SKILL.md').read_text()+'\n'+(SHARED/'references/scope-review.md').read_text()

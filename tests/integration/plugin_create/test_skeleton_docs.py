@@ -8,7 +8,7 @@ import unittest
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file())
 SHARED = ROOT / 'skills/_shared'
 sys.path.insert(0, str(SHARED / 'scripts'))
-from docs_rules import OUTLINE  # noqa: E402
+from verify.docs import OUTLINE  # noqa: E402
 
 
 class SkeletonDocsTests(unittest.TestCase):

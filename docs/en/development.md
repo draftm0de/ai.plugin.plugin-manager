@@ -48,6 +48,7 @@ All commands run in the root of the repository. `make help` lists them too.
 | `make check` | Check that the host manifest matches | |
 | `make test` | Deterministic tests | `TEST_GROUP=<name>`: one component only |
 | `make verify` | Read-only structure check | `SOURCE=<folder>`; `REVIEW=1`: also compare with `SCOPE.md` |
+| `make build-skeleton-hashes` | Rebuild the hash files of sync templates; without such templates nothing happens | |
 | `make test-behavior` | Optional model cases, may consume credits | `CLI=claude` or `codex` |
 | `make install-hooks` | Activate the check before every commit for this clone | |
 | `make help` | Show the commands | |
@@ -62,7 +63,11 @@ Your own commands belong into `CUSTOM.mk`.
 | --- | --- |
 | `python3 -B scripts/run_tests.py` | a test fails |
 | `python3 -B scripts/plugin.py check` | the host manifest does not match `plugin.json` |
-| `python3 -B scripts/verify.py --source . --kind plugin` | the structure is invalid, standards or `AGENTS.md` differ, a convention is broken (command files, messages, test folders, `docs/style.md`), the documentation lacks pages, headings or link targets, or hash files do not fit the sync templates |
+| `python3 -B scripts/verify/structure.py --source .` | manifests, catalogs, skills or the structure are invalid |
+| `python3 -B scripts/verify/standards.py --source .` | the standards or `AGENTS.md` differ or standard text is copied |
+| `python3 -B scripts/verify/conventions.py --source .` | command files, messages, failure codes, test folders or `docs/style.md` do not fit |
+| `python3 -B scripts/verify/docs.py --source .` | the documentation lacks pages, headings or link targets |
+| `python3 -B scripts/verify/hashes.py --source .` | hash files do not fit the sync templates |
 
 Your own steps belong into another file under `.github/workflows/`. Locally you check the same with `make test check verify`.
 

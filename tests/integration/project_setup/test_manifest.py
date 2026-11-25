@@ -9,7 +9,7 @@ from tests.support.project_setup_fixture import ROOT, SHARED, digest
 
 TEMPLATES = SHARED / 'templates'
 MANIFESTS = SHARED / 'manifests'
-TOOL = ROOT / 'scripts/skeleton_hashes.py'
+TOOL = ROOT / 'scripts/verify/hashes.py'
 KINDS = ('marketplace', 'plugin')
 
 
@@ -48,14 +48,14 @@ class ManifestTests(unittest.TestCase):
                     self.assertEqual({'sha256': digest(file.read_bytes()), 'executable': bool(file.stat().st_mode & 0o111)}, listed[path], path)
 
     def test_tombstones_are_removed_files_and_not_shipped(self):
-        self.assertEqual(['install.sh', 'keep.md', 'remove.md'], load('plugin.sync.json')['removed'])
-        self.assertEqual([], load('marketplace.sync.json')['removed'])
+        self.assertEqual(['install.sh', 'keep.md', 'remove.md', 'scripts/docs_rules.py', 'scripts/verify.py'], load('plugin.sync.json')['removed'])
+        self.assertEqual(['scripts/docs_rules.py', 'scripts/verify.py'], load('marketplace.sync.json')['removed'])
         for path in ('install.sh', 'keep.md', 'remove.md'):
             self.assertFalse((TEMPLATES / 'plugin/sync' / path).exists())
             self.assertFalse((TEMPLATES / 'plugin/seed' / path).exists())
 
     def test_check_tool_is_green_on_the_real_repository(self):
-        result = subprocess.run([sys.executable, '-B', str(TOOL), 'check'], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, '-B', str(TOOL), '--source', str(ROOT)], capture_output=True, text=True)
         self.assertEqual((0, 'skeleton hashes: ok\n'), (result.returncode, result.stdout), result.stderr)
 
     def test_a_file_is_either_synced_or_seeded_never_both(self):
@@ -67,7 +67,7 @@ class ManifestTests(unittest.TestCase):
     def test_marketplace_classes_follow_the_scope(self):
         sync = load('marketplace.sync.json')
         self.assertEqual({'AGENTS.md', 'CLAUDE.md', 'Makefile', 'SCOPE.md', 'scripts/local_plugins.py', 'scripts/marketplace.py', 'scripts/plugin_payload.py',
-                          'scripts/run_tests.py', 'scripts/verify.py', 'scripts/docs_rules.py', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
+                          'scripts/run_tests.py', 'scripts/verify/common.py', 'scripts/verify/structure.py', 'scripts/verify/standards.py', 'scripts/verify/docs.py', 'scripts/verify/scope.py', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
                           'tests/contracts/test_local_plugins.py', 'tests/contracts/test_marketplace_catalogs.py',
                           'tests/contracts/test_plugin_payload.py', 'tests/contracts/test_run_tests.py'}, set(sync['files']))  # R40
         seed = set(files_below(TEMPLATES / 'marketplace/seed'))
@@ -82,7 +82,7 @@ class ManifestTests(unittest.TestCase):
 
     def test_plugin_classes_follow_the_scope(self):
         sync = set(load('plugin.sync.json')['files'])
-        self.assertTrue({'CLAUDE.md', 'Makefile', 'scripts/plugin.py', 'scripts/verify.py', 'scripts/docs_rules.py', 'scripts/run_tests.py',
+        self.assertTrue({'CLAUDE.md', 'Makefile', 'scripts/plugin.py', 'scripts/build_hashes.py', 'scripts/verify/common.py', 'scripts/verify/structure.py', 'scripts/verify/standards.py', 'scripts/verify/conventions.py', 'scripts/verify/docs.py', 'scripts/verify/hashes.py', 'scripts/verify/scope.py', 'scripts/run_tests.py',
                          'skills/_shared/scripts/operator_language.py', 'skills/_shared/references/operator-language.md', 'skills/_shared/references/operator-language-helper.md', 'skills/_shared/scripts/messages_base.py', 'tests/behavior/run_cases.py', 'tests/contracts/test_operator_language.py', 'githooks/pre-commit', 'docs/de/concepts.md', 'docs/en/concepts.md', 'docs/de/development.md', 'docs/en/development.md', 'AGENTS.md', 'docs/prerequisites.md', 'tests/README.md', '.github/workflows/dm-verify.yml',
                          'docs/standards/coding.md', 'docs/standards/messages.md', 'docs/standards/testing.md', 'docs/standards/skills.md'} == sync)  # R16: no setup flow; R27: the standards
         seed = set(files_below(TEMPLATES / 'plugin/seed'))

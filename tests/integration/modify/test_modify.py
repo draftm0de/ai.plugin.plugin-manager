@@ -52,7 +52,7 @@ class PluginModifyTests(ModifyBase):
         self.assertEqual({'displayName': 'Changed Plugin', 'description': 'A changed fictional capability'},
                          {k: self.entry()[k] for k in ('displayName', 'description')})
         self.assertEqual('A changed fictional capability', data(self.plugin / '.claude-plugin/plugin.json')['description'])
-        flow.module(ROOT / 'skills/_shared/scripts/verify.py', 'trusted_verify').marketplace(self.market)  # catalogs still valid
+        flow.module(ROOT / 'skills/_shared/scripts/verify/__init__.py', 'trusted_verify').marketplace(self.market)  # catalogs still valid
         self.assertTrue(result['changed'])
 
     def test_rename_follows_name_artifact_entry_and_local_mapping_but_keeps_the_repository(self):

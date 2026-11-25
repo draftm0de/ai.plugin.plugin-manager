@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p/'Makefile').is_file())
-SPEC = importlib.util.spec_from_file_location('catalog_verifier', ROOT/'skills/_shared/scripts/verify.py')
+SPEC = importlib.util.spec_from_file_location('catalog_verifier', ROOT/'skills/_shared/scripts/verify/__init__.py')
 verify = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(verify)
 REPO = 'https://github.com/example/ai.plugin.demo'
@@ -23,7 +23,8 @@ class CatalogIdentityTests(unittest.TestCase):
                    extensions={'com.openai': {'interface': {'displayName': 'Demo Manager'}}})
         self.write(self.plugin/'.project/plugins/plugin-manager/local.json', schema_version=1, marketplace_path=str(self.market))
         self.write(self.market/'.local/marketplace.json', sources={'demo-manager': str(self.plugin)})
-        verify.marketplace = lambda root: {}          # catalog structure is not under test here
+        self.addCleanup(setattr, verify.structure, 'marketplace', verify.structure.marketplace)
+        verify.structure.marketplace = lambda root: {}  # catalog structure is not under test here
 
     @staticmethod
     def write(path, **data):

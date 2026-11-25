@@ -1,4 +1,4 @@
-"""R37, R47: the verify copy a repository runs in CI checks the documentation structure and the sync hash files."""
+"""R37, R47: the scripts a repository runs in CI check the documentation structure and the sync hash files."""
 import hashlib
 import json
 from pathlib import Path
@@ -10,7 +10,7 @@ import unittest
 
 R = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file())
 sys.path.insert(0, str(R / 'skills/_shared/scripts'))
-import verify  # noqa: E402
+from verify import docs, hashes  # noqa: E402
 
 
 class DocumentationCheck(unittest.TestCase):
@@ -20,22 +20,21 @@ class DocumentationCheck(unittest.TestCase):
         self.root = Path(temp.name).resolve()
 
     def test_without_selected_languages_nothing_is_checked_and_the_result_says_so(self):
-        self.assertEqual('not_created', verify.documentation(self.root))
+        result = docs.check(self.root)
+        self.assertEqual((True, 'not_created'), (result['valid'], result['documentation']))
 
     def test_with_selected_languages_missing_pages_are_findings(self):
         (self.root / 'docs').mkdir()
         (self.root / 'docs/documentation.json').write_text(json.dumps(
             {'schema_version': 1, 'documentation': {'languages': ['en'], 'default_language': 'en'}}))
-        with self.assertRaisesRegex(ValueError, 'docs/en/development.md: missing page'):
-            verify.documentation(self.root)
+        result = docs.check(self.root)
+        self.assertFalse(result['valid'])
+        self.assertIn('docs/en/development.md: missing page', result['errors'])
 
-    def test_the_copy_in_a_repository_works_without_the_manager_and_writes_nothing(self):
-        (self.root / 'scripts').mkdir()
-        for name in ('verify.py', 'docs_rules.py'):
-            shutil.copyfile(R / 'scripts' / name, self.root / 'scripts' / name)
-        code = "import sys; sys.path.insert(0, 'scripts'); import verify, pathlib; print(verify.documentation(pathlib.Path.cwd()))"
-        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=self.root, capture_output=True, text=True)
-        self.assertEqual('not_created\n', result.stdout, result.stderr)
+    def test_the_copy_in_a_repository_runs_without_the_manager_and_writes_nothing(self):
+        shutil.copytree(R / 'scripts/verify', self.root / 'scripts/verify', ignore=shutil.ignore_patterns('__pycache__'))
+        result = subprocess.run([sys.executable, '-B', 'scripts/verify/docs.py'], cwd=self.root, capture_output=True, text=True)
+        self.assertEqual((0, 'not_created'), (result.returncode, json.loads(result.stdout)['documentation']), result.stderr)
         self.assertEqual([], list(self.root.rglob('__pycache__')))
 
 
@@ -49,39 +48,37 @@ class TemplateHashCheck(unittest.TestCase):
         (self.base / 'manifests').mkdir()
         self.template = self.base / 'templates/thing/sync/rules.md'
         self.template.write_text('fictional\n')
-        self.write({'rules.md': {'sha256': hashlib.sha256(b'fictional\n').hexdigest(), 'executable': False}})
+        self.write({'rules.md': {'sha256': hashlib.sha256(b'fictional\n').hexdigest(), 'executable': False}})  # canonical form
 
     def write(self, files, removed=()):
-        (self.base / 'manifests/thing.sync.json').write_text(
-            json.dumps({'schema_version': 1, 'files': files, 'removed': list(removed)}))
+        (self.base / 'manifests/thing.sync.json').write_text(hashes.render(files, list(removed)))
 
     def finds(self, text):
-        with self.assertRaisesRegex(ValueError, text):
-            verify.template_hashes(self.root)
+        self.assertIn(text, ' '.join(hashes.check(self.root)))
 
     def test_matching_hash_files_pass_and_a_plugin_without_sync_templates_is_untouched(self):
-        verify.template_hashes(self.root)
+        self.assertEqual([], hashes.check(self.root))
         shutil.rmtree(self.base)
         (self.root / 'skills/other/templates/site').mkdir(parents=True)  # templates without sync/ are not sync structures
-        verify.template_hashes(self.root)
+        self.assertEqual([], hashes.check(self.root))
 
     def test_a_changed_template_is_a_finding(self):
         self.template.write_text('changed\n')
-        self.finds('rules.md differs from its hash')
+        self.finds('rules.md: hash differs')
 
     def test_an_unlisted_and_a_missing_file_are_findings(self):
         (self.template.parent / 'new.md').write_text('x')
-        self.finds('does not list new.md')
+        self.finds('new.md: in sync/ but not listed')
         (self.template.parent / 'new.md').unlink()
         self.template.unlink()
-        self.finds('lists the missing file rules.md')
+        self.finds('rules.md: listed but missing')
 
     def test_a_missing_hash_file_is_a_finding(self):
         (self.base / 'manifests/thing.sync.json').unlink()
-        self.finds('thing.sync.json is missing')
+        self.finds('thing.sync.json: missing')
 
     def test_the_hash_files_of_the_manager_fit(self):
-        verify.template_hashes(R)
+        self.assertEqual([], hashes.check(R))
 
 
 if __name__ == '__main__':

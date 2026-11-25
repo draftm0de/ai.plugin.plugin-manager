@@ -48,6 +48,7 @@ Alle Befehle laufen im Stamm des Repositorys. `make help` listet sie auch.
 | `make check` | Prüfen, ob das Host-Manifest dazu passt | |
 | `make test` | Deterministische Tests | `TEST_GROUP=<name>`: nur eine Komponente |
 | `make verify` | Struktur nur lesend prüfen | `SOURCE=<ordner>`; `REVIEW=1`: zusätzlich Abgleich mit `SCOPE.md` |
+| `make build-skeleton-hashes` | Hash-Dateien der Sync-Vorlagen neu erzeugen; ohne solche Vorlagen passiert nichts | |
 | `make test-behavior` | Optionale Modellfälle, kann Credits kosten | `CLI=claude` oder `codex` |
 | `make install-hooks` | Prüfung vor jedem Commit für diesen Klon aktivieren | |
 | `make help` | Befehle anzeigen | |
@@ -62,7 +63,11 @@ Eigene Befehle stehen in `CUSTOM.mk`.
 | --- | --- |
 | `python3 -B scripts/run_tests.py` | ein Test fehlschlägt |
 | `python3 -B scripts/plugin.py check` | das Host-Manifest nicht zu `plugin.json` passt |
-| `python3 -B scripts/verify.py --source . --kind plugin` | die Struktur ungültig ist, Standards oder `AGENTS.md` abweichen, eine Konvention verletzt ist (Befehlsdateien, Meldungen, Testordner, `docs/style.md`), der Doku Seiten, Überschriften oder Linkziele fehlen oder Hash-Dateien nicht zu Sync-Vorlagen passen |
+| `python3 -B scripts/verify/structure.py --source .` | Manifeste, Kataloge, Skills oder die Struktur ungültig sind |
+| `python3 -B scripts/verify/standards.py --source .` | die Standards oder `AGENTS.md` abweichen oder Standardtext kopiert ist |
+| `python3 -B scripts/verify/conventions.py --source .` | Befehlsdateien, Meldungen, Fehlercodes, Testordner oder `docs/style.md` nicht passen |
+| `python3 -B scripts/verify/docs.py --source .` | der Doku Seiten, Überschriften oder Linkziele fehlen |
+| `python3 -B scripts/verify/hashes.py --source .` | Hash-Dateien nicht zu den Sync-Vorlagen passen |
 
 Eigene Schritte stehen in einer weiteren Datei unter `.github/workflows/`. Lokal prüfst du dasselbe mit `make test check verify`.
 

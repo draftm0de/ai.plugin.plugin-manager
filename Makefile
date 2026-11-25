@@ -6,11 +6,12 @@ TEST_GROUP ?=
 CLI ?= claude
 .SUFFIXES:
 .DEFAULT_GOAL := help
-.PHONY: help sync check test verify test-behavior install-hooks
+.PHONY: help sync check test verify build-skeleton-hashes test-behavior install-hooks
 help:
 	@echo 'sync / check          Generate / validate the committed host metadata'
 	@echo 'test                  Deterministic tests; TEST_GROUP=<name> selects a component'
 	@echo 'verify                Read-only structure checks; REVIEW=1 adds the scope review'
+	@echo 'build-skeleton-hashes Rebuild the hash files of sync templates; without such templates nothing happens'
 	@echo 'test-behavior         Optional model cases, CLI=claude|codex (may consume credits)'
 	@echo 'install-hooks         Activate the pre-commit check for this clone'
 	@echo 'Local installation: run make install-local in the marketplace of this plugin.'
@@ -21,7 +22,14 @@ check:
 test:
 	$(PYTHON) -B scripts/run_tests.py --kind deterministic $(if $(TEST_GROUP),--group "$(TEST_GROUP)",)
 verify:
-	$(PYTHON) scripts/verify.py --source "$(SOURCE)" --kind auto $(if $(filter 1,$(REVIEW)),--review,)
+	$(PYTHON) scripts/verify/structure.py --source "$(SOURCE)"
+	$(PYTHON) scripts/verify/standards.py --source "$(SOURCE)"
+	$(PYTHON) scripts/verify/conventions.py --source "$(SOURCE)"
+	$(PYTHON) scripts/verify/docs.py --source "$(SOURCE)"
+	$(PYTHON) scripts/verify/hashes.py --source "$(SOURCE)"
+	$(if $(filter 1,$(REVIEW)),$(PYTHON) scripts/verify/scope.py --source "$(SOURCE)",)
+build-skeleton-hashes:
+	$(PYTHON) -B scripts/build_hashes.py
 test-behavior:
 	$(PYTHON) -B tests/behavior/run_cases.py --cli $(CLI)
 install-hooks:

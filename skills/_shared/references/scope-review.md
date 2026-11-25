@@ -15,7 +15,7 @@ and report that acceptance cannot be assessed. Do not invent requirements or inf
 confirmation from existing code. Requirements use stable R-numbered IDs, confirmed
 status, observable acceptance criteria and explicit public Source/Test file pointers.
 
-Run the bundled trusted `scripts/verify.py --source TARGET --review` (relative to
+Run the bundled trusted `scripts/verify/scope.py --source TARGET` (relative to
 skills/_shared). It reads only, preserves structural/local availability distinctions,
 and collects bounded evidence with hashes. It neither performs semantic comparison
 nor executes tests. `ready_for_source_review` means evidence is available, not passed.

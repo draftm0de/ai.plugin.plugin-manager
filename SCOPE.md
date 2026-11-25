@@ -151,9 +151,9 @@ Test: tests/integration/project_setup/test_workpackage_config.py
 ## R16: Skeleton per kind: sync/ and seed/ folders, generated hash file, manifest
 
 Status: confirmed
-Acceptance: Every kind has two template folders: skills/_shared/templates/<kind>/sync/<project path> (files kept in sync: copied 1:1, hashed in .project/plugins/<plugin>/skeleton.json, schema_version 2, and synchronized under the keep/adopt/delete rules of R12) and skills/_shared/templates/<kind>/seed/<project path> (files created once when missing, with a short intro of what the file is for, never what it does; never hashed or synced). The folder a file lies in is the only statement of its class. skills/_shared/manifests/<kind>.json is only {schema_version: 1, product, requires_marketplace, derived: [{path, generate, check}]} (product = root file naming the kind or null; requires_marketplace = boolean, true only for the kind plugin; derived = catalogs produced by a named command of the kind and only verified by its check command, never copied or hashed). skills/_shared/manifests/<kind>.sync.json is generated, never edited by hand: {schema_version: 1, files: {<path>: {sha256, executable}}, removed: [<path>]}, sorted, with a trailing newline. files lists exactly the files of sync/ (full SHA-256 of the bytes, executable bit); removed lists tombstones, paths whose template source was removed in the parent (plugin: keep.md, remove.md), and may not overlap files. The development tool scripts/skeleton_hashes.py (make build-skeleton-hashes / check-skeleton-hashes) writes the file (build keeps removed) and verifies it (check exits 1 naming each path on a hash or executable mismatch, a missing or unlisted file, an invalid file or an overlap); the same comparison runs in CI as part of verify (R47). The helper trusts the file only as the expected value: before copying or comparing it hashes every source of sync/ and refuses with a template_base conflict (reason names make build-skeleton-hashes) on a deviating or missing source of a listed path, an unlisted file in sync/, an invalid sync file or an overlap, and writes nothing. The removal rules of R12 apply only to paths in removed. Templates and manifests carry -text in .gitattributes so line endings never change a hash. The kind marketplace has sync = AGENTS.md, CLAUDE.md, SCOPE.md (R41), the concepts pages (R36), the development pages (R42), Makefile (R43), docs/prerequisites.md, tests/README.md and .github/workflows/dm-verify.yml (R44), scripts/{local_plugins,marketplace,plugin_payload,run_tests,verify}.py and the tests of R40; seed = CUSTOM.mk, CUSTOM.AGENTS.md, docs/architecture.md, local-marketplace.example.json, tests/__init__.py, tests/contracts/__init__.py, tests/contracts/test_structure.py; derived = .claude-plugin/marketplace.json and .agents/plugins/marketplace.json (marketplace.py sync / check). The kind plugin has AGENTS.md, CLAUDE.md, Makefile (R43), docs/prerequisites.md, tests/README.md, .github/workflows/dm-verify.yml (R44), the standards under docs/standards/, scripts/plugin.py, scripts/run_tests.py, scripts/verify.py and the operator-language building block of R9/R10 in sync/; the setup flows and project_setup.py are no part of a generated plugin. Its seed/ holds the generator files (CUSTOM.AGENTS.md, SCOPE.md, CUSTOM.mk, gitignore.txt, assets/icon.png as a neutral placeholder, docs, tests). The former .project/plugin.skeleton.lock.json is an unsupported location (no read, migration or deletion). The ignore rules written by the generators are /.project/operator.json (new plugin repositories only) and /.project/plugins/*/local.json (every plugin repository where the association is written; effectiveness is checked with Git before writing); the marketplace side keeps .local/. A managed file that was an exact copy of the source at the last sync and is untouched since (its source changed, the local file did not) is updated by `setup` without a question, named by path; a file that was edited or deliberately kept (keep) is never replaced silently and comes as a decision under R12.
+Acceptance: Every kind has two template folders: skills/_shared/templates/<kind>/sync/<project path> (files kept in sync: copied 1:1, hashed in .project/plugins/<plugin>/skeleton.json, schema_version 2, and synchronized under the keep/adopt/delete rules of R12) and skills/_shared/templates/<kind>/seed/<project path> (files created once when missing, with a short intro of what the file is for, never what it does; never hashed or synced). The folder a file lies in is the only statement of its class. skills/_shared/manifests/<kind>.json is only {schema_version: 1, product, requires_marketplace, derived: [{path, generate, check}]} (product = root file naming the kind or null; requires_marketplace = boolean, true only for the kind plugin; derived = catalogs produced by a named command of the kind and only verified by its check command, never copied or hashed). skills/_shared/manifests/<kind>.sync.json is generated, never edited by hand: {schema_version: 1, files: {<path>: {sha256, executable}}, removed: [<path>]}, sorted, with a trailing newline. files lists exactly the files of sync/ (full SHA-256 of the bytes, executable bit); removed lists tombstones, paths whose template source was removed in the parent (plugin: keep.md, remove.md), and may not overlap files. The development tool scripts/build_hashes.py (make build-skeleton-hashes, which keeps removed) writes the file and scripts/verify/hashes.py verifies it (check exits 1 naming each path on a hash or executable mismatch, a missing or unlisted file, an invalid file or an overlap); the same comparison runs in CI as part of verify (R47). The helper trusts the file only as the expected value: before copying or comparing it hashes every source of sync/ and refuses with a template_base conflict (reason names make build-skeleton-hashes) on a deviating or missing source of a listed path, an unlisted file in sync/, an invalid sync file or an overlap, and writes nothing. The removal rules of R12 apply only to paths in removed. Templates and manifests carry -text in .gitattributes so line endings never change a hash. The kind marketplace has sync = AGENTS.md, CLAUDE.md, SCOPE.md (R41), the concepts pages (R36), the development pages (R42), Makefile (R43), docs/prerequisites.md, tests/README.md and .github/workflows/dm-verify.yml (R44), scripts/{local_plugins,marketplace,plugin_payload,run_tests,verify}.py and the tests of R40; seed = CUSTOM.mk, CUSTOM.AGENTS.md, docs/architecture.md, local-marketplace.example.json, tests/__init__.py, tests/contracts/__init__.py, tests/contracts/test_structure.py; derived = .claude-plugin/marketplace.json and .agents/plugins/marketplace.json (marketplace.py sync / check). The kind plugin has AGENTS.md, CLAUDE.md, Makefile (R43), docs/prerequisites.md, tests/README.md, .github/workflows/dm-verify.yml (R44), the standards under docs/standards/, scripts/plugin.py, scripts/run_tests.py, scripts/verify.py and the operator-language building block of R9/R10 in sync/; the setup flows and project_setup.py are no part of a generated plugin. Its seed/ holds the generator files (CUSTOM.AGENTS.md, SCOPE.md, CUSTOM.mk, gitignore.txt, assets/icon.png as a neutral placeholder, docs, tests). The former .project/plugin.skeleton.lock.json is an unsupported location (no read, migration or deletion). The ignore rules written by the generators are /.project/operator.json (new plugin repositories only) and /.project/plugins/*/local.json (every plugin repository where the association is written; effectiveness is checked with Git before writing); the marketplace side keeps .local/. A managed file that was an exact copy of the source at the last sync and is untouched since (its source changed, the local file did not) is updated by `setup` without a question, named by path; a file that was edited or deliberately kept (keep) is never replaced silently and comes as a decision under R12.
 Source: skills/setup/scripts/setup_state.py
-Source: scripts/skeleton_hashes.py
+Source: scripts/build_hashes.py
 Source: skills/setup/scripts/state/context.py
 Test: tests/integration/project_setup/test_workpackage_config.py
 Test: tests/integration/project_setup/test_manifest.py
@@ -287,7 +287,7 @@ Source: skills/_shared/templates/plugin/sync/docs/standards/testing.md
 Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
 Source: skills/_shared/templates/plugin/sync/AGENTS.md
 Source: skills/_shared/manifests/plugin.sync.json
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/scripts/plugin_audit.py
 Source: skills/_shared/references/scope-review.md
 Test: tests/contracts/verify/test_standards.py
@@ -302,7 +302,7 @@ Source: skills/_shared/templates/plugin/sync/AGENTS.md
 Source: skills/_shared/templates/plugin/seed/CUSTOM.AGENTS.md
 Source: skills/_shared/templates/plugin/sync/CLAUDE.md
 Source: skills/_shared/manifests/plugin.sync.json
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/scripts/plugin_audit.py
 Test: tests/contracts/verify/test_standards.py
 Test: tests/integration/project_setup/test_manifest.py
@@ -346,7 +346,7 @@ Test: tests/integration/project_setup/test_manifest.py
 
 Status: confirmed
 Acceptance: Besides the managed files (R27, R28), `verify` reads a plugin repository and reports as a structural error, without running anything, what the standards fix mechanically: with several skills, a `commands/<skill>.md` for every skill (a plugin with exactly one skill needs none); the failure layout only in `messages_base.py` (or a file named `messages.py` of the Manager's own catalogue), never in another script; every failure code used in a script (`Failure`, `failure`, `OperatorLanguageError`) has an entry in a catalogue of the repository; and the test folders: only `unit`, `integration`, `contracts`, `behavior`, `native`, `fixtures` and `support` below `tests/`, with an `__init__.py` in every folder on the way to a test file. All problems are listed in one answer with the path. What the standards also demand but cannot be read mechanically (for example whether a message wording is good, or an acceptance test per requirement, which `verify --review` compares) stays with the review. The checks apply to plugin repositories only.
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
 Source: skills/_shared/templates/plugin/sync/docs/standards/testing.md
 Test: tests/contracts/verify/test_standards.py
@@ -358,7 +358,7 @@ Acceptance: The CI workflow of a new plugin runs `verify` (`python3 -B scripts/v
 Source: skills/_shared/templates/plugin/seed/ci.yml
 Source: skills/_shared/templates/plugin/seed/Makefile
 Source: skills/_shared/templates/plugin/sync/githooks/pre-commit
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/scripts/plugin_audit.py
 Test: tests/contracts/verify/test_standards.py
 Test: tests/integration/project_setup/test_manifest.py
@@ -378,7 +378,7 @@ Acceptance: The user documentation of a repository is written from its sources (
 | `docs/<lang>/development.md` | yes | yes | Requirements / Voraussetzungen; Set up / Einrichten; Test locally / Lokal testen; Publish / Veröffentlichen (R42) |
 
 The README starts with the language switch and the links to the pages and then describes the product invitingly in prose; it uses only the Purpose and Non-goals of `SCOPE.md`, confirmed requirements and the skill descriptions and never presents a draft as a feature. `skills.md` starts with a table of all skills (name, one short purpose); `plugins.md` is a table of the plugins of `marketplace.json` (name, description, link to its documentation). The pages `screens`, `faq`, `usage`, `storage` and `docs/<lang>/README.md` are not part of the structure. Existing user text is never converted, overwritten or deleted by the Manager.
-Source: skills/_shared/scripts/docs_rules.py
+Source: skills/_shared/scripts/verify/docs.py
 Source: skills/_shared/scripts/documentation.py
 Test: tests/integration/update/test_documentation.py
 
@@ -400,9 +400,8 @@ Test: tests/integration/project_setup/test_manifest.py
 ## R37: verify checks the documentation structure
 
 Status: confirmed
-Acceptance: `verify` reads, without executing anything, that the pages of R34 for the kind exist in every selected language with their required headings, that every skill has a table row and a section in `skills.md` (marketplace: every listed plugin a row in `plugins.md`), that no unresolved placeholder remains and that local links resolve. Pages of the former structure are reported. Whether the prose is good is not checked. The check is part of `verify` itself and therefore runs in the CI of every plugin and marketplace: the rules (`docs_rules.py`) are a synced script next to `verify.py`. Without `docs/documentation.json` no language is selected yet; nothing is checked and the result says `documentation: not_created`.
-Source: skills/_shared/scripts/verify.py
-Source: skills/_shared/scripts/docs_rules.py
+Acceptance: The documentation check reads, without executing anything, that the pages of R34 for the kind exist in every selected language with their required headings, that every skill has a table row and a section in `skills.md` (marketplace: every listed plugin a row in `plugins.md`), that no unresolved placeholder remains and that local links resolve. Pages of the former structure are reported. Whether the prose is good is not checked. It is its own script (R51) and so part of `make verify`, the CI and the verify skill. Without `docs/documentation.json` no language is selected yet; nothing is checked and the result says `documentation: not_created`.
+Source: skills/_shared/scripts/verify/docs.py
 Test: tests/contracts/verify/test_ci_checks.py
 Test: tests/contracts/verify/test_standards.py
 
@@ -414,7 +413,7 @@ Source: skills/setup/scripts/state/style.py
 Source: skills/setup/scripts/state/reporting.py
 Source: skills/setup/flows/style.md
 Source: skills/_shared/templates/plugin/seed/docs/style.md
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
 Test: tests/integration/project_setup/test_style.py
 Test: tests/contracts/verify/test_standards.py
@@ -424,7 +423,7 @@ Test: tests/contracts/verify/test_standards.py
 Status: confirmed
 Acceptance: The Plugin Manager lives in its own repository (`ai.plugin.plugin-manager`) and is a plugin like any other: `setup`, `docs` and the other skills may target it, only the installation the running Manager was loaded from is never a target. No marketplace embeds a plugin: a marketplace entry with a local `path` is rejected by `verify` and by the catalog script with a concrete reason, never converted.
 Source: skills/setup/scripts/state/detection.py
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/templates/marketplace/sync/scripts/marketplace.py
 Test: tests/integration/project_setup/test_setup.py
 
@@ -448,7 +447,7 @@ Acceptance: Every marketplace has the same task, so its `SCOPE.md` is not writte
 Source: skills/_shared/templates/marketplace/sync/SCOPE.md
 Source: skills/_shared/templates/marketplace/sync/AGENTS.md
 Source: skills/_shared/templates/marketplace/seed/CUSTOM.AGENTS.md
-Source: skills/_shared/scripts/verify.py
+Source: skills/_shared/scripts/verify/structure.py
 Test: tests/contracts/verify/test_marketplace_standard.py
 Test: tests/integration/project_setup/test_manifest.py
 
@@ -509,9 +508,11 @@ Test: tests/contracts/shared_files/test_shared_files_page.py
 ## R47: verify checks the hash files of sync templates
 
 Status: confirmed
-Acceptance: A plugin that keeps files in sync for others uses the structure `skills/<skill>/templates/<kind>/sync/` with the hash file `skills/<skill>/manifests/<kind>.sync.json`. Where such a structure exists, `verify` (and with it `dm-verify.yml`) fails when a file is missing in the hash file or in the folder, its hash or executable bit differs, a path is listed as file and as removed, or the hash file is missing. A plugin without such a structure is not affected. A repository therefore needs no own workflow for this; the Manager has none besides `dm-verify.yml`. Open, not part of this requirement: a seed and sync process that other plugins can offer themselves (creating, updating and asking), including building their hash files; only the Manager builds them (R16).
-Source: skills/_shared/scripts/verify.py
+Acceptance: A plugin that keeps files in sync for others uses the structure `skills/<skill>/templates/<kind>/sync/` with the hash file `skills/<skill>/manifests/<kind>.sync.json`. Every plugin receives the tools as synced scripts: `scripts/build_hashes.py` (`make build-skeleton-hashes`) builds the hash files and `scripts/verify/hashes.py` fails when a file is missing in the hash file or in the folder, its hash or executable bit differs, a path is listed as file and as removed, the format is not canonical or the hash file is missing. A plugin without such a structure is not affected. Open: a seed and sync process that other plugins can offer themselves (creating, updating and asking).
+Source: skills/_shared/scripts/verify/hashes.py
+Source: scripts/build_hashes.py
 Test: tests/contracts/verify/test_ci_checks.py
+Test: tests/unit/skeleton_hashes/test_skeleton_hashes.py
 
 ## R48: The developer pages describe commands and CI
 
@@ -538,3 +539,12 @@ Source: skills/setup/scripts/state/syncing.py
 Source: skills/setup/flows/skeleton.md
 Source: skills/setup/flows/entry.md
 Test: tests/integration/project_setup/test_write_request.py
+
+## R51: One script per check, called alike by make, CI and pre-commit
+
+Status: confirmed
+Acceptance: The checks of a repository are separate scripts in `scripts/verify/`: `structure.py`, `standards.py`, `docs.py` and for a plugin also `conventions.py` and `hashes.py`; `scope.py` collects the review evidence (`REVIEW=1`). Each runs alone, writes nothing and reports its own result. `make verify`, `dm-verify.yml` and (plugin) the pre-commit hook call exactly the same scripts, which a test compares; the verify skill runs the same ones. The former `scripts/verify.py` and `scripts/docs_rules.py` are listed as removed, so setup deletes untouched copies.
+Source: skills/_shared/scripts/verify/structure.py
+Source: skills/_shared/templates/plugin/sync/Makefile
+Source: skills/_shared/templates/plugin/sync/githooks/pre-commit
+Test: tests/contracts/verify/test_check_scripts.py

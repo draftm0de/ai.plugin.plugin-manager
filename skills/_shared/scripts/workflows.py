@@ -257,7 +257,7 @@ def create_marketplace(root, name=None, display_name=None, owner=None):
         if not (root/filename).exists():
             text = (f'# {display_name}\n\nMarketplace `{name}`\n\n' +
                 ('Plugin-Repositories werden in `marketplace.json` eingetragen. Lokale Pfade stehen ausschließlich in `.local/marketplace.json`.\n\n' if lang == 'de' else 'Plugin repositories are registered in `marketplace.json`. Local paths belong only in `.local/marketplace.json`.\n\n') +
-                '```sh\npython3 -B scripts/verify.py --source .\npython3 -B scripts/marketplace.py check\nmake install-local TARGET=claude\n```\n\n' +
+                '```sh\npython3 -B scripts/verify/structure.py --source .\npython3 -B scripts/marketplace.py check\nmake install-local TARGET=claude\n```\n\n' +
                 ('Ein frischer Clone benötigt für lokale Installation zuerst Checkout-Zuordnungen über die Plugin-Zuordnung von plugin-manager. local-marketplace.example.json ist nur eine optionale manuelle Kopiervorlage; nur .local/marketplace.json wird zur Laufzeit gelesen und bleibt uncommitted. Snapshots verwenden den aktuellen Checkout einschließlich uncommitteter Änderungen auf jedem Branch. Nach Änderungen oder Branchwechsel install-local und eine neue Host-Sitzung; kein Commit/Push/PR und kein Marketplace pro Branch. [Voraussetzungen](docs/prerequisites.md): Git und Python 3.10+, Make optional, Host-CLI nur für automatische lokale Installation. Strukturprüfung ist keine GitHub-/GUI-Abnahme.\n' if lang == 'de' else 'A fresh clone needs checkout associations through the plugin association of plugin-manager before local installation. local-marketplace.example.json is only an optional manual template; only .local/marketplace.json is read at runtime and stays uncommitted. Snapshots use the current checkout including uncommitted edits on any branch. After edits or branch switches run install-local and open a new host session; no commit/push/PR or per-branch marketplace. [Prerequisites](docs/prerequisites.md): Git and Python 3.10+, optional Make, host CLI only for automatic local installation. Structural verification is not GitHub/GUI acceptance.\n'))
             files[root/filename] = text.encode()
     ignore, content = ignore_file(root); files[ignore] = content
@@ -301,7 +301,7 @@ def plugin_entry(manifest, url):
 def association_files(plugin_root, market, manifest, new_plugin=False, allow_change=False):
     market = safe_path(market)
     git_root(market)
-    verifier = module(SKILL/'scripts/verify.py', 'trusted_verify')
+    verifier = module(SKILL/'scripts/verify/__init__.py', 'trusted_verify')
     verifier.marketplace(market)
     market_identity(market)  # the name at the root, checked before any file of this change is written
     config = read(market/'marketplace.json')
@@ -343,7 +343,7 @@ def association_files(plugin_root, market, manifest, new_plugin=False, allow_cha
 def release_old_marketplace(old, plugin_root, manifest):
     """Files that remove exactly this plugin from its previous marketplace checkout (name and repository must match)."""
     git_root(old)
-    verifier = module(SKILL/'scripts/verify.py', 'trusted_verify')
+    verifier = module(SKILL/'scripts/verify/__init__.py', 'trusted_verify')
     verifier.marketplace(old)
     if git_tracked(old, '.local'):
         raise ValueError('Local configuration is tracked; review before writing private checkout mappings')
@@ -406,7 +406,7 @@ def associate(root, marketplace, repository=None, drop_missing_old=False, plugin
         raise failure('not_configured')
     if not kinds[evidence['kind']]['requires_marketplace']:
         raise ValueError('Only a plugin belongs to a marketplace; this workpackage is configured as ' + evidence['kind'])
-    verifier = module(SKILL/'scripts/verify.py', 'trusted_verify')
+    verifier = module(SKILL/'scripts/verify/__init__.py', 'trusted_verify')
     verifier.plugin(root)
     manifest = read(root/'plugin.json')
     if repository_url(manifest['repository']) != origin:

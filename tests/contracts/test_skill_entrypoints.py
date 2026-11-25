@@ -23,7 +23,7 @@ class SkillEntrypointTests(unittest.TestCase):
                 self.assertTrue((path.parent/relative.split(' ', 1)[0]).is_file(), relative)
         self.assertFalse((root/'skills/_shared/SKILL.md').exists())
         for relative in ('WORKFLOWS.md', 'references/prerequisites.md',
-                         'scripts/workflows.py', 'scripts/verify.py',
+                         'scripts/workflows.py', 'scripts/verify/__init__.py',
                          'scripts/documentation.py', 'templates/plugin/sync/Makefile', 'templates/marketplace/sync/Makefile'):
             self.assertTrue((root/'skills/_shared'/relative).is_file(), relative)
 

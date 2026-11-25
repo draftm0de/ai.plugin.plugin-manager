@@ -11,7 +11,7 @@ import subprocess
 import sys
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from docs_rules import (FORMER_PAGES, KINDS, MANAGED_PAGES, SECTION_LABELS, anchors, check_policy, kind_of,  # noqa: E402,F401
+from verify.docs import (FORMER_PAGES, KINDS, MANAGED_PAGES, SECTION_LABELS, anchors, check_policy, kind_of,  # noqa: E402,F401
                         language_policy, outline, page_layout, read_manifest, repository_address, safe_target, slug, strict_json, validate)
 
 SKILL = Path(__file__).resolve().parents[1]

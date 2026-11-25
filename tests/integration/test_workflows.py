@@ -17,7 +17,7 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
         self.assertEqual([], flow.associate(existing,self.market)['changed'])
         self.assertEqual('Existing project introduction\n',(self.plugin/'README.md').read_text())
         self.assertEqual('Fictional licensing decision preserved\n',(self.plugin/'LICENSE').read_text())
-        self.assertIn('documentation does not match', verify.verify(self.plugin)['errors'][0])  # R37: own README
+        self.assertTrue(flow.module(flow.SKILL/'scripts/verify/docs.py', 'docs_check').check(self.plugin)['errors'])  # R37: own README
         flow.complete_skeleton_documentation(self.plugin, 'Fictional Plugin')
         for path in (self.market,self.plugin,existing):
             result=verify.verify(path)
@@ -59,7 +59,7 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
         report=json.loads(result.stdout)
         self.assertFalse(report['executed'])
         self.assertEqual('fictional-market-dev',report['marketplace'])
-        result=subprocess.run([sys.executable,'-B',str(self.plugin/'scripts/verify.py'),'--source',str(self.plugin)],
+        result=subprocess.run([sys.executable,'-B',str(self.plugin/'scripts/verify/structure.py'),'--source',str(self.plugin)],
                               cwd=self.plugin,env=env,check=True,capture_output=True,text=True)
         self.assertTrue(json.loads(result.stdout)['structure_valid'])
         self.assertTrue((self.plugin/'docs/prerequisites.md').is_file())

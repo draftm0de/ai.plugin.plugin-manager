@@ -37,7 +37,7 @@ class StatusTests(Base):
         self.assertEqual(0, code)
         self.assertEqual('identical', data['files']['scripts/plugin.py'])
         self.assertEqual('decision_needed', data['files']['AGENTS.md'])
-        self.assertEqual('missing', data['files']['scripts/verify.py'])
+        self.assertEqual('missing', data['files']['scripts/verify/structure.py'])
         self.assertTrue(data['language']['needs_choice'])
         self.assertIn('scripts/plugin.py', data['lock']['pending'])
         self.assertFalse(data['matches_template'])
@@ -89,13 +89,14 @@ class SupplementTests(Base):
 
     def test_identical_files_keep_mode_and_get_lock_evidence_fixed(self):
         (self.p / 'scripts').mkdir()
-        target = self.p / 'scripts/verify.py'
-        target.write_bytes(template('scripts/verify.py')); target.chmod(0o600)
+        target = self.p / 'scripts/verify/structure.py'
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(template('scripts/verify/structure.py')); target.chmod(0o600)
         (self.p / '.project').mkdir(exist_ok=True)
-        (self.p / LOCK).write_text(json.dumps({'schema_version': 2, 'files': {'scripts/verify.py': raw_pair('0' * 64), 'other/x.txt': raw_pair('a' * 64)}}))
+        (self.p / LOCK).write_text(json.dumps({'schema_version': 2, 'files': {'scripts/verify/structure.py': raw_pair('0' * 64), 'other/x.txt': raw_pair('a' * 64)}}))
         self.setup_ok()
         self.assertEqual(0o600, stat.S_IMODE(target.stat().st_mode))
-        self.assertEqual(pair(template('scripts/verify.py')), self.box.lock()['scripts/verify.py'])
+        self.assertEqual(pair(template('scripts/verify/structure.py')), self.box.lock()['scripts/verify/structure.py'])
         self.assertEqual(raw_pair('a' * 64), self.box.lock()['other/x.txt'])
 
     def test_different_files_are_kept_with_old_lock_and_others_supplemented(self):
@@ -311,7 +312,7 @@ class ConflictTests(Base):
         ps = fx.load_state(**self.box.ctx_args)
         real = ps.fsafe.copy_new
         def failing(path, data, executable):
-            if path.name == 'verify.py':
+            if path.name == 'structure.py':
                 raise OSError('disk full')
             return real(path, data, executable)
         with mock.patch.object(ps.fsafe, 'copy_new', failing):
@@ -554,16 +555,16 @@ class TechnicalErrorTests(Base):
         ps = self.module('t6')
         real = ps.fsafe.copy_new
         def corrupt(path, data, executable):
-            return real(path, b'corrupt' if path.name == 'verify.py' else data, executable)
+            return real(path, b'corrupt' if path.name == 'structure.py' else data, executable)
         with mock.patch.object(ps.fsafe, 'copy_new', corrupt):
             data = ps.setup(str(self.p), 'de')
         self.assertFalse(data['ok'])
-        self.assertIn('scripts/verify.py', data['created']['files'])
-        self.assertEqual(['scripts/verify.py'], data['created']['unverified'])
-        self.assertEqual('unverified', data['files']['scripts/verify.py'])
+        self.assertIn('scripts/verify/structure.py', data['created']['files'])
+        self.assertEqual(['scripts/verify/structure.py'], data['created']['unverified'])
+        self.assertEqual('unverified', data['files']['scripts/verify/structure.py'])
         self.assertFalse((self.p / LOCK).exists())
         resumed = self.setup_ok()  # a later run keeps the unverified file as a plain deviation
-        self.assertIn('scripts/verify.py', resumed['different'])
+        self.assertIn('scripts/verify/structure.py', resumed['different'])
 
     def test_language_save_failure_after_project_folder_creation_is_reported(self):
         shutil.rmtree(self.p / '.project')  # unconfigured: only the language step writes here (R17)

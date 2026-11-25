@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""The structure rules of the documentation (R34, R37): read-only, used by verify in every repository and by the
-documentation skill. Managed by the plugin manager: do not edit."""
+"""Documentation check (R34, R37): pages, headings and local links. Read-only.
+Usage: python3 -B scripts/verify/docs.py --source <repository>. Managed by the plugin manager: do not edit."""
+import argparse
 import json
 from pathlib import Path
 import re
+import sys
 from urllib.parse import unquote, urlsplit
 
 
@@ -252,3 +254,32 @@ def validate(output):
         if path.is_file() and 'assets/icon.png' not in path.read_text(encoding='utf-8'):
             errors.append(f'{name}: the icon assets/icon.png must be referenced')
     return errors
+
+
+def check(source):
+    """R37: without docs/documentation.json no language is selected yet: nothing is checked, and the result says so."""
+    root = Path(source).expanduser().resolve()
+    manifest = root / 'docs/documentation.json'
+    if not manifest.exists() and not manifest.is_symlink():
+        return {'valid': True, 'check': 'docs', 'documentation': 'not_created', 'errors': []}
+    try:
+        errors = validate(root)
+    except (OSError, ValueError) as exc:
+        errors = [str(exc)]
+    result = {'valid': not errors, 'check': 'docs', 'documentation': 'checked', 'errors': errors}
+    if errors:
+        result['next'] = 'Run /plugin-manager:setup for the shared pages and /plugin-manager:docs for the others.'
+    return result
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source', type=Path, default=Path.cwd(), help='Project repository root')
+    args = parser.parse_args(argv)
+    result = check(args.source)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result['valid'] else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

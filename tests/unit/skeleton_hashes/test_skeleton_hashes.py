@@ -1,4 +1,4 @@
-"""R16: scripts/skeleton_hashes.py builds and checks the generated hash files (fictional kinds only)."""
+"""R16: scripts/build_hashes.py builds and scripts/verify/hashes.py checks the generated hash files (fictional kinds only)."""
 import json
 from pathlib import Path
 import subprocess
@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file())
-TOOL = ROOT / 'scripts/skeleton_hashes.py'
+TOOLS = {'build': ROOT / 'scripts/build_hashes.py', 'check': ROOT / 'scripts/verify/hashes.py'}
 
 
 class ToolBase(unittest.TestCase):
@@ -27,7 +27,7 @@ class ToolBase(unittest.TestCase):
         path.chmod(mode)
 
     def run_tool(self, action):
-        return subprocess.run([sys.executable, '-B', str(TOOL), action, '--root', str(self.root)], capture_output=True, text=True)
+        return subprocess.run([sys.executable, '-B', str(TOOLS[action]), '--source', str(self.root)], capture_output=True, text=True)
 
     def sync_path(self):
         return self.root / 'skills/_shared/manifests/demo.sync.json'
@@ -95,7 +95,7 @@ class CheckTests(ToolBase):
     def test_missing_sync_file_invalid_file_overlap_and_noncanonical_form_fail(self):
         original = self.sync_path().read_text()
         self.sync_path().unlink()
-        self.assert_fails('demo.sync.json is missing', 'make build-skeleton-hashes')
+        self.assert_fails('demo.sync.json: missing', 'make build-skeleton-hashes')
         self.sync_path().write_text('{not json')
         self.assert_fails('invalid JSON')
         data = json.loads(original); data['removed'] = ['b.txt']

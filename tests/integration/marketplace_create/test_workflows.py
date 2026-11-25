@@ -90,9 +90,10 @@ class MarketplaceFlowAcceptanceTests(unittest.TestCase):
     def test_deviating_synced_file_neither_blocks_nor_changes_and_becomes_a_sync_decision(self):
         (self.market/'scripts').mkdir()
         mine = b'# my own verify\n'
-        (self.market/'scripts/verify.py').write_bytes(mine)
+        (self.market/'scripts/verify').mkdir(parents=True, exist_ok=True)
+        (self.market/'scripts/verify/structure.py').write_bytes(mine)
         self.create()
-        self.assertEqual(mine, (self.market/'scripts/verify.py').read_bytes())
+        self.assertEqual(mine, (self.market/'scripts/verify/structure.py').read_bytes())
         self.assertTrue((self.market/'scripts/marketplace.py').is_file())  # missing synced files are created
         self.assertEqual(0, self.call('language', '--language', 'de')[0])
         self.assertEqual(0, self.call('record', '--kind', 'marketplace', '--artifact', 'fictional-market')[0])
@@ -100,7 +101,7 @@ class MarketplaceFlowAcceptanceTests(unittest.TestCase):
         self.assertEqual(0, self.call('setup')[0])
         status = self.call('status')[1]
         self.assertEqual('sync', status['next'])
-        self.assertEqual(['scripts/verify.py'], [d['path'] for d in status['sync']['decisions']])
+        self.assertEqual(['scripts/verify/structure.py'], [d['path'] for d in status['sync']['decisions']])
 
     def test_starter_readmes_name_only_existing_commands(self):
         self.create()
@@ -108,5 +109,5 @@ class MarketplaceFlowAcceptanceTests(unittest.TestCase):
             text = (self.market/name).read_text(encoding='utf-8')
             for gone in ('make verify', 'make check-marketplace', 'make sync-marketplace', 'update-local', 'plugin-verify', 'marketplace-verify'):
                 self.assertNotIn(gone, text, name)
-            for present in ('scripts/verify.py', 'scripts/marketplace.py', 'make install-local'):
+            for present in ('scripts/verify/structure.py', 'scripts/marketplace.py', 'make install-local'):
                 self.assertIn(present, text, name)

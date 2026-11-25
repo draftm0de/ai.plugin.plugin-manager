@@ -9,7 +9,7 @@ Detect plugin or marketplace structure and report production-readiness gaps. Dis
 
 Read `../_shared/WORKFLOWS.md` and follow its **verify** action. This is a thin plugin entry point; all rules and templates live in that shared workflow reference. Ask for paths only if they cannot be determined.
 
-Use `../_shared/scripts/verify.py --source TARGET --kind auto` for context-aware verification. TARGET comes from the user or current project root, never from this plugin installation. Reject ambiguous roots. Use --kind plugin or --kind marketplace when the expected type is explicit. This action is read-only; configuration and repair belong to a separate action.
+Run each check with `--source TARGET` and report every result, also after a failed one: `../_shared/scripts/verify/structure.py` (it detects the kind), `../_shared/scripts/verify/standards.py`, `../_shared/scripts/verify/docs.py`, and for a plugin also `../_shared/scripts/verify/conventions.py` and `../_shared/scripts/verify/hashes.py`. A repository runs the same checks with `make verify`, in its CI and (plugin) before each commit. TARGET comes from the user or current project root, never from this plugin installation. Reject ambiguous roots. Use --kind plugin or --kind marketplace when the expected type is explicit. This action is read-only; configuration and repair belong to a separate action.
 
 The kind is detected (`--kind auto`) and never a call argument of the command; an explicit `--kind plugin` or `--kind marketplace` stays possible. When `setup_state.py status` shows a pending setup or sync, report it as a finding and continue; verify never runs setup.
 
@@ -20,7 +20,7 @@ Messages to the person (failures, stops, results) follow `../_shared/references/
 ## Explicit scope/source review
 
 When asked to compare target requirements with implementation, read
-`../_shared/references/scope-review.md` in full. Use the shared helper with `--review`,
+`../_shared/references/scope-review.md` in full. Run `../_shared/scripts/verify/scope.py --source TARGET`,
 then perform the actual requirement-by-requirement source/test comparison as instructed.
 `SCOPE.md` is authoritative only for confirmed requirements; never infer the target
 from code or silently promote draft requirements. Cite concrete source lines, explain

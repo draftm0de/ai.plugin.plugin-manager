@@ -7,7 +7,7 @@ import unittest
 from tests.support.marketplace_fixture import attach
 from tests.support.workflow_fixture import ROOT, WorkflowFixture, verify
 
-HELPER = ROOT / 'skills/_shared/scripts/verify.py'
+HELPER = ROOT / 'skills/_shared/scripts/verify/__init__.py'
 CLAUDE, CODEX = '.claude-plugin/marketplace.json', '.agents/plugins/marketplace.json'
 
 
@@ -61,7 +61,7 @@ class VerifyContextTests(WorkflowFixture, unittest.TestCase):
     def test_the_default_source_is_the_working_directory_not_the_installation(self):
         empty = self.root / 'empty'
         empty.mkdir()
-        result = subprocess.run([sys.executable, '-B', str(HELPER)], cwd=empty, capture_output=True, text=True)
+        result = subprocess.run([sys.executable, '-B', str(HELPER.with_name('structure.py'))], cwd=empty, capture_output=True, text=True)
         self.assertEqual(1, result.returncode)
         self.assertEqual(str(empty), json.loads(result.stdout)['source'])
 

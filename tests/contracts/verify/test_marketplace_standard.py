@@ -68,7 +68,7 @@ class MarketplaceStandardTests(unittest.TestCase):
         lock.write_text(json.dumps({'files': {path: {'source_hash': manifest['files'][path]['sha256']}
                                               for path in (STANDARD, 'AGENTS.md')}}))
         def run():
-            return subprocess.run([sys.executable, '-B', 'scripts/verify.py'], cwd=self.market, capture_output=True, text=True)
+            return subprocess.run([sys.executable, '-B', 'scripts/verify/standards.py'], cwd=self.market, capture_output=True, text=True)
         self.assertEqual(0, run().returncode, run().stdout)
         (self.market / STANDARD).write_text('changed\n')
         self.assertIn('differs', run().stdout)

@@ -71,7 +71,7 @@ def available_marketplace(root, evidence):
 
 
 def modify_plugin(root, evidence, name, display_name, description, plugin, dry_run=False):
-    verifier = flow.module(flow.SKILL / 'scripts/verify.py', 'trusted_verify')
+    verifier = flow.module(flow.SKILL / 'scripts/verify/__init__.py', 'trusted_verify')
     verifier.plugin(root)
     manifest = flow.read(root / 'plugin.json')
     if manifest['name'] != evidence['artifact']:
@@ -109,7 +109,7 @@ def modify_plugin(root, evidence, name, display_name, description, plugin, dry_r
 
 def catalog_update(root, market, old, new):
     """Files that carry the changed identity into the catalog entry of the plugin and the local checkout mapping."""
-    verifier = flow.module(flow.SKILL / 'scripts/verify.py', 'trusted_verify')
+    verifier = flow.module(flow.SKILL / 'scripts/verify/__init__.py', 'trusted_verify')
     verifier.marketplace(market)
     if flow.git_tracked(market, '.local'):
         raise ValueError('Local configuration is tracked; review before writing private checkout mappings')
@@ -145,7 +145,7 @@ def catalog_update(root, market, old, new):
 def modify_marketplace(root, evidence, name, display_name, description, plugin, dry_run=False):
     if description is not None:
         raise ValueError('A marketplace has no description; change its name or display name')
-    verifier = flow.module(flow.SKILL / 'scripts/verify.py', 'trusted_verify')
+    verifier = flow.module(flow.SKILL / 'scripts/verify/__init__.py', 'trusted_verify')
     verifier.marketplace(root)
     config = flow.read(root / 'marketplace.json')
     if config['name'] != evidence['artifact']:

@@ -50,7 +50,9 @@ Eigene Befehle stehen in `CUSTOM.mk`.
 | --- | --- |
 | `python3 -B scripts/run_tests.py` | ein Test fehlschlägt |
 | `python3 -B scripts/marketplace.py check` | die Host-Kataloge nicht zu `marketplace.json` passen |
-| `python3 -B scripts/verify.py --source . --kind marketplace` | Katalog oder Struktur ungültig sind, `SCOPE.md` oder `AGENTS.md` abweichen oder der Doku Seiten, Überschriften oder Linkziele fehlen |
+| `python3 -B scripts/verify/structure.py --source .` | Manifeste, Kataloge, Skills oder die Struktur ungültig sind |
+| `python3 -B scripts/verify/standards.py --source .` | `SCOPE.md` oder `AGENTS.md` abweichen |
+| `python3 -B scripts/verify/docs.py --source .` | der Doku Seiten, Überschriften oder Linkziele fehlen |
 
 Eigene Schritte stehen in einer weiteren Datei unter `.github/workflows/`. Lokal prüfst du dasselbe mit `make test check verify`.
 

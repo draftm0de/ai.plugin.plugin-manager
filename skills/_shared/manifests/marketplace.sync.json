@@ -2,7 +2,7 @@
   "schema_version": 1,
   "files": {
     ".github/workflows/dm-verify.yml": {
-      "sha256": "621a4e31297cc5ca8831ba242d1eaa48b4286437bbd20effef7bf03c4aadf765",
+      "sha256": "ab10a1dea4c52ee790cb43dc3c2cacae92c6211f4858b80051178a4ccb51ecf7",
       "executable": false
     },
     "AGENTS.md": {
@@ -14,7 +14,7 @@
       "executable": false
     },
     "Makefile": {
-      "sha256": "37fb5c70da38a2fcf53863c7730a4a6cb588bcffbe259334686a325159d2d56e",
+      "sha256": "2f493f22fc07e9746ab201135cf78e4432a7cce5ac1a0bc2ae3627dbb01df000",
       "executable": false
     },
     "SCOPE.md": {
@@ -26,7 +26,7 @@
       "executable": false
     },
     "docs/de/development.md": {
-      "sha256": "b1daade413ba76856a84f591d96b063f422989af6509c7ee2d2a7327ba2096ac",
+      "sha256": "6217258dfde05916f04b8e46ad2d90b60e33d4a887940a84051095d0f8f8d559",
       "executable": false
     },
     "docs/en/concepts.md": {
@@ -34,15 +34,11 @@
       "executable": false
     },
     "docs/en/development.md": {
-      "sha256": "82d0bd1429dc3afe5f4b206f41ccd3dc54fcaea5062c2bdb18ac8de949533345",
+      "sha256": "00ede61892f648eb088e4417de4f2a36d0813ff416fe7638ba732a9651926d07",
       "executable": false
     },
     "docs/prerequisites.md": {
-      "sha256": "bd31c420a6b66e58e16e7abea1d653301d14c44c2ee12e2ae700652fcf92ae32",
-      "executable": false
-    },
-    "scripts/docs_rules.py": {
-      "sha256": "70946e077cd64dd5fa5863e4f46f8bd5271b682dd55279649af22eb23fda1ae1",
+      "sha256": "c638698408a7c315eb515fd5c85fae01a3a38946a9e9f20e750ebc2c0b94be71",
       "executable": false
     },
     "scripts/local_plugins.py": {
@@ -61,8 +57,24 @@
       "sha256": "210e1c86b5c90ce9770fc2f1bc5df1724315187a8b3c0999cf01e9db79e5f96d",
       "executable": false
     },
-    "scripts/verify.py": {
-      "sha256": "15c3e9d8db08e899590cde66d6ca33a962ed48570859e303fdfebab25610960a",
+    "scripts/verify/common.py": {
+      "sha256": "e58a1f82664c114093a5723a6d7face9a7140e4b3344784c551bb7e0873b1873",
+      "executable": false
+    },
+    "scripts/verify/docs.py": {
+      "sha256": "5890887a07259b927623a7d8c7cb6be40455bf2941f99673bad20dc109181d10",
+      "executable": false
+    },
+    "scripts/verify/scope.py": {
+      "sha256": "0dda7f4b66b7ca0c0d2ad476288889813b6bb8bc85e5429492472c3e0f3192aa",
+      "executable": false
+    },
+    "scripts/verify/standards.py": {
+      "sha256": "8c840f478a30e66127a61656047e388199aa6eabf372aee9ee0d21ab161e78fb",
+      "executable": false
+    },
+    "scripts/verify/structure.py": {
+      "sha256": "8b3bf773ff392b02545df1bc1bc908470eef07f56009e458ae35d0aea2801841",
       "executable": false
     },
     "tests/README.md": {
@@ -86,5 +98,8 @@
       "executable": false
     }
   },
-  "removed": []
+  "removed": [
+    "scripts/docs_rules.py",
+    "scripts/verify.py"
+  ]
 }
