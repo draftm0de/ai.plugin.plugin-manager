@@ -112,7 +112,7 @@ Reports whether a repository follows the rules, and what is not yet proven.
 
 ### Reads and writes
 
-Reads the repository. Writes nothing and runs no code of the repository.
+Reads the repository. Writes nothing and runs no code of the repository. The same check runs in CI, including the documentation structure and, where a plugin keeps files in sync, the hash files.
 
 ---
 

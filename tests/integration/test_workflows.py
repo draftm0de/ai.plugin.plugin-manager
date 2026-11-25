@@ -17,6 +17,8 @@ class IntegrationWorkflowTests(IntegrationWorkflowTestsFixture, unittest.TestCas
         self.assertEqual([], flow.associate(existing,self.market)['changed'])
         self.assertEqual('Existing project introduction\n',(self.plugin/'README.md').read_text())
         self.assertEqual('Fictional licensing decision preserved\n',(self.plugin/'LICENSE').read_text())
+        self.assertIn('documentation does not match', verify.verify(self.plugin)['errors'][0])  # R37: own README
+        flow.complete_skeleton_documentation(self.plugin, 'Fictional Plugin')
         for path in (self.market,self.plugin,existing):
             result=verify.verify(path)
             self.assertTrue(result['valid'],result)

@@ -43,13 +43,13 @@ Ask `setup` for it, for example "Take the Makefile back". After your yes the tem
 
 ## Files of a plugin
 
-**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `docs/standards/coding.md`, `docs/standards/messages.md`, `docs/standards/skills.md`, `docs/standards/testing.md`, `githooks/pre-commit`, `scripts/plugin.py`, `scripts/run_tests.py`, `scripts/verify.py`, `skills/_shared/references/operator-language-helper.md`, `skills/_shared/references/operator-language.md`, `skills/_shared/scripts/messages_base.py`, `skills/_shared/scripts/operator_language.py`, `tests/README.md`, `tests/behavior/run_cases.py`, `tests/contracts/test_operator_language.py`
+**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `docs/standards/coding.md`, `docs/standards/messages.md`, `docs/standards/skills.md`, `docs/standards/testing.md`, `githooks/pre-commit`, `scripts/docs_rules.py`, `scripts/plugin.py`, `scripts/run_tests.py`, `scripts/verify.py`, `skills/_shared/references/operator-language-helper.md`, `skills/_shared/references/operator-language.md`, `skills/_shared/scripts/messages_base.py`, `skills/_shared/scripts/operator_language.py`, `tests/README.md`, `tests/behavior/run_cases.py`, `tests/contracts/test_operator_language.py`
 
 **Seed:** `.gitignore`, `CUSTOM.AGENTS.md`, `CUSTOM.mk`, `SCOPE.md`, `assets/icon.png`, `docs/architecture.md`, `docs/style.md`, `tests/__init__.py`, `tests/contracts/__init__.py`, `tests/contracts/test_structure.py`
 
 ## Files of a marketplace
 
-**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `SCOPE.md`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `scripts/local_plugins.py`, `scripts/marketplace.py`, `scripts/plugin_payload.py`, `scripts/run_tests.py`, `scripts/verify.py`, `tests/README.md`, `tests/contracts/test_local_plugins.py`, `tests/contracts/test_marketplace_catalogs.py`, `tests/contracts/test_plugin_payload.py`, `tests/contracts/test_run_tests.py`
+**Synced:** `AGENTS.md`, `CLAUDE.md`, `Makefile`, `SCOPE.md`, `.github/workflows/dm-verify.yml`, `docs/<lang>/concepts.md`, `docs/<lang>/development.md`, `docs/prerequisites.md`, `scripts/docs_rules.py`, `scripts/local_plugins.py`, `scripts/marketplace.py`, `scripts/plugin_payload.py`, `scripts/run_tests.py`, `scripts/verify.py`, `tests/README.md`, `tests/contracts/test_local_plugins.py`, `tests/contracts/test_marketplace_catalogs.py`, `tests/contracts/test_plugin_payload.py`, `tests/contracts/test_run_tests.py`
 
 **Seed:** `CUSTOM.AGENTS.md`, `CUSTOM.mk`, `local-marketplace.example.json`, `docs/architecture.md`, `docs/style.md`, `tests/__init__.py`, `tests/contracts/__init__.py`, `tests/contracts/test_structure.py`
 

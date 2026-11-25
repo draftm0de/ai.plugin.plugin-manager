@@ -26,7 +26,7 @@
       "executable": false
     },
     "docs/de/development.md": {
-      "sha256": "60a5e3d5bacae05db718a7b90fc727f105a842f9bdb265a0ff4cb8bc0c0c3fb2",
+      "sha256": "b1daade413ba76856a84f591d96b063f422989af6509c7ee2d2a7327ba2096ac",
       "executable": false
     },
     "docs/en/concepts.md": {
@@ -34,11 +34,15 @@
       "executable": false
     },
     "docs/en/development.md": {
-      "sha256": "e5141605a9da232f0da4960c5e34fd1d4a186e03a1756156738e00cf408fdff5",
+      "sha256": "82d0bd1429dc3afe5f4b206f41ccd3dc54fcaea5062c2bdb18ac8de949533345",
       "executable": false
     },
     "docs/prerequisites.md": {
       "sha256": "bd31c420a6b66e58e16e7abea1d653301d14c44c2ee12e2ae700652fcf92ae32",
+      "executable": false
+    },
+    "scripts/docs_rules.py": {
+      "sha256": "70946e077cd64dd5fa5863e4f46f8bd5271b682dd55279649af22eb23fda1ae1",
       "executable": false
     },
     "scripts/local_plugins.py": {
@@ -58,7 +62,7 @@
       "executable": false
     },
     "scripts/verify.py": {
-      "sha256": "1b375b48940ae49e192318c847f5643df9406ea89d1cadb65618dc6655c9bdc4",
+      "sha256": "15c3e9d8db08e899590cde66d6ca33a962ed48570859e303fdfebab25610960a",
       "executable": false
     },
     "tests/README.md": {

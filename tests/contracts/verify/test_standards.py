@@ -12,6 +12,7 @@ R = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file
 sys.path.insert(0, str(R / 'skills/_shared/scripts'))
 import plugin_audit as audit
 import verify as skill_verify
+import workflows
 
 NAMES = ('coding.md', 'messages.md', 'testing.md', 'skills.md')
 SOURCE = R / 'skills/_shared/templates/plugin/sync/docs/standards'
@@ -27,6 +28,7 @@ class StandardsTests(unittest.TestCase):
         (source / 'SKILL.md').write_text('---\nname: fictional-example\ndescription: A fictional test capability.\n---\n# Example\n')
         self.plugin = root / 'plugin'
         audit.scaffold_plugin(source, self.plugin, languages=['de', 'en'], repository='https://github.com/example/fictional', author='Fictional Team')
+        workflows.complete_skeleton_documentation(self.plugin, 'Fictional')  # finished pages, as a real creation leaves them
 
     def status(self):
         return {c['id']: c['status'] for c in audit.audit(self.plugin)['checks'] if c['id'].startswith('standards:')}
@@ -87,6 +89,10 @@ class StandardsTests(unittest.TestCase):
         canonical = (R / 'skills/_shared/scripts/verify.py').read_bytes()
         for relative in ('scripts/verify.py', 'skills/_shared/templates/plugin/sync/scripts/verify.py', 'skills/_shared/templates/marketplace/sync/scripts/verify.py'):
             self.assertEqual(canonical, (R / relative).read_bytes(), relative)
+        rules = (R / 'skills/_shared/scripts/docs_rules.py').read_bytes()  # R37: the structure rules travel with verify
+        for relative in ('scripts/docs_rules.py', 'skills/_shared/templates/plugin/sync/scripts/docs_rules.py',
+                         'skills/_shared/templates/marketplace/sync/scripts/docs_rules.py'):
+            self.assertEqual(rules, (R / relative).read_bytes(), relative)
 
     def errors(self):
         return ' '.join(skill_verify.verify(self.plugin, 'plugin').get('errors', []))
@@ -100,6 +106,8 @@ class StandardsTests(unittest.TestCase):
         (self.plugin / 'commands').mkdir(exist_ok=True)
         for name in ('fictional-example', 'second'):
             (self.plugin / 'commands' / (name + '.md')).write_text('Run the skill.\n')
+        self.assertIn('level-two headings', self.errors())  # R37: the new skill has no section yet
+        workflows.complete_skeleton_documentation(self.plugin, 'Fictional')
         self.assertTrue(skill_verify.verify(self.plugin, 'plugin')['structure_valid'])
 
     def test_the_failure_layout_exists_only_in_the_message_module(self):  # R32

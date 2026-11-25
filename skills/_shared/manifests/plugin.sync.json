@@ -22,7 +22,7 @@
       "executable": false
     },
     "docs/de/development.md": {
-      "sha256": "f994d357ef2d4e2cb84e639102af0a9510cfa5d4319924af56b849417e07e775",
+      "sha256": "6d2841294aa2ee3973b51ccc797745e23a3e0e98a59fa33544ce83f75b8fce84",
       "executable": false
     },
     "docs/en/concepts.md": {
@@ -30,7 +30,7 @@
       "executable": false
     },
     "docs/en/development.md": {
-      "sha256": "6a8ad8011ff3e1cecb2abc9aca8d8d5fc2972c9152e98e15e928f8c1f1052310",
+      "sha256": "bc56450f42151f612330ddd6cffb134cac3b937945b78c629b996ecff8843b2d",
       "executable": false
     },
     "docs/prerequisites.md": {
@@ -57,6 +57,10 @@
       "sha256": "d9c541efb33dd9303b6c8f9b50fc40d7060f249ac848dfd82d5667a60554d517",
       "executable": true
     },
+    "scripts/docs_rules.py": {
+      "sha256": "70946e077cd64dd5fa5863e4f46f8bd5271b682dd55279649af22eb23fda1ae1",
+      "executable": false
+    },
     "scripts/plugin.py": {
       "sha256": "50c43c6e2ba1a2c8c3733a2620f6501cb2ce1f4388467678adc075ac41dd4cde",
       "executable": false
@@ -66,7 +70,7 @@
       "executable": false
     },
     "scripts/verify.py": {
-      "sha256": "1b375b48940ae49e192318c847f5643df9406ea89d1cadb65618dc6655c9bdc4",
+      "sha256": "15c3e9d8db08e899590cde66d6ca33a962ed48570859e303fdfebab25610960a",
       "executable": false
     },
     "skills/_shared/references/operator-language-helper.md": {

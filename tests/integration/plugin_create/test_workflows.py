@@ -330,7 +330,8 @@ class PluginCreateWorkflowTests(WorkflowFixture, unittest.TestCase):
         result = flow.create_plugin(self.plugin, self.market, skeleton=True, name='new-plugin',
             display_name='Fictional Plugin', author='Fixture', languages=['en'], license='deferred')
         self.assertEqual(original, (self.plugin/'README.md').read_text())
-        self.assertTrue(result['checks']['plugin']['structure_valid'])
+        self.assertFalse(result['checks']['plugin']['structure_valid'])  # R37: verify names the documentation
+        self.assertIn('documentation does not match', result['checks']['plugin']['errors'][0])
         self.assertEqual('needs_attention', result['checks']['status'])
         self.assertFalse(result['checks']['documentation']['valid'])
         self.assertIn('Resolve', result['next'])
