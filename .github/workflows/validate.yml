@@ -1,0 +1,17 @@
+name: Validate Plugin Manager
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: make test
+      - run: make check-plugin
+      - run: make check-skeleton-hashes
+      - run: make verify SOURCE=.
+      - run: make validate-docs OUTPUT=.
