@@ -172,7 +172,7 @@ Test: tests/contracts/test_plugin_manager_entry.py
 ## R18: Ready output
 
 Status: confirmed
-Acceptance: When status is ready, the setup skill outputs only the line "Plugin <name> Status: fully configured" (`<name>` is the configured plugin or marketplace repository from the status answer, not the running Manager) in the operator language (German: "Plugin <name> Status: vollständig konfiguriert") and waits. Skeleton deviations and other details are not listed unless asked.
+Acceptance: When status is ready, the setup skill outputs only the line "<Kind> <name> Status: fully configured" (`<Kind>` is "Plugin" or "Marketplace" according to the configured kind; `<name>` is the configured plugin or marketplace repository from the status answer, not the running Manager) in the operator language (German: "<Kind> <name> Status: vollständig konfiguriert") and waits. Skeleton deviations and other details are not listed unless asked.
 Source: skills/setup/SKILL.md
 Test: tests/contracts/test_plugin_manager_entry.py
 
