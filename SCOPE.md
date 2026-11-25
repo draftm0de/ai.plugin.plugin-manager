@@ -476,12 +476,14 @@ Test: tests/integration/distribution/test_plugin.py
 ## R44: The CI workflow and the generic documents are managed
 
 Status: confirmed
-Acceptance: What is the same in every repository of a kind is synced, not created once: `.github/workflows/dm-verify.yml` (tests, host manifest or catalog check and `verify`, calling the Python scripts directly so that it does not depend on the Makefile), `docs/prerequisites.md` and `tests/README.md`. Own CI steps go into another file under `.github/workflows/`. What belongs to the repository stays seeded. A former `validate.yml` was never managed: the Manager neither changes nor removes it.
+Acceptance: What is the same in every repository of a kind is synced, not created once: `.github/workflows/dm-verify.yml` (tests, host manifest or catalog check and `verify`, calling the Python scripts directly so that it does not depend on the Makefile), `docs/prerequisites.md` and `tests/README.md`. Own CI steps go into another file under `.github/workflows/`. What belongs to the repository stays seeded. A former `validate.yml` was never managed: the Manager neither changes nor removes it. The local development package holds every template, the workflow under `.github/` included, and an incomplete or inconsistent template set is reported with its own message.
 Source: skills/_shared/templates/plugin/sync/.github/workflows/dm-verify.yml
 Source: skills/_shared/templates/marketplace/sync/.github/workflows/dm-verify.yml
 Source: skills/_shared/manifests/plugin.sync.json
+Source: skills/_shared/templates/marketplace/sync/scripts/plugin_payload.py
 Test: tests/integration/project_setup/test_manifest.py
 Test: tests/contracts/verify/test_standards.py
+Test: tests/contracts/payload/test_payload_complete.py
 
 ## R45: A file kept on purpose can be taken back
 

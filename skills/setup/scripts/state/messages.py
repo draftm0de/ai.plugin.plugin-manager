@@ -111,6 +111,12 @@ CATALOGUE = {
         'en': ('no change was given', 'give a name, a display name or a description'),
         'de': ('keine Änderung angegeben wurde', 'gib einen Namen, einen Anzeigenamen oder eine Beschreibung an'),
     },
+    'template_base': {
+        'en': ('the installed Plugin Manager is incomplete or damaged: its templates do not fit together',
+               'update or reinstall the Plugin Manager and open a new session'),
+        'de': ('der installierte Plugin Manager unvollständig oder beschädigt ist: Seine Vorlagen passen nicht zusammen',
+               'aktualisiere oder installiere den Plugin Manager neu und öffne eine neue Sitzung'),
+    },
     'no_decision': {
         'en': ('there is no open question for the file {path}', 'call /plugin-manager:setup and say which kept file you want to take back'),
         'de': ('es zur Datei {path} keine offene Entscheidung gibt', 'rufe /plugin-manager:setup auf und nenne die behaltene Datei, die du zurückhaben willst'),
@@ -129,7 +135,7 @@ CATALOGUE = {
 
 # state-helper conflicts (Conflict.code) that are known causes; every other conflict is not known
 FILE_CODES = ('no_decision', 'stale_decision')  # their {path} is the file, not the folder
-CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decision', 'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
+CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decision', 'template_base': 'template_base', 'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
 
 # the gate: why a writing skill stops (the reason follows "only partly (...)")
 GATE_REASONS = {

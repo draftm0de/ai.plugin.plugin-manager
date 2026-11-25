@@ -103,14 +103,22 @@ def configuration(root=None):
 
 
 # Dot-named files that skeleton templates legitimately need. Exact names, files only,
-# and only below a `templates` folder of a skill; every other dot path stays excluded.
+# and only below a `templates` folder of a skill, plus the workflow folder of a template;
+# every other dot path stays excluded.
 TEMPLATE_DOT_FILES = frozenset({'.gitignore.tpl', '.gitkeep'})
 
 
 def allowed_resource(destination, relative, part):
     parts = relative.parts
-    return (destination == 'skills' and part in TEMPLATE_DOT_FILES and part == parts[-1]
-            and 'templates' in parts[:-1] and not any(p.startswith('.') for p in parts[:-1]))
+    if destination != 'skills' or 'templates' not in parts[:-1]:
+        return False
+    dotted = [index for index, name in enumerate(parts) if name.startswith('.')]
+    if len(dotted) != 1:
+        return False
+    index = dotted[0]
+    if part == '.github':  # the CI workflow a template delivers: only <kind>/sync/.github/workflows/<file>
+        return parts.index('templates') < index and parts[index - 1] == 'sync' and parts[index + 1:-1] == ('workflows',)
+    return part in TEMPLATE_DOT_FILES and part == parts[-1]
 
 
 def payload():
