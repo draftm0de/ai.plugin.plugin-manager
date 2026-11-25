@@ -26,7 +26,7 @@ Writes or refreshes the documentation of a plugin or marketplace in the selected
 
 ### Workflow
 
-1. Checks that the repository is set up.
+1. Checks that the repository is set up and has its writing style `docs/style.md`.
 2. Reads the sources and clarifies open points with you.
 3. Writes README, installation, skills or plugin list, and concepts.
 4. Checks structure and links.
@@ -37,14 +37,14 @@ Writes or refreshes the documentation of a plugin or marketplace in the selected
 
 ### Reads and writes
 
-Reads the sources of the repository. Writes README and pages under `docs/`; your own existing text stays.
+Reads the writing style and the sources of the repository without running its code. Writes README and pages under `docs/`; your own existing text stays.
 
 
 ## modify
 
 ### Description
 
-Changes what a repository says about itself: technical name, display name and description.
+Changes what a repository says about itself: technical name, display name and description. A marketplace has no description.
 
 ### Workflow
 
@@ -52,6 +52,7 @@ Changes what a repository says about itself: technical name, display name and de
 2. Asks what should change.
 3. Shows every affected file without writing.
 4. Writes only after your yes.
+5. Names the next steps: refresh the documentation with `docs`, publish the changes with `publish`.
 
 ### Example
 
@@ -59,7 +60,7 @@ Changes what a repository says about itself: technical name, display name and de
 
 ### Reads and writes
 
-Reads the configuration and the associated marketplace. Writes the manifests and, for a plugin, its marketplace entry.
+Reads the configuration and the associated marketplace. Writes the manifests and, for a plugin, its marketplace entry if the marketplace folder is available on your machine. When you rename a marketplace, the affected plugins are only listed, not changed.
 
 
 ## publish
@@ -74,6 +75,9 @@ Prepares a publication and carries it out only with your approval, through a che
 2. Shows the diff, the commit message and the checks.
 3. Waits for your approval.
 4. Creates branch, commit, push and pull request.
+5. Merges after passing checks and reviews, if your approval covers that.
+
+An empty repository without a first commit is a special case: the first commit and the direct push need their own approval. No tags or releases are created. Details: [publication workflow](publish.md).
 
 ### Example
 
@@ -95,7 +99,12 @@ Brings a plugin or marketplace repository into the configured state and keeps th
 1. Resolve the language.
 2. Configure plugin or marketplace.
 3. Add and update shared files; unchanged copies without a question, changed ones only by your decision.
-4. One line "fully configured".
+4. If the writing style `docs/style.md` is missing, you pick the template or describe your own.
+5. One line "fully configured".
+
+Every plugin belongs to exactly one marketplace. To change it, or when its folder has moved, ask `setup`.
+
+Plugins also get a Git hook that checks the standards before every commit. It runs only after you activate it once per clone: `git config core.hooksPath githooks`.
 
 ### Example
 
@@ -103,7 +112,7 @@ Brings a plugin or marketplace repository into the configured state and keeps th
 
 ### Reads and writes
 
-Reads the folder and the selected marketplace. Writes management files under `.project/`, the shared files and, when creating, the plugin skeleton.
+Reads the folder and the selected marketplace. Writes management files under `.project/`, one rule in `.gitignore`, the shared files, the writing style and, when creating, the skeleton. Creating a plugin or changing its marketplace also changes the selected marketplace folder, and a change touches the previous one too. Only shared files whose template was dropped are deleted: untouched ones automatically, changed ones only by your decision.
 
 
 ## verify
@@ -115,8 +124,9 @@ Reports whether a repository follows the rules, and what is not yet proven.
 ### Workflow
 
 1. Detects plugin or marketplace itself.
-2. Checks structure and standards.
-3. On request compares `SCOPE.md` with the source code.
+2. Checks the structure, for plugins also the standards and shared instructions, and the documentation.
+3. Reports a setup that is still open, without running it.
+4. On request compares `SCOPE.md` with the source code.
 
 ### Example
 

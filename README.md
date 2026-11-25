@@ -22,7 +22,7 @@ Jedes neue Plugin beginnt sonst von vorn: eigene Ordner, eigene Regeln, eigene F
 
 ## Daten und Datenschutz
 
-Der Manager schreibt nur in das Repository, das du auswählst: Verwaltungsdateien unter `.project/`, die gemeinsamen Dateien, Dokumentation und, nach deinem Ja, Änderungen an Name oder Beschreibung. Er commitet, pusht und veröffentlicht nie ohne deine Freigabe und liest keine Zugangsdaten oder privaten Daten. Was ein Skill liest und schreibt, steht bei jedem Skill. Der KI-Host verarbeitet die Quellen nach seinen eigenen Bedingungen.
+Der Manager schreibt in das Repository, das du auswählst, und, wenn ein Plugin angelegt, umbenannt, beschrieben oder zugeordnet wird, in den Ordner seines Marketplace. Dazu gehören: Verwaltungsdateien unter `.project/`, die gemeinsamen Dateien, Dokumentation und, nach deinem Ja, Änderungen an Name oder Beschreibung. Er commitet, pusht und veröffentlicht nie ohne deine Freigabe und liest keine Zugangsdaten oder privaten Daten. Was ein Skill liest und schreibt, steht bei jedem Skill. Der KI-Host verarbeitet die Quellen nach seinen eigenen Bedingungen.
 
 ## Dokumentation
 

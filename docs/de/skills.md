@@ -26,7 +26,7 @@ Schreibt oder aktualisiert die Dokumentation eines Plugins oder Marketplace in d
 
 ### Ablauf
 
-1. Prüft, ob das Repository eingerichtet ist.
+1. Prüft, ob das Repository eingerichtet ist und der Schreibstil `docs/style.md` vorhanden ist.
 2. Liest die Quellen und klärt Offenes mit dir.
 3. Schreibt README, Installation, Skills beziehungsweise Plugin-Liste und Begriffe.
 4. Prüft Struktur und Links.
@@ -37,14 +37,14 @@ Schreibt oder aktualisiert die Dokumentation eines Plugins oder Marketplace in d
 
 ### Liest und schreibt
 
-Liest die Quellen des Repositorys. Schreibt README und Seiten unter `docs/`, vorhandene eigene Texte bleiben.
+Liest den Schreibstil und die Quellen des Repositorys, ohne deren Code auszuführen. Schreibt README und Seiten unter `docs/`, vorhandene eigene Texte bleiben.
 
 
 ## modify
 
 ### Beschreibung
 
-Ändert, was ein Repository über sich sagt: technischen Namen, Anzeigenamen und Beschreibung.
+Ändert, was ein Repository über sich sagt: technischen Namen, Anzeigenamen und Beschreibung. Ein Marketplace hat keine Beschreibung.
 
 ### Ablauf
 
@@ -52,6 +52,7 @@ Liest die Quellen des Repositorys. Schreibt README und Seiten unter `docs/`, vor
 2. Fragt, was sich ändern soll.
 3. Zeigt alle betroffenen Dateien, ohne zu schreiben.
 4. Schreibt erst nach deinem Ja.
+5. Nennt die nächsten Schritte: Dokumentation mit `docs` auffrischen, Änderungen mit `publish` veröffentlichen.
 
 ### Beispiel
 
@@ -59,7 +60,7 @@ Liest die Quellen des Repositorys. Schreibt README und Seiten unter `docs/`, vor
 
 ### Liest und schreibt
 
-Liest die Konfiguration und den zugehörigen Marketplace. Schreibt die Manifeste und, beim Plugin, den Marketplace-Eintrag.
+Liest die Konfiguration und den zugehörigen Marketplace. Schreibt die Manifeste und, beim Plugin, den Eintrag im Marketplace, wenn dessen Ordner auf deinem Rechner verfügbar ist. Benennst du einen Marketplace um, werden die betroffenen Plugins nur genannt, nicht verändert.
 
 
 ## publish
@@ -74,6 +75,9 @@ Bereitet eine Veröffentlichung vor und führt sie nur mit deiner Freigabe aus, 
 2. Zeigt den Diff, die Commit-Nachricht und die Prüfungen.
 3. Wartet auf deine Freigabe.
 4. Erstellt Branch, Commit, Push und Pull Request.
+5. Merged nach erfolgreichen Checks und Reviews, wenn deine Freigabe das umfasst.
+
+Ein leeres Repository ohne ersten Commit ist ein Sonderfall: Der erste Commit und der direkte Push brauchen eine eigene Freigabe. Tags und Releases entstehen nicht. Details: [Ablauf der Veröffentlichung](publish.md).
 
 ### Beispiel
 
@@ -95,7 +99,12 @@ Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und
 1. Sprache klären.
 2. Plugin oder Marketplace konfigurieren.
 3. Gemeinsame Dateien anlegen und aktualisieren; unveränderte Kopien ohne Frage, geänderte nur nach deiner Entscheidung.
-4. Eine Zeile „vollständig konfiguriert“.
+4. Fehlt der Schreibstil `docs/style.md`, wählst du die Vorlage oder beschreibst deinen eigenen.
+5. Eine Zeile „vollständig konfiguriert“.
+
+Jedes Plugin gehört zu genau einem Marketplace. Willst du ihn wechseln oder liegt sein Ordner jetzt woanders, bitte `setup` darum.
+
+In Plugins liegt auch ein Git-Hook, der die Standards vor jedem Commit prüft. Er läuft erst, wenn du ihn einmal pro Klon aktivierst: `git config core.hooksPath githooks`.
 
 ### Beispiel
 
@@ -103,7 +112,7 @@ Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und
 
 ### Liest und schreibt
 
-Liest den Ordner und den ausgewählten Marketplace. Schreibt Verwaltungsdateien unter `.project/`, die gemeinsamen Dateien und beim Anlegen das Plugin-Gerüst.
+Liest den Ordner und den ausgewählten Marketplace. Schreibt Verwaltungsdateien unter `.project/`, eine Regel in `.gitignore`, die gemeinsamen Dateien, den Schreibstil und beim Anlegen das Gerüst. Beim Anlegen eines Plugins und beim Wechsel des Marketplace ändert es auch den ausgewählten Marketplace-Ordner, beim Wechsel zusätzlich den bisherigen. Gelöscht werden nur gemeinsame Dateien, deren Vorlage entfallen ist: unveränderte von selbst, geänderte nur nach deiner Entscheidung.
 
 
 ## verify
@@ -115,8 +124,9 @@ Meldet, ob ein Repository den Regeln entspricht, und was noch nicht belegt ist.
 ### Ablauf
 
 1. Erkennt selbst, ob Plugin oder Marketplace.
-2. Prüft Struktur und Standards.
-3. Auf Wunsch vergleicht es `SCOPE.md` mit dem Quellcode.
+2. Prüft die Struktur, bei Plugins auch die Standards und gemeinsamen Anweisungen, und die Dokumentation.
+3. Meldet eine noch offene Einrichtung, ohne sie auszuführen.
+4. Auf Wunsch vergleicht es `SCOPE.md` mit dem Quellcode.
 
 ### Beispiel
 

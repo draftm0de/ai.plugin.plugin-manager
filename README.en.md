@@ -22,7 +22,7 @@ Otherwise every new plugin starts from scratch: its own folders, its own rules, 
 
 ## Data and privacy
 
-The Manager writes only into the repository you select: management files under `.project/`, the shared files, documentation and, after your yes, changes to name or description. It never commits, pushes or publishes without your approval and reads no credentials or private data. What each skill reads and writes is listed with the skill. The AI host processes the sources under its own terms.
+The Manager writes into the repository you select and, when a plugin is created, renamed, described or associated, into the folder of its marketplace. This covers management files under `.project/`, the shared files, documentation and, after your yes, changes to name or description. It never commits, pushes or publishes without your approval and reads no credentials or private data. What each skill reads and writes is listed with the skill. The AI host processes the sources under its own terms.
 
 ## Documentation
 
