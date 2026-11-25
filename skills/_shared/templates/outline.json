@@ -32,6 +32,7 @@
       "Voraussetzungen",
       "Einrichten",
       "Lokal testen",
+      "Gemeinsame Dateien",
       "Veröffentlichen"
     ],
     "docs/en/installation.md": [
@@ -52,6 +53,7 @@
       "Requirements",
       "Set up",
       "Test locally",
+      "Shared files",
       "Publish"
     ]
   },
@@ -84,6 +86,7 @@
       "Voraussetzungen",
       "Einrichten",
       "Lokal testen",
+      "Gemeinsame Dateien",
       "Veröffentlichen"
     ],
     "docs/en/installation.md": [
@@ -104,6 +107,7 @@
       "Requirements",
       "Set up",
       "Test locally",
+      "Shared files",
       "Publish"
     ]
   }

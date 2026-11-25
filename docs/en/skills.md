@@ -76,6 +76,8 @@ Brings a plugin or marketplace repository into the configured state and keeps th
 4. If the writing style `docs/style.md` is missing, you pick the template or describe your own.
 5. One line "fully configured".
 
+Which files are shared and what changing one means is described under [Shared files](files.md).
+
 To get a file you kept managed again, ask `setup` for it, for example "Take the Makefile back into the sync".
 
 Every plugin belongs to exactly one marketplace. To change it, or when its folder has moved, ask `setup`.

@@ -4,7 +4,7 @@
 
 <img src="assets/icon.png" alt="draftmode.io" width="48">
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
 Mit dem Plugin Manager entstehen Plugins, die alle gleich aufgebaut sind: eingerichtet, dokumentiert, geprüft und gepflegt.
 
@@ -26,7 +26,7 @@ Der Manager schreibt in das Repository, das du auswählst, und, wenn ein Plugin 
 
 ## Dokumentation
 
-[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
+[Installation](docs/de/installation.md) · [Skills](docs/de/skills.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md) · [Gemeinsame Dateien](docs/de/files.md)
 
 Lizenz: [MIT](LICENSE).
 

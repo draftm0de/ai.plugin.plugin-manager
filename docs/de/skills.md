@@ -76,6 +76,8 @@ Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und
 4. Fehlt der Schreibstil `docs/style.md`, wählst du die Vorlage oder beschreibst deinen eigenen.
 5. Eine Zeile „vollständig konfiguriert“.
 
+Welche Dateien gemeinsam sind und was eine eigene Änderung bedeutet, steht unter [Gemeinsame Dateien](files.md).
+
 Eine Datei, die du behalten hast, holst du zurück, indem du `setup` darum bittest, zum Beispiel „Nimm das Makefile wieder in den Sync“.
 
 Jedes Plugin gehört zu genau einem Marketplace. Willst du ihn wechseln oder liegt sein Ordner jetzt woanders, bitte `setup` darum.

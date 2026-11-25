@@ -492,3 +492,13 @@ Source: skills/setup/scripts/state/inspection.py
 Source: skills/setup/flows/sync.md
 Source: skills/setup/scripts/state/messages.py
 Test: tests/integration/project_setup/test_take_back.py
+
+## R46: The documentation explains the shared files
+
+Status: confirmed
+Acceptance: The Manager's documentation has a page "Shared files" (German and English) that explains synced and seed files, what changing, deleting, keeping and adopting means, which kept deviations `verify` still reports, and how a file is taken back; it lists every file of both kinds with its class, checked against the template folders. The managed development pages of both kinds carry a short section on the same.
+Source: docs/de/files.md
+Source: docs/en/files.md
+Source: skills/_shared/templates/plugin/sync/docs/de/development.md
+Source: skills/_shared/templates/marketplace/sync/docs/de/development.md
+Test: tests/contracts/shared_files/test_shared_files_page.py

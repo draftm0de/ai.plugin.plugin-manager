@@ -27,6 +27,10 @@ make install-local TARGET=claude
 
 This installs the local state of every listed plugin as a separate development marketplace `<name>-dev`, uncommitted changes included. Open a new session afterwards. For Codex use `TARGET=codex`.
 
+## Shared files
+
+Plugin Manager keeps some files up to date (synced) and creates others only once (seed). `.project/plugins/plugin-manager/skeleton.json` lists the synced files. Do not change them: your own rules belong into `CUSTOM.AGENTS.md`, your own commands into `CUSTOM.mk`, your own CI steps into another file under `.github/workflows/`. If you change a synced file anyway, `/plugin-manager:setup` asks whether to keep it or adopt the template. If you keep `AGENTS.md`, the `SCOPE.md` of a marketplace or a standard under `docs/standards/`, `verify` fails.
+
 ## Publish
 
 Commit and push the plugins first, then the marketplace:
