@@ -1,0 +1,10 @@
+{
+  "schema_version": 2,
+  "plugin": "plugin-manager",
+  "kind": "plugin",
+  "artifact": "plugin-manager",
+  "configured_at": "2026-11-25T11:36:29Z",
+  "marketplace": {
+    "name": "draftmode-ai-plugins"
+  }
+}

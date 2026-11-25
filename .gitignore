@@ -7,3 +7,7 @@ __pycache__/
 *.py[cod]
 .venv/
 node_modules/
+
+# Machine-local paths and the operator preference of the workpackage.
+/.project/operator.json
+/.project/plugins/*/local.json
