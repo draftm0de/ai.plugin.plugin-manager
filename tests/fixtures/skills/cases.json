@@ -239,8 +239,7 @@
     "skill": "modify",
     "sources": [
       "skills/modify/SKILL.md",
-      "skills/_shared/flows/gate.md",
-      "skills/_shared/WORKFLOWS.md#- **modify**"
+      "skills/_shared/flows/gate.md"
     ],
     "history": [
       {
@@ -278,8 +277,7 @@
     "skill": "modify",
     "sources": [
       "skills/modify/SKILL.md",
-      "skills/_shared/flows/gate.md",
-      "skills/_shared/WORKFLOWS.md#- **modify**"
+      "skills/_shared/flows/gate.md"
     ],
     "history": [
       {

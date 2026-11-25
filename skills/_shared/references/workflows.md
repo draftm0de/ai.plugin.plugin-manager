@@ -114,3 +114,20 @@ verify with --review. The helper collects evidence; the agent compares actual so
 and test logic with confirmed criteria. No tests are run by verify.
 
 Creation rejects existing .claude/skills or .agents/skills before writing plugin files or associations. Skill import through `create --kind plugin` is unsupported; --source and --import are rejected before writes.
+
+## Rules of the setup configuration flows
+
+The **setup configuration flows** are:
+
+- plugin creation in `skills/setup/flows/configure.md`
+- marketplace setup in `skills/setup/flows/marketplace.md`
+- the marketplace association of a plugin in `skills/setup/flows/associate.md`
+
+For all of them:
+
+- Read `references/workflows.md`. Use `scripts/workflows.py` from this bundled shared directory, with the user's project as target.
+- Resolve known facts from project files and Git origin; ask only for missing or contradictory inputs.
+- `create --kind plugin` accepts only explicit --skeleton; skill import is unsupported.
+- A skeleton has no domain implementation; confirm SCOPE.md before implementing.
+- Preserve existing SCOPE.md, AGENTS.md and CLAUDE.md; conflicting owned files require review.
+- Complete generated documentation from verified source evidence using the documentation workflow below.

@@ -315,6 +315,7 @@ Status: confirmed
 Acceptance: The documentation of a plugin repository is written from all of its sources, not from one skill: every skill under `skills/` (`SKILL.md` and its `references`, `flows` and `scripts`) and `SCOPE.md`, plus the `extra_sources` named in `docs/documentation.json`. `docs/documentation.json` holds only the language policy, `extra_sources` and open questions; it names no skill. A manifest with the field `source_skill` is rejected with a concrete reason before any write and is never converted or edited by the Manager. A standalone skill folder outside a repository is still documented as that one skill, with the output repository named explicitly. The documentation reads sources only and never executes them; the helper lists the sources (`inspect`), the agent reads them and writes the content from evidence.
 Source: skills/_shared/scripts/documentation.py
 Source: skills/_shared/WORKFLOWS.md
+Source: skills/docs/references/workflow.md
 Source: skills/_shared/references/source-of-truth.md
 Test: tests/integration/update/test_documentation.py
 Test: tests/contracts/test_skill_entrypoints.py
@@ -548,3 +549,14 @@ Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/templates/plugin/sync/Makefile
 Source: skills/_shared/templates/plugin/sync/githooks/pre-commit
 Test: tests/contracts/verify/test_check_scripts.py
+
+## R52: Each skill loads its own rules, and instructions name only existing scripts
+
+Status: confirmed
+Acceptance: `skills/_shared/WORKFLOWS.md` holds only what every action shares. The rules of `modify` and `verify` stand in their `SKILL.md`, those of `docs` in `skills/docs/references/workflow.md`, so a skill does not load the rules of another one. Repository layout and distribution are a reference read only when needed. Every Python script an instruction or reference file names exists, checked by a test. Every `SKILL.md` of the Manager has the title ``# <skill> (`/plugin-manager:<skill>`)`` and the sections Read first, Start, Steps, Boundaries and Messages in this order.
+Source: skills/_shared/WORKFLOWS.md
+Source: skills/docs/references/workflow.md
+Source: skills/modify/SKILL.md
+Source: skills/verify/SKILL.md
+Test: tests/contracts/test_instruction_references.py
+Test: tests/contracts/test_skill_layout.py
