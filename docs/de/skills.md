@@ -72,7 +72,7 @@ Bringt ein Plugin- oder Marketplace-Repository in den eingerichteten Zustand und
 
 1. Sprache klären.
 2. Plugin oder Marketplace konfigurieren.
-3. Gemeinsame Dateien anlegen und aktualisieren; unveränderte Kopien ohne Frage, geänderte nur nach deiner Entscheidung.
+3. Gemeinsame Dateien anlegen und aktualisieren: erst nennt es die Dateien und schreibt nach deinem Ja; für geänderte Dateien entscheidest du je Datei. Danach listet es auf, was es geschrieben hat.
 4. Fehlt der Schreibstil `docs/style.md`, wählst du die Vorlage oder beschreibst deinen eigenen.
 5. Eine Zeile „vollständig konfiguriert“.
 

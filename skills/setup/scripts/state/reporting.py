@@ -30,6 +30,28 @@ def next_flow(operation, failed, needs_choice, plan, missing, state):
     return 'ready'
 
 
+def pending_writes(ctx, plan):
+    """What the skeleton flow is about to write; its own evidence file only when it writes nothing else."""
+    entries = [(path, 'create') for path, state in plan['files'].items() if state == 'missing']
+    entries += [(path, 'change') for path in plan['updates']]
+    entries += [(path, 'delete') for path in plan['removals']['auto']]
+    if plan['rule_pending']:
+        entries.append(('.gitignore', 'change' if plan['ignore_text'] else 'create'))
+    if not entries and (plan['pending'] or plan['removals']['lock_cleanup']):
+        entries.append((ctx.lock_path, 'change' if plan['lock_exists'] else 'create'))
+    return entries
+
+
+def written(ctx, root, plan, created_files, updated_files, removed_files, ignore, lock_changed):
+    """The list of what the skeleton flow wrote, with the same rule for the evidence file."""
+    created, updated = list(created_files), list(updated_files)
+    if ignore and ignore.get('changed'):
+        (updated if plan['ignore_text'] else created).append('.gitignore')
+    if lock_changed and not (created or updated or removed_files):
+        (updated if plan['lock_exists'] else created).append(ctx.lock_path)
+    return messages.write_result(updated, created, removed_files, messages.language_for(root))
+
+
 def report(ctx, operation, root, name, plan, created_files=(), created_dirs=(), lock_changed=False,
            ignore=None, saved=False, errors=(), conflicts=(), unverified=(), state='plugin', removed_files=(), removed_dirs=(), updated_files=()):
     files = plan['files']
@@ -41,12 +63,18 @@ def report(ctx, operation, root, name, plan, created_files=(), created_dirs=(), 
             and (plan['pending'] or preference['needs_choice'])):
         directories.append('.project')  # management folder needed for language and/or lock
     failed = bool(errors or conflicts)
+    following = next_flow(operation, failed, preference['needs_choice'], plan, missing, state)
+    asks = operation == 'status' and following == 'skeleton'
     return {
         'operation': operation, 'ok': not failed, 'state': state, 'target': str(root), 'plugin': name,
         'plugin_configured': state != 'unconfigured',
         'configuration': {'plugin': ctx.plugin, 'configured': state != 'unconfigured',
                           'kind': state if state in ctx.kinds else None},
-        'next': next_flow(operation, failed, preference['needs_choice'], plan, missing, state),
+        'next': following,
+        'write_request': messages.write_request(pending_writes(ctx, plan), messages.language_for(root)) if asks else None,
+        'write_declined': messages.write_declined(messages.language_for(root)) if asks else None,
+        'result_message': written(ctx, root, plan, created_files, updated_files, removed_files, ignore, lock_changed)
+        if operation == 'setup' and not failed else None,
         'style': plan.get('style'),
         'updated': list(updated_files), 'outdated': list(plan['updates']),
         'skeleton': {'open': bool(missing or plan['pending'] or plan['updates'] or plan['rule_pending'] or plan['removals']['auto']

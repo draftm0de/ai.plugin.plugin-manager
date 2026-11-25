@@ -137,6 +137,38 @@ CATALOGUE = {
 FILE_CODES = ('no_decision', 'stale_decision')  # their {path} is the file, not the folder
 CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decision', 'template_base': 'template_base', 'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
 
+# R50: the question before the skeleton flow writes, the answer to "no" and the list of what was written
+WRITE = {
+    'en': {'ask': 'I would like to change file(s):', 'may': 'May I write?', 'declined': 'Nothing was changed. Call /plugin-manager:setup again when I may write.',
+           'create': 'create', 'change': 'change', 'delete': 'delete',
+           'updated': 'I updated:', 'created': 'I created:', 'removed': 'I removed:'},
+    'de': {'ask': 'Ich möchte Datei(en) ändern:', 'may': 'Darf ich schreiben?', 'declined': 'Es wurde nichts geändert. Rufe /plugin-manager:setup erneut auf, wenn ich schreiben darf.',
+           'create': 'anlegen', 'change': 'ändern', 'delete': 'löschen',
+           'updated': 'Aktualisiert habe ich:', 'created': 'Neu angelegt habe ich:', 'removed': 'Entfernt habe ich:'},
+}
+
+
+def write_request(entries, language=None):
+    """The question naming every file that is about to be written; `entries` are (path, create|change|delete)."""
+    if not entries:
+        return None
+    words = WRITE[pick(language)]
+    lines = ['* %s (%s)' % (path, words[action]) for path, action in sorted(entries)]
+    return '\n\n'.join((words['ask'], '\n'.join(lines), words['may']))
+
+
+def write_declined(language=None):
+    return WRITE[pick(language)]['declined']
+
+
+def write_result(updated=(), created=(), removed=(), language=None):
+    """The files that were written, one list per kind of change; None when nothing was written."""
+    words = WRITE[pick(language)]
+    blocks = [words[key] + '\n' + '\n'.join('- ' + path for path in sorted(paths))
+              for key, paths in (('updated', updated), ('created', created), ('removed', removed)) if paths]
+    return '\n\n'.join(blocks) or None
+
+
 # the gate: why a writing skill stops (the reason follows "only partly (...)")
 GATE_REASONS = {
     'en': {'stop': 'something in this folder blocks the setup', 'language': 'the language is not set yet',

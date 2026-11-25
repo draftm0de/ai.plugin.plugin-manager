@@ -8,7 +8,7 @@ Plugin Manager puts files into every plugin and marketplace. There are two class
 | --- | --- | --- |
 | Belongs to | Plugin Manager, identical in all repositories | the repository |
 | Created | by `setup`, also when it is missing later | once, when the repository is created |
-| New template | taken over, after a question if you changed the file | has no effect |
+| New template | taken over after your yes, with a question per file if you changed it | has no effect |
 | Your change | leads to a question | stays, without a question |
 | Deleted | `setup` creates it again | stays deleted |
 

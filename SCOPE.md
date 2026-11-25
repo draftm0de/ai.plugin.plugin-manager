@@ -527,3 +527,14 @@ Status: confirmed
 Acceptance: For a marketplace, which has no skills, `inspect` lists the existing files `marketplace.json`, `SCOPE.md`, `Makefile`, `CUSTOM.mk` and the workflows as documentation sources instead of stopping. Symlinks are never listed and nothing is executed.
 Source: skills/_shared/scripts/documentation.py
 Test: tests/integration/update/test_inspect_marketplace.py
+
+## R50: setup asks before the skeleton flow writes and lists what it wrote
+
+Status: confirmed
+Acceptance: When the skeleton flow is about to write, `status` returns a finished question that names every file with what happens to it (create, change, delete) and asks "May I write?"; the flow shows it unchanged and runs `setup` only after an explicit yes. This includes untouched copies that are updated without a per-file decision. On no, nothing is written. After writing, the helper returns the finished list of updated, created and removed files (also after adopting or deleting by a sync decision); the final answer shows these lists unchanged, above the ready line, instead of a sentence. The helper's own evidence file is named only when nothing else is written. Questions per deviating file stay as they are. Helper commands are run as plain single commands. Both texts are built in the helper, German and English.
+Source: skills/setup/scripts/state/messages.py
+Source: skills/setup/scripts/state/reporting.py
+Source: skills/setup/scripts/state/syncing.py
+Source: skills/setup/flows/skeleton.md
+Source: skills/setup/flows/entry.md
+Test: tests/integration/project_setup/test_write_request.py

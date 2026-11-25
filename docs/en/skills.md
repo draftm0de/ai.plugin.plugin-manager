@@ -72,7 +72,7 @@ Brings a plugin or marketplace repository into the configured state and keeps th
 
 1. Resolve the language.
 2. Configure plugin or marketplace.
-3. Add and update shared files; unchanged copies without a question, changed ones only by your decision.
+3. Add and update shared files: it first names the files and writes after your yes; for changed files you decide one by one. Afterwards it lists what it wrote.
 4. If the writing style `docs/style.md` is missing, you pick the template or describe your own.
 5. One line "fully configured".
 

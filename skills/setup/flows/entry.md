@@ -6,6 +6,8 @@ Specialised actions stay in their own skills. Helper: `../scripts/setup_state.py
 
 ## Loop
 
+Run every helper command exactly as written: one plain command, without redirection, pipes, variables or extra code; read its answer directly.
+
 1. Determine the explicitly selected folder (user input or current project). Ask only which one if several are possible. Never the installed plugin directory or unrelated projects.
 2. Run `python3 -B "<helper>" status --target "<folder>" --plugin <plugin>` (JSON, writes nothing, needs no Git, origin or marketplace; `--plugin` is the name of this running plugin and is passed to every helper call below). Configuration of the workpackage for this plugin is proven only by `.project/plugins/<plugin>/config.json`; a root plugin.json or marketplace.json is a product, never evidence. Read `next`:
 
@@ -26,7 +28,7 @@ Specialised actions stay in their own skills. Helper: `../scripts/setup_state.py
 
 ## Ready output
 
-On `ready` write exactly one line in the operator language and nothing else (no greeting, no list of skeleton deviations unless the person asks): English `<Kind> <name> Status: fully configured`, German `<Kind> <name> Status: vollständig konfiguriert`; for another language translate only the status words. `<Kind>` is `Plugin` or `Marketplace`, from the field `state` of the status answer. `<name>` is the field `plugin` of the status answer, the name of the configured plugin or marketplace repository (never the name of the running Manager unless the Manager itself is the target). Add no remark, note or explanation about this line or the rules behind it. Write it exactly once as your whole answer: no second copy, no recap and no closing-summary or next-step card of the host for this line (a card would repeat it). Then wait for input.
+If this call wrote files, write first every `result_message` it received, unchanged and in order, then an empty line, then the ready line (R50). Otherwise, on `ready` write exactly one line in the operator language and nothing else (no greeting, no list of skeleton deviations unless the person asks): English `<Kind> <name> Status: fully configured`, German `<Kind> <name> Status: vollständig konfiguriert`; for another language translate only the status words. `<Kind>` is `Plugin` or `Marketplace`, from the field `state` of the status answer. `<name>` is the field `plugin` of the status answer, the name of the configured plugin or marketplace repository (never the name of the running Manager unless the Manager itself is the target). Add no remark, note or explanation about this line or the rules behind it. Write it exactly once as your whole answer: no second copy, no recap and no closing-summary or next-step card of the host for this line (a card would repeat it). Then wait for input.
 
 ## Read-only requests
 

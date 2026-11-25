@@ -8,7 +8,7 @@ Plugin Manager legt in jedem Plugin und Marketplace Dateien an. Es gibt zwei Art
 | --- | --- | --- |
 | Gehört | Plugin Manager, in allen Repositorys gleich | dem Repository |
 | Angelegt | von `setup`, auch wenn sie später fehlt | einmal beim Erstellen des Repositorys |
-| Neue Vorlage | wird übernommen, bei eigener Änderung nach Rückfrage | wirkt sich nicht aus |
+| Neue Vorlage | wird nach deinem Ja übernommen, bei eigener Änderung nach Rückfrage je Datei | wirkt sich nicht aus |
 | Eigene Änderung | führt zu einer Rückfrage | bleibt, ohne Rückfrage |
 | Gelöscht | `setup` legt sie wieder an | bleibt gelöscht |
 

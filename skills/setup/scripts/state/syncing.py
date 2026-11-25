@@ -4,6 +4,7 @@ import stat
 from . import detection
 from . import fsafe
 from . import inspection
+from . import messages
 from . import skeleton
 from . import skeleton_lock
 from .constants import Conflict, SHA256
@@ -69,6 +70,9 @@ def sync(ctx, target, decision, relative, expected_source, expected_local):
             'decision': decision, 'path': relative, 'conflicts': conflicts, 'errors': errors,
             'changed': {'file': file_changed, 'lock': lock_changed},
             'recorded': evidence if lock_changed else None,
+            'result_message': None if failed else messages.write_result(
+                updated=[relative] if decision == 'adopt' and file_changed else (), removed=removed_files,
+                language=messages.language_for(root)),
             'removed': {'files': removed_files, 'directories': removed_dirs},
             'created': {'files': [], 'directories': [str(d.relative_to(root)) for d in created_dirs]},
             'next': 'stop' if failed else 'status', 'target_code_executed': False}
