@@ -22,7 +22,7 @@ With `modify` you change what your repository says about itself: the technical n
 | --- | --- | --- |
 | Run /plugin-manager:setup now? | The setup is missing or incomplete | `modify` changes nothing before it is done. Call it again afterwards. |
 | What should change? | Technical name, display name or description | A marketplace has no description. |
-| What is the new value for `<field>`? | The new name or text | A new technical name changes the call forms and the installation. |
+| New value for "`<field>`" (currently: `<value>`)? | The new name or text | A new technical name changes the call forms and the installation. |
 | May I write? | Above it stands the list of the files that change, also in the marketplace | On "No" everything stays as it is. |
 
 ## Example

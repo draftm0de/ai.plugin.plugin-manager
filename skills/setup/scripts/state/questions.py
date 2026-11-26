@@ -35,7 +35,7 @@ QUESTIONS = {
                       'The template of {file} is gone.', ('Keep file', 'Delete file')),
     'run_setup': ('Soll ich /plugin-manager:setup jetzt ausführen?', ('Ja, ausführen', 'Nein, abbrechen'),
                   'Run /plugin-manager:setup now?', ('Yes, run it', 'No, stop')),
-    'new_value': ('Wie lautet der neue Wert für {field}?', (), 'What is the new value for {field}?', ()),
+    'new_value': ('Neuer Wert für „{field}“ (bisher: {current})?', (), 'New value for "{field}" (currently: {current})?', ()),
     'change': ('Was soll sich ändern?', ('Technischer Name', 'Anzeigename', 'Beschreibung'),
                'What should change?', ('Technical name', 'Display name', 'Description')),
 }
