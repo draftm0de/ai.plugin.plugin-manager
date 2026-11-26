@@ -20,25 +20,23 @@ The rules of the `docs` action. Paths are relative to `skills/_shared/` unless e
 - Read `docs/documentation.json` → `documentation.languages` and `documentation.default_language`.
 - Honor an explicit user choice, including English only. With no saved policy and no clear instruction, ask whether German, English or both and which is the default; read `references/languages.md`.
 
-### 2. Generate and create
+### 2. Generate, create and check
 
-Run `python3 -B "<helper>" scaffold --source PATH --output REPOSITORY` (the helper is `scripts/documentation.py`; add `--languages` and `--default-language` only for the first run). It
+Run this one command, exactly as written. The helper lies in the shared folder, `../../_shared/scripts/documentation.py` relative to this file, not in the folder of this skill:
+
+`python3 -B "<plugin>/skills/_shared/scripts/documentation.py" scaffold --source "<repository>" --output "<repository>"`
+
+Add `--languages` and `--default-language` only for the first run. The command
 
 - writes the generated pages anew: `concepts.md`, `development.md`, `files.md` and, for a plugin, `installation.md` and `skills.md`
 - creates missing pages the person writes: `README`, `skills/<skill>.md`; a marketplace also `installation.md` and `plugins.md`
+- checks the documentation; everything it finds is a warning, never a failure
 
-### 3. Check
+### 3. Answer
 
-Run `python3 -B "<helper>" validate --output REPOSITORY`. Everything it names is a warning, never a failure.
+Write `result_message` of the answer unchanged as the whole final answer: no added sentences, no closing-summary or next-step card. On a failure follow the message rules instead.
 
-### 4. Report
-
-- the pages written anew and the pages created
-- what is still to be written, per page and section, with what belongs there (the findings name it)
-- missing facts (`missing_facts`), with the file where each is recorded
-- other findings: missing pages, headings, links
-
-Fix nothing by hand and offer no text. When the person asks for texts afterwards, that is ordinary work outside this action. Never commit, push, publish or install.
+Fix nothing by hand and offer no text. When the person asks for texts afterwards, that is ordinary work outside this action. Never commit, push, publish or install. Only when the person asks what belongs into an open section, say it (`warnings` of the answer name it).
 
 ## Pages
 

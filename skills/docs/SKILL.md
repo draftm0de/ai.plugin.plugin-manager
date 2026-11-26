@@ -20,7 +20,7 @@ Only `setup` changes configuration, skeleton files or sync decisions.
 
 ## Steps
 
-Follow `references/workflow.md`: languages, generate and create, check, report.
+Follow `references/workflow.md`: languages, one command that generates, creates and checks, then its `result_message` as the answer.
 
 ## Boundaries
 
@@ -28,4 +28,4 @@ No texts of its own, no questions about missing facts, no failing on findings; i
 
 ## Messages
 
-Messages to the person (failures, stops, results) follow `../_shared/references/messages.md`: two short paragraphs of running text (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.
+The result is the helper's `result_message`, a complete text shown unchanged and not retold under the message layout. Failures and stops follow `../_shared/references/messages.md`: two short paragraphs of running text (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.

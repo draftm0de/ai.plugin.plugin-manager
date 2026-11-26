@@ -367,6 +367,56 @@ def scaffold(source, output, title=None, languages=None, default_language=None):
             'next': 'Run validate and report what it names together with missing_facts as warnings. The texts are written by the person.'}
 
 
+REPORT = {
+    'en': {'updated': 'Rewritten:', 'created': 'Created:', 'open': 'Still to be written:', 'facts': 'Missing facts:', 'notes': 'Notes:',
+           'complete': '{kind} {name} docs: complete', 'one': '{kind} {name} docs: 1 warning', 'many': '{kind} {name} docs: {count} warnings'},
+    'de': {'updated': 'Neu geschrieben:', 'created': 'Neu angelegt:', 'open': 'Noch zu schreiben:', 'facts': 'Fehlende Angaben:', 'notes': 'Hinweise:',
+           'complete': '{kind} {name} Doku: vollständig', 'one': '{kind} {name} Doku: 1 Warnung', 'many': '{kind} {name} Doku: {count} Warnungen'},
+}
+FACT_NAMES = {'url': 'marketplace address', 'market': 'marketplace name', 'id': 'plugin id'}
+
+
+def operator_language(root, requested=None):
+    """The requested language, else the one saved in the repository, else English; never guessed."""
+    if requested in REPORT:
+        return requested
+    saved = local_json(Path(root) / '.project/operator.json').get('operator_language')
+    return saved if saved in REPORT else 'en'
+
+
+def result_message(root, created, updated, warnings, missing_facts, language):
+    """The finished answer of docs: only what happened and what is open, then one status line."""
+    words, kind = REPORT[language], kind_of(root)
+    if any('/skills/' in warning for warning in warnings):  # skills.md only repeats what is open on a skill page
+        warnings = [warning for warning in warnings if not re.fullmatch(r'docs/\w+/skills\.md: unresolved template placeholders', warning)]
+    manifest = local_json(root / ('plugin.json' if kind == 'plugin' else 'marketplace.json'))
+    sections, notes = {}, []
+    for warning in warnings:
+        found = re.match(r'^(.+?): "(.+?)" is still to be written', warning)
+        sections.setdefault(found[1], []).append('"%s"' % found[2]) if found else notes.append(warning)
+    blocks = [words[key] + '\n' + '\n'.join('- ' + line for line in lines) for key, lines in (
+        ('updated', sorted(updated)), ('created', sorted(created)),
+        ('open', [page + ': ' + ', '.join(names) for page, names in sections.items()]),
+        ('facts', [FACT_NAMES.get(fact, fact) for fact in missing_facts]), ('notes', notes)) if lines]
+    count = len(warnings) + len(missing_facts)
+    status = words['complete' if not count else 'one' if count == 1 else 'many']
+    blocks.append(status.format(kind=kind.title(), name=manifest.get('name') or root.name, count=count))
+    return '\n\n'.join(blocks)
+
+
+def run(source, output, title=None, languages=None, default_language=None, message_language=None):
+    """What the docs skill does in one call: generate and create, check, and say it in one finished message."""
+    root = Path(output).expanduser().resolve()
+    before = {path.relative_to(root).as_posix() for path in [*root.glob('*.md'), *(root / 'docs').rglob('*.md')]}
+    result = scaffold(source, output, title, languages, default_language)
+    pages = [name for name in result['created'] if name.endswith('.md')]
+    warnings = validate(root)
+    facts = result['missing_facts'] if kind_of(root) == 'plugin' else [fact for fact in result['missing_facts'] if fact != 'id']
+    message = result_message(root, [name for name in pages if name not in before], [name for name in pages if name in before],
+                             warnings, facts, operator_language(root, message_language))
+    return dict(result, warnings=warnings, result_message=message)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -378,6 +428,7 @@ def main(argv=None):
     create.add_argument('--title')
     create.add_argument('--languages', nargs='+', choices=('de','en'))
     create.add_argument('--default-language', choices=('de','en'))
+    create.add_argument('--message-language', choices=('de','en'), help='Language of result_message; default the saved operator language, else English')
     verify = sub.add_parser('validate')
     verify.add_argument('--output', type=Path, required=True)
     args = parser.parse_args(argv)
@@ -385,7 +436,7 @@ def main(argv=None):
         if args.command == 'inspect':
             result = inspect(args.source)
         elif args.command == 'scaffold':
-            result = scaffold(args.source, args.output, args.title, args.languages, args.default_language)
+            result = run(args.source, args.output, args.title, args.languages, args.default_language, args.message_language)
         else:
             errors = validate(args.output)
             result = {'valid': not errors, 'errors': errors,

@@ -560,8 +560,9 @@ Test: tests/contracts/test_skill_layout.py
 ## R53: docs creates structure and reports, it writes no texts
 
 Status: confirmed
-Acceptance: The docs skill selects the languages, runs the helper, which writes the generated pages anew and creates missing hand-written pages, validates and reports what is still to be written. It never writes or changes text of a person, never asks for a missing fact (the page states it as open, the report names it) and treats every finding as a warning.
+Acceptance: The docs skill selects the languages, runs the helper, which writes the generated pages anew and creates missing hand-written pages, validates and reports what is still to be written. It never writes or changes text of a person, never asks for a missing fact (the page states it as open, the report names it) and treats every finding as a warning. One command does it and returns the finished answer: the pages rewritten and created, the sections still to be written, missing facts, other notes, then one status line (`<Kind> <name> docs: complete` or the number of warnings), in the operator language; with nothing to report only that line, without a summary card.
 Source: skills/docs/SKILL.md
 Source: skills/docs/references/workflow.md
 Source: skills/_shared/scripts/documentation.py
 Test: tests/contracts/verify/test_ci_checks.py
+Test: tests/integration/update/test_docs_result.py
