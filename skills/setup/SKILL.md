@@ -38,7 +38,7 @@ No gate: `setup` is the skill that opens the gate of the others. The status answ
 
 ### Writing shared files
 
-- Before the skeleton flow writes, ask with the `write_request` of the status answer, with no text before the question; after writing, show each `result_message` (R50).
+- Before the skeleton flow writes, ask with the whole `write_request` of the status answer as the question text, file lines included, with no text before the question; after writing, show each `result_message` (R50).
 - Both are complete texts shown unchanged, not retold under the message layout.
 - Run helper commands as plain single commands.
 - A request to take back a file that was kept on purpose goes to `flows/sync.md`, section "Taking a kept file back" (R45).

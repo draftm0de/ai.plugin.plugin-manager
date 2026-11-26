@@ -8,10 +8,6 @@ sys.path.insert(0, str(ROOT / 'skills/setup/scripts'))
 from state import messages, reporting  # noqa: E402
 
 
-class Ctx:
-    lock_path = '.project/plugins/fictional/skeleton.json'
-
-
 def plan(files=(), updates=(), auto=(), rule=False, ignore='', pending=(), cleanup=(), lock=True):
     return {'files': dict(files), 'updates': list(updates), 'removals': {'auto': list(auto), 'lock_cleanup': list(cleanup)},
             'rule_pending': rule, 'ignore_text': ignore, 'pending': list(pending), 'lock_exists': lock}
@@ -19,15 +15,16 @@ def plan(files=(), updates=(), auto=(), rule=False, ignore='', pending=(), clean
 
 class WriteRequest(unittest.TestCase):
     def test_every_file_is_named_with_what_happens_to_it(self):
-        entries = reporting.pending_writes(Ctx, plan(files={'b.md': 'missing', 'c.md': 'identical'}, updates=['a.md'],
+        entries = reporting.pending_writes(plan(files={'b.md': 'missing', 'c.md': 'identical'}, updates=['a.md'],
                                                      auto=['d.md'], rule=True, ignore='x', pending=['c.md']))
         self.assertEqual('Ich möchte Datei(en) ändern:\n\n* .gitignore (ändern)\n* a.md (ändern)\n* b.md (anlegen)\n* d.md (löschen)\n\n'
                          'Darf ich schreiben?', messages.write_request(entries, 'de'))
 
-    def test_the_evidence_file_is_named_only_when_nothing_else_is_written(self):
-        entries = reporting.pending_writes(Ctx, plan(pending=['c.md'], lock=False))
-        self.assertEqual([(Ctx.lock_path, 'create')], entries)
-        self.assertIsNone(messages.write_request(reporting.pending_writes(Ctx, plan()), 'en'))
+    def test_the_evidence_file_is_never_asked_about_or_listed(self):
+        self.assertEqual([], reporting.pending_writes(plan(pending=['c.md'], lock=False)))
+        self.assertEqual([], reporting.pending_writes(plan(cleanup=['old.md'])))
+        self.assertIsNone(messages.write_request(reporting.pending_writes(plan(pending=['c.md'])), 'en'))
+        self.assertIn('writes only the Manager\'s own bookkeeping: ask nothing', (ROOT / 'skills/setup/flows/skeleton.md').read_text(encoding='utf-8'))
 
     def test_the_result_lists_the_files_per_kind_of_change(self):
         self.assertEqual('Aktualisiert habe ich:\n- a.md\n- b.md\n\nNeu angelegt habe ich:\n- c.py',
@@ -40,6 +37,14 @@ class FlowTexts(unittest.TestCase):
         text = (ROOT / 'skills/setup/flows/skeleton.md').read_text(encoding='utf-8')
         self.assertLess(text.index('write_request'), text.index('setup --target'))
         self.assertIn('Only an explicit yes', text)
+
+
+class QuestionTextTests(unittest.TestCase):
+    def test_every_flow_that_asks_puts_the_whole_list_into_the_question_itself(self):  # R50
+        root = Path(__file__).resolve().parents[3]
+        for name in ('skeleton', 'configure', 'marketplace', 'associate'):
+            text = (root / 'skills/setup/flows' / (name + '.md')).read_text(encoding='utf-8')
+            self.assertIn('every file line included and unchanged, is the question', text, name)
 
 
 if __name__ == '__main__':
