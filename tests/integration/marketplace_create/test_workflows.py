@@ -103,6 +103,16 @@ class MarketplaceFlowAcceptanceTests(unittest.TestCase):
         self.assertEqual('sync', status['next'])
         self.assertEqual(['scripts/verify/structure.py'], [d['path'] for d in status['sync']['decisions']])
 
+    def test_a_new_marketplace_has_its_pages_so_the_start_page_has_no_dead_link(self):  # R54
+        self.create()
+        for language in ('de', 'en'):
+            for page in ('installation.md', 'concepts.md', 'development.md'):
+                self.assertTrue((self.market/'docs'/language/page).is_file(), page)
+            self.assertNotIn('{{', (self.market/'docs'/language/'installation.md').read_text(encoding='utf-8'))
+        sys.path.insert(0, str(ROOT/'skills/_shared/scripts'))
+        import documentation
+        self.assertEqual([], documentation.validate(self.market))
+
     def test_starter_readmes_have_the_expected_structure(self):
         self.create()
         for name in ('README.md', 'README.en.md'):

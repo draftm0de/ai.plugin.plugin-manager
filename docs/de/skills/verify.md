@@ -22,7 +22,3 @@
 ## Liest und schreibt
 
 Liest das Repository. Schreibt nichts und führt keinen Code des Repositorys aus. Dieselbe Prüfung läuft in der CI, samt Doku-Struktur und, wo ein Plugin Dateien im Sync hält, den Hash-Dateien.
-
----
-
-Dokumentation mit Plugin Manager erstellt.

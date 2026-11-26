@@ -6,14 +6,15 @@
 
 ## Beschreibung
 
-Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
+Hier beginnst du. `setup` konfiguriert dein geklontes Repository als Plugin oder als Marketplace und fragt dich dafür Schritt für Schritt, was es wissen muss. Das Repository braucht eine GitHub-Adresse (`origin`); fehlt sie, nennt `setup` die Befehle und hört auf. Danach hält es die gemeinsamen Dateien im Sync. Bevor es schreibt, nennt es die Dateien. Hast du eine davon selbst geändert, entscheidest du, ob deine Fassung bleibt oder die Vorlage übernommen wird. Du kannst es jederzeit erneut aufrufen.
 
 ## Ablauf
 
 1. Sprache klären.
-2. Plugin oder Marketplace konfigurieren.
-3. Gemeinsame Dateien anlegen und aktualisieren: erst nennt es die Dateien und schreibt nach deinem Ja; für geänderte Dateien entscheidest du je Datei. Danach listet es auf, was es geschrieben hat.
-4. Eine Zeile „vollständig konfiguriert“.
+2. Git-Repository und `origin` prüfen.
+3. Plugin oder Marketplace konfigurieren.
+4. Gemeinsame Dateien anlegen und aktualisieren: erst nennt es die Dateien und schreibt nach deinem Ja; für geänderte Dateien entscheidest du je Datei. Danach listet es auf, was es geschrieben hat.
+5. Eine Zeile „vollständig konfiguriert“.
 
 Welche Dateien gemeinsam sind und was eine eigene Änderung bedeutet, steht unter [Gemeinsame Dateien](../files.md).
 
@@ -29,8 +30,4 @@ In Plugins liegt auch ein Git-Hook, der die Standards vor jedem Commit prüft. E
 
 ## Liest und schreibt
 
-Liest den Ordner und den ausgewählten Marketplace. Schreibt Verwaltungsdateien unter `.project/`, eine Regel in `.gitignore`, die gemeinsamen Dateien, den Schreibstil und beim Anlegen das Gerüst. Beim Anlegen eines Plugins und beim Wechsel des Marketplace ändert es auch den ausgewählten Marketplace-Ordner, beim Wechsel zusätzlich den bisherigen. Gelöscht werden nur gemeinsame Dateien, deren Vorlage entfallen ist: unveränderte von selbst, geänderte nur nach deiner Entscheidung.
-
----
-
-Dokumentation mit Plugin Manager erstellt.
+Liest den Ordner, seine Git-Angaben und den ausgewählten Marketplace. Schreibt Verwaltungsdateien unter `.project/`, eine Regel in `.gitignore`, die gemeinsamen Dateien, den Schreibstil und beim Anlegen das Gerüst. Beim Anlegen eines Plugins und beim Wechsel des Marketplace ändert es auch den ausgewählten Marketplace-Ordner, beim Wechsel zusätzlich den bisherigen. Gelöscht werden nur gemeinsame Dateien, deren Vorlage entfallen ist: unveränderte von selbst, geänderte nur nach deiner Entscheidung.

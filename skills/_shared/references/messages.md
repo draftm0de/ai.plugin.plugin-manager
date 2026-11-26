@@ -12,7 +12,7 @@ this file show the register.
 ## Mandatory structure of every error message
 
 Two short paragraphs of running text, separated by one blank line. No labels, no list letters, no line break inside
-a sentence.
+a sentence. The only exception is the code block for shell commands described below the example.
 
 ```
 The <action> action could not be completed, because <the cause in plain words>. <What was already changed, or nothing.>
@@ -22,11 +22,21 @@ Please <the way to fix it>. Then call /plugin-manager:<skill> again.
 
 Two ways in one sentence: "Please either <first way> or <second way>." Example (English):
 
-```
-The setup action could not be completed, because the folder /Users/demo/plugin.a is not recognised as a Git repository. The language you chose was saved.
+````
+The setup action could not be completed, because the folder /Users/demo/plugin.a is not recognised as a Git repository and has no GitHub address yet. Nothing was changed.
 
-Please either initialise a Git repository in an IDE (for example VS Code) or run `git init` in a terminal in that folder. Then call /plugin-manager:setup again.
+Please run this in that folder (in a terminal or an IDE such as VS Code):
+
+```bash
+git init
+git remote add origin https://github.com/<owner>/plugin.a.git
 ```
+
+The repository does not have to exist on GitHub yet. Then call /plugin-manager:setup again.
+````
+
+When the fix consists of shell commands, the request ends with a colon, the commands stand in one `bash` code block and
+the remaining sentences follow it. Otherwise the second part is one paragraph. Keep a code block exactly as printed.
 
 - The first paragraph names what the person asked for (setup, docs, modify), never a helper or flow, says
   "could not be completed" (a deliberate stop: "was stopped"), then `because` and the cause. The cause names the
@@ -54,7 +64,7 @@ message. You write that message unchanged, you never compose, translate, shorten
 - Pass `--message-language <language of the person's text>` where the command accepts it; without the option the
   saved operator language counts, else English. Pass `--changed language` when the language was saved before the
   call.
-- Known causes today: `git_missing`, `not_a_repository`, `plugin_without_repository`, `no_origin`,
+- Known causes today: `git_missing`, `not_a_repository`, `no_repository`, `no_origin`,
   `inside_repository`, `address_not_plain`, `address_differs`, `other_content`, `existing_differs`,
   `unsupported_format`, `not_configured`, `invalid_name`, `empty_display_name`, `empty_description`,
   `nothing_to_change`, and the closed gate. A new cause is a new entry in the catalogue, never a sentence in a flow.

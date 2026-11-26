@@ -17,7 +17,7 @@ The state-guided skill of the Plugin Manager: it brings a repository into the co
 
 ## Start
 
-No gate: `setup` is the skill that opens the gate of the others. The status answer decides which flow runs:
+No gate: `setup` is the skill that opens the gate of the others. The status answer decides which flow runs; right after the language is saved the entry checks that the folder is a Git repository with a GitHub address (both kinds):
 
 | Flow | For |
 | --- | --- |
@@ -71,4 +71,4 @@ The plugin skeleton is the `common` list of `../_shared/manifests/plugin.json`, 
 
 ## Messages
 
-Messages to the person (failures, stops, results) follow `../_shared/references/messages.md`: two short paragraphs of running text (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.
+Messages to the person (failures, stops, results) follow `../_shared/references/messages.md`: two short paragraphs of running text, shell commands in a code block, (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.

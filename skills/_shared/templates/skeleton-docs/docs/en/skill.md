@@ -19,7 +19,3 @@
 ## Reads and writes
 
 {{SECTION_4}}
-
----
-
-Documentation prepared with Plugin Manager. Source-product ownership remains unchanged.

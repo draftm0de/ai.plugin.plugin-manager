@@ -22,7 +22,3 @@
 ## Reads and writes
 
 Reads the repository. Writes nothing and runs no code of the repository. The same check runs in CI, including the documentation structure and, where a plugin keeps files in sync, the hash files.
-
----
-
-Documentation prepared with Plugin Manager.

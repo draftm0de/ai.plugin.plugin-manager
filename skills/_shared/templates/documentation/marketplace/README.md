@@ -2,7 +2,7 @@
 
 **Deutsch** | [English](README.en.md)
 
-<img src="assets/icon.png" alt="draftmode.io" width="48">
+<img src="assets/icon.png" alt="{{TITLE}}" width="48">
 
 [Start](README.md) · [Installation](docs/de/installation.md) · [Begriffe](docs/de/concepts.md) · [Entwicklung](docs/de/development.md)
 

@@ -18,7 +18,7 @@ python3 /path/to/installed/skills/_shared/scripts/workflows.py create --kind mar
   --owner "Confirmed publisher"
 ```
 
-A marketplace needs a Git repository but no origin and records no repository of its own. Existing marketplace metadata supplies omitted names/owner; unknown facts require clarification. The result contains canonical marketplace.json, both derived host catalogs, standalone scripts, Makefile, DE/EN starter instructions and local-marketplace.example.json. No embedded manager or plugin is created. Existing identity conflicts stop creation. Repeating the same operation is idempotent.
+A marketplace needs a Git repository with a GitHub origin but records no repository of its own. Existing marketplace metadata supplies omitted names/owner; unknown facts require clarification. The result contains canonical marketplace.json, both derived host catalogs, standalone scripts, Makefile, DE/EN starter instructions, the documentation settings with the generated DE/EN pages and local-marketplace.example.json. No embedded manager or plugin is created. Existing identity conflicts stop creation. Repeating the same operation is idempotent.
 
 ## `create --kind plugin` (internal generator operation)
 

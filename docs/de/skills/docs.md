@@ -117,7 +117,3 @@ Fehlt eine Angabe, zum Beispiel die Adresse des Marketplace, steht auf der Seite
 ## Liest und schreibt
 
 Liest die Angaben deines Repositorys, zum Beispiel `plugin.json`, ohne Code auszuführen. Schreibt README und Seiten unter `docs/`; vorhandene eigene Texte ändert es nicht.
-
----
-
-Dokumentation mit Plugin Manager erstellt.

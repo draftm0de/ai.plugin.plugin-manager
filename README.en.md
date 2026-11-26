@@ -35,6 +35,8 @@ You add the marketplace once and install Plugin Manager from it.
 
 `/plugin-manager:setup`
 
+Your folder has to be a Git repository with a GitHub address (`origin`). The easiest way is to create the repository on GitHub and clone it.
+
 Run `:setup` to configure your connected folder as a plugin or a marketplace. The skill guides you through the configuration with questions.
 
 In Claude Code you call the skills as above. In Codex and ChatGPT you describe the task or pick the skill.

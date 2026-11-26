@@ -34,16 +34,16 @@
       "local_hash": "bc56450f42151f612330ddd6cffb134cac3b937945b78c629b996ecff8843b2d"
     },
     "docs/prerequisites.md": {
-      "source_hash": "c638698408a7c315eb515fd5c85fae01a3a38946a9e9f20e750ebc2c0b94be71",
-      "local_hash": "c638698408a7c315eb515fd5c85fae01a3a38946a9e9f20e750ebc2c0b94be71"
+      "source_hash": "6badbb949b3ff5b22c8c07ea593e80da2002caf68a0996b1427bcc456f632d43",
+      "local_hash": "6badbb949b3ff5b22c8c07ea593e80da2002caf68a0996b1427bcc456f632d43"
     },
     "docs/standards/coding.md": {
       "source_hash": "43da9da322dccb2830af3abac71d1b2324177ebc50fac9a2da851207053dddc8",
       "local_hash": "43da9da322dccb2830af3abac71d1b2324177ebc50fac9a2da851207053dddc8"
     },
     "docs/standards/messages.md": {
-      "source_hash": "d6f9d37b8505c96710c20823efa41e16cc4ced1839952895da85bcca90877031",
-      "local_hash": "d6f9d37b8505c96710c20823efa41e16cc4ced1839952895da85bcca90877031"
+      "source_hash": "82ec4ffe2eac818e899e50a22d61495a58f733e64edeb015c4472298c208205f",
+      "local_hash": "82ec4ffe2eac818e899e50a22d61495a58f733e64edeb015c4472298c208205f"
     },
     "docs/standards/skills.md": {
       "source_hash": "bff996bf42b905fea0bf15eb15cf56e5514f236529b3bb8b9b687f4d9dd51690",
@@ -106,8 +106,8 @@
       "local_hash": "608c81480295570eb14e8eb59cfd53dca25fdf438ae33a846255dec915107933"
     },
     "skills/_shared/scripts/messages_base.py": {
-      "source_hash": "92be65e2deeca54371e0e38d51f6800eadd141c15842ddd280a3908186a560d7",
-      "local_hash": "92be65e2deeca54371e0e38d51f6800eadd141c15842ddd280a3908186a560d7"
+      "source_hash": "5e1e5f9a8fd36b674e621b779eeda0406e919521b68aa30b8694a4b929fecf63",
+      "local_hash": "5e1e5f9a8fd36b674e621b779eeda0406e919521b68aa30b8694a4b929fecf63"
     },
     "skills/_shared/scripts/operator_language.py": {
       "source_hash": "3660c928e59a241bc4e3250ca63d39c76eb3a52e7c33bf0d9602121b030aba5e",

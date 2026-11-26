@@ -43,19 +43,13 @@ CATALOGUE = {
         'de': ('der Ordner {path} nicht als Git-Repository erkannt wird',
                'initialisiere entweder in einer IDE (zum Beispiel VS Code) ein Git-Repository oder führe in einem Terminal in diesem Ordner `git init` aus'),
     },
-    'plugin_without_repository': {
-        'en': ('the folder {path} is not recognised as a Git repository and has no GitHub address yet',
-               'run `git init` in that folder, in an IDE (for example VS Code) or in a terminal, and then '
-               '`git remote add origin https://github.com/<owner>/<name>.git` (the repository does not have to exist yet)'),
-        'de': ('der Ordner {path} nicht als Git-Repository erkannt wird und noch keine GitHub-Adresse hat',
-               'führe in diesem Ordner, in einer IDE (zum Beispiel VS Code) oder in einem Terminal, `git init` aus und danach '
-               '`git remote add origin https://github.com/<owner>/<name>.git` (das Repository muss auf GitHub noch nicht existieren)'),
+    'no_repository': {
+        'en': ('the folder {path} is not recognised as a Git repository and has no GitHub address yet', 'run this in that folder (in a terminal or an IDE such as VS Code)'),
+        'de': ('der Ordner {path} nicht als Git-Repository erkannt wird und noch keine GitHub-Adresse hat', 'führe in diesem Ordner aus (im Terminal oder in einer IDE wie VS Code)'),
     },
     'no_origin': {
-        'en': ('the folder {path} has no GitHub address yet',
-               'run `git remote add origin https://github.com/<owner>/<name>.git` in that folder (the repository does not have to exist yet)'),
-        'de': ('der Ordner {path} noch keine GitHub-Adresse hat',
-               'führe in diesem Ordner `git remote add origin https://github.com/<owner>/<name>.git` aus (das Repository muss auf GitHub noch nicht existieren)'),
+        'en': ('the folder {path} has no GitHub address yet', 'run this in that folder (in a terminal or an IDE such as VS Code)'),
+        'de': ('der Ordner {path} noch keine GitHub-Adresse hat', 'führe in diesem Ordner aus (im Terminal oder in einer IDE wie VS Code)'),
     },
     'inside_repository': {
         'en': ('the folder {path} lies inside the Git repository {root}', 'choose the folder that is itself the repository'),
@@ -133,6 +127,12 @@ CATALOGUE = {
     },
 }
 
+# fixes that are shell commands: shown in one code block after the request, followed by the sentence in AFTER
+_REMOTE = 'git remote add origin https://github.com/<owner>/{repo}.git'
+COMMANDS = {'no_repository': ('git init', _REMOTE), 'no_origin': (_REMOTE,)}
+_NOT_YET = {'en': 'The repository does not have to exist on GitHub yet.', 'de': 'Das Repository muss auf GitHub noch nicht existieren.'}
+AFTER = {'no_repository': _NOT_YET, 'no_origin': _NOT_YET}
+
 # state-helper conflicts (Conflict.code) that are known causes; every other conflict is not known
 FILE_CODES = ('no_decision', 'stale_decision')  # their {path} is the file, not the folder
 CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decision', 'template_base': 'template_base', 'not_fresh': 'other_content', 'config_format': 'unsupported_format', 'not_configured': 'not_configured'}
@@ -197,21 +197,27 @@ def pick(language):
     return language if language in LANGUAGES else DEFAULT_LANGUAGE
 
 
-def language_for(root, requested=None):
-    """The requested language, else the operator language saved in the folder, else English (never guessed)."""
-    if requested in LANGUAGES:
-        return requested
+def saved_language(root):
+    """The operator language saved in the folder when the catalogue has it, else None."""
     try:
         text = (Path(root) / '.project' / 'operator.json').read_text(encoding='utf-8')
         saved = json.loads(text).get('operator_language')
     except (OSError, ValueError, AttributeError, TypeError):
-        saved = None
-    return pick(saved)
+        return None
+    return saved if saved in LANGUAGES else None
+
+
+def language_for(root, requested=None):
+    """The requested language, else the operator language saved in the folder, else English (never guessed)."""
+    return requested if requested in LANGUAGES else pick(saved_language(root))
 
 
 def render_plain(code, facts, language='en'):
     cause, way = CATALOGUE[code][pick(language)]
-    return (cause + '; please ' + way if pick(language) == 'en' else cause + '; bitte ' + way).format_map(_Facts(facts))
+    text = cause + ('; please ' if pick(language) == 'en' else '; bitte ') + way
+    if code in COMMANDS:
+        text += ': ' + ', '.join('`%s`' % line for line in COMMANDS[code])
+    return text.format_map(_Facts(facts))
 
 
 class _Facts(dict):
@@ -220,20 +226,26 @@ class _Facts(dict):
 
 
 def render(action, code, facts=None, language=None, changed=None, skill=None, stopped=False, repeat=True):
-    """The two-paragraph message. `changed` is one of CHANGED or None (the sentence is then left out)."""
+    """The two-paragraph message; a fix made of shell commands carries them in a code block inside the second part.
+    `changed` is one of CHANGED or None (the sentence is then left out)."""
     lang = pick(language)
     cause, way = CATALOGUE[code][lang]
-    return _layout(lang, action, cause.format_map(_Facts(facts or {})), way.format_map(_Facts(facts or {})), changed, skill or action, stopped, repeat)
+    commands = [line.format_map(_Facts(facts or {})) for line in COMMANDS.get(code, ())]
+    return _layout(lang, action, cause.format_map(_Facts(facts or {})), way.format_map(_Facts(facts or {})), changed, skill or action, stopped, repeat,
+                   commands, AFTER.get(code, {}).get(lang))
 
 
-def _layout(lang, action, cause, way, changed, skill, stopped, repeat):
+def _layout(lang, action, cause, way, changed, skill, stopped, repeat, commands=(), after=None):
     first = (STOPPED if stopped else HEADLINE)[lang].format(action=ACTIONS.get(action, action), cause=cause)
     if changed in CHANGED:
         first += ' ' + CHANGED[changed][lang]
-    second = PLEASE[lang].format(way=way)
+    rest = [after] if after else []
     if repeat:
-        second += ' ' + REPEAT[lang].format(skill=skill)
-    return first + '\n\n' + second
+        rest.append(REPEAT[lang].format(skill=skill))
+    if commands:
+        second = PLEASE[lang].format(way=way)[:-1] + ':\n\n```bash\n' + '\n'.join(commands) + '\n```'
+        return '\n\n'.join([first, second] + ([' '.join(rest)] if rest else []))
+    return first + '\n\n' + ' '.join([PLEASE[lang].format(way=way)] + rest)
 
 
 def gate_message(action, next_state, language=None):

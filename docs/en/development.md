@@ -15,6 +15,8 @@ For people who work on this plugin. You do not need this page to use it.
 
 ## Set up
 
+If you did not clone the folder of a repository, run `git init` and `git remote add origin <address>` in it; `setup` names the commands for you.
+
 ### Marketplace
 
 To develop a plugin, `:setup` asks you to associate it with a marketplace. So you need a repository that has been set up as a marketplace with `/plugin-manager:setup`.

@@ -23,7 +23,3 @@ With `modify` you change what your repository says about itself: the technical n
 ## Reads and writes
 
 Reads the configuration and the associated marketplace. Writes the manifests and, for a plugin, its marketplace entry if the marketplace folder is available on your machine. When you rename a marketplace, the affected plugins are only listed, not changed.
-
----
-
-Documentation prepared with Plugin Manager.

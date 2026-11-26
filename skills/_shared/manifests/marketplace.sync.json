@@ -22,7 +22,7 @@
       "executable": false
     },
     "docs/prerequisites.md": {
-      "sha256": "c638698408a7c315eb515fd5c85fae01a3a38946a9e9f20e750ebc2c0b94be71",
+      "sha256": "6badbb949b3ff5b22c8c07ea593e80da2002caf68a0996b1427bcc456f632d43",
       "executable": false
     },
     "scripts/local_plugins.py": {

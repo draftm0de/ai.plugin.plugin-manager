@@ -15,6 +15,8 @@ Für alle, die an diesem Marketplace arbeiten. Zum Benutzen brauchst du diese Se
 
 ## Einrichten
 
+Hast du den Ordner eines Repositorys nicht geklont, führe darin `git init` und `git remote add origin <Adresse>` aus; `setup` nennt dir die Befehle.
+
 ### Marketplace
 
 Ein Marketplace ist ein eigenes Repository. Lege es auf GitHub an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Eigentümer. Danach liegen der Katalog `marketplace.json` und die gemeinsamen Dateien in deinem Repository.

@@ -23,7 +23,7 @@ class SkeletonDocsTests(unittest.TestCase):
                 if template.endswith('/installation.md'):  # filled from the facts of the repository (R35)
                     self.assertEqual({'{{PLUGIN_LABEL}}', '{{MARKETPLACE_URL}}', '{{PLUGIN_ID}}', '{{MARKETPLACE_NAME}}'}, set(found))
                 else:
-                    expected = ['{{TITLE}}', '{{SKILL_FEATURES}}'] if template.startswith('README') else ['{{SKILL_ROWS}}'] if template.endswith('/skills.md') else []
+                    expected = ['{{TITLE}}', '{{TITLE}}', '{{SKILL_FEATURES}}'] if template.startswith('README') else ['{{SKILL_ROWS}}'] if template.endswith('/skills.md') else []
                     self.assertEqual(expected, found)
                 found_headings = re.findall(r'^## (.+)$', text, re.M)
                 if template.startswith('README'):  # an icon may precede a heading of the start page

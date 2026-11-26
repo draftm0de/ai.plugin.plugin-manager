@@ -117,7 +117,3 @@ When a fact is missing, for example the address of the marketplace, the page say
 ## Reads and writes
 
 Reads the facts of your repository, for example `plugin.json`, without running code. Writes the README and pages under `docs/`; it does not change your existing texts.
-
----
-
-Documentation prepared with Plugin Manager.

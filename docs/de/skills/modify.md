@@ -23,7 +23,3 @@ Mit `modify` änderst du, was dein Repository über sich sagt: den technischen N
 ## Liest und schreibt
 
 Liest die Konfiguration und den zugehörigen Marketplace. Schreibt die Manifeste und, beim Plugin, den Eintrag im Marketplace, wenn dessen Ordner auf deinem Rechner verfügbar ist. Benennst du einen Marketplace um, werden die betroffenen Plugins nur genannt, nicht verändert.
-
----
-
-Dokumentation mit Plugin Manager erstellt.

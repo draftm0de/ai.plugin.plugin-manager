@@ -15,6 +15,8 @@ Für alle, die an diesem Plugin arbeiten. Zum Benutzen brauchst du diese Seite n
 
 ## Einrichten
 
+Hast du den Ordner eines Repositorys nicht geklont, führe darin `git init` und `git remote add origin <Adresse>` aus; `setup` nennt dir die Befehle.
+
 ### Marketplace
 
 Damit du ein Plugin entwickeln kannst, fordert dich `:setup` auf, es einem Marketplace zuzuordnen. Du brauchst also ein Repository, das über `/plugin-manager:setup` als Marketplace eingerichtet wurde.

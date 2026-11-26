@@ -62,4 +62,4 @@ When asked to compare target requirements with implementation:
 
 ## Messages
 
-Messages to the person (failures, stops, results) follow `../_shared/references/messages.md`: two short paragraphs of running text (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.
+Messages to the person (failures, stops, results) follow `../_shared/references/messages.md`: two short paragraphs of running text, shell commands in a code block, (what could not be done, because of what, what was changed; then the request with the exact way and the call to repeat), no labels, no technical terms.

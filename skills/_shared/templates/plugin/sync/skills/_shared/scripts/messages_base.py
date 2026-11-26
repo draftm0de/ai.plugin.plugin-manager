@@ -98,7 +98,9 @@ BASE_CATALOGUE = {
 
 def render_failure(catalogue, code, language, plugin, skill, changed=None, stopped=False, **facts):
     """The finished two-paragraph message. A code outside the catalogue is reported as not known.
-    `changed` is the sentence about what was already changed (default: nothing was changed)."""
+    `changed` is the sentence about what was already changed (default: nothing was changed). An entry whose fix is
+    made of shell commands lists them in `commands` (and may add a sentence per language in `after`): the request then
+    ends with a colon, the commands stand in one code block and the remaining sentences follow it."""
     if code not in catalogue:
         code, facts = 'UNKNOWN', {}
     language = pick_language(language)
@@ -108,10 +110,14 @@ def render_failure(catalogue, code, language, plugin, skill, changed=None, stopp
     first = layout['stopped' if stopped else 'failed'].format(
         action=skill or 'language', cause=entry['cause'][language].format_map(_Facts(values)),
         changed=changed or layout['nothing'])
-    second = entry['fix'][language].format_map(_Facts(values)) + '.'
+    request = entry['fix'][language].format_map(_Facts(values))
+    rest = [entry['after'][language].format_map(_Facts(values))] if entry.get('after') else []
     if plugin and skill:
-        second += ' ' + layout['then'].format(plugin=plugin, skill=skill)
-    return first + '\n\n' + second
+        rest.append(layout['then'].format(plugin=plugin, skill=skill))
+    if entry.get('commands'):
+        block = '\n'.join(line.format_map(_Facts(values)) for line in entry['commands'])
+        return '\n\n'.join([first, request + ':\n\n```bash\n' + block + '\n```'] + ([' '.join(rest)] if rest else []))
+    return first + '\n\n' + ' '.join([request + '.'] + rest)
 
 
 class _Facts(dict):

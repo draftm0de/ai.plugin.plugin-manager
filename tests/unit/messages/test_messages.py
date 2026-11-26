@@ -8,7 +8,7 @@ from tests.support import project_setup_fixture as fx
 ROOT = Path(__file__).resolve().parents[3]
 FORBIDDEN = re.compile(r'\b(exit|json|stderr|traceback|schema|evidence|hash|lock|manifest|migration|generator)\b|'
                        r'\b(Öffnen|Führen|Rufen|Prüfen|Starten|Wählen|Verwenden|Geben|Nutzen|Legen|Setzen) Sie\b|\b(Ihr|Ihre|Ihrem|Ihren|Ihrer|Ihnen)\b', re.I)
-FACTS = {'path': '/Users/demo/plugin.a', 'root': '/Users/demo', 'address': 'https://x.test/a.git', 'origin': 'https://github.com/o/n.git'}
+FACTS = {'path': '/Users/demo/plugin.a', 'root': '/Users/demo', 'address': 'https://x.test/a.git', 'origin': 'https://github.com/o/n.git', 'repo': 'plugin.a'}
 
 
 class MessagesTests(unittest.TestCase):
@@ -19,7 +19,14 @@ class MessagesTests(unittest.TestCase):
         for code in self.messages.CATALOGUE:
             for lang, headline, please in (('en', 'could not be completed, because', 'Please'), ('de', 'konnte nicht abgeschlossen werden, weil', 'Bitte')):
                 text = self.messages.render('setup', code, FACTS, lang, changed='language')
-                first, second = text.split('\n\n')
+                parts = text.split('\n\n')
+                if code in self.messages.COMMANDS:  # request with colon, code block, remaining sentences
+                    first, request, block, rest = parts[0], parts[1], parts[2], parts[3]
+                    self.assertTrue(request.endswith(':'), code)
+                    self.assertEqual(['```bash', *[c.format(**FACTS) for c in self.messages.COMMANDS[code]], '```'], block.split('\n'))
+                    second = request + ' ' + rest
+                else:
+                    first, second = parts
                 self.assertIn(headline, first, code)
                 self.assertTrue(second.startswith(please), code)
                 self.assertTrue(second.rstrip().endswith('/plugin-manager:setup again.' if lang == 'en' else '/plugin-manager:setup erneut auf.'), code)

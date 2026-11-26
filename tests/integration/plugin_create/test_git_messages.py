@@ -29,7 +29,7 @@ class GitMessageTests(WorkflowFixture, unittest.TestCase):
         bare = self.root / 'bare-plugin'
         bare.mkdir()
         subprocess.run(['git', 'init', '-q', str(bare)], check=True)  # a repository, but no origin
-        self.raises(lambda: flow.git_repository(bare), 'no GitHub address yet', '`git remote add origin https://github.com/<owner>/<name>.git`')
+        self.raises(lambda: flow.git_repository(bare), 'no GitHub address yet', '`git remote add origin https://github.com/<owner>/bare-plugin.git`')
 
     def test_a_subfolder_of_a_repository_is_not_accepted_as_the_repository(self):
         sub = self.plugin / 'nested'

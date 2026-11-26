@@ -37,6 +37,8 @@ Du fügst den Marketplace einmal hinzu und installierst daraus den Plugin Manage
 
 `/plugin-manager:setup`
 
+Dein Ordner muss ein Git-Repository mit GitHub-Adresse (`origin`) sein. Am einfachsten legst du das Repository auf GitHub an und klonst es.
+
 Führe `:setup` aus, um deinen verbundenen Ordner als Plugin oder Marketplace zu konfigurieren. Der Skill führt dich mit Fragen durch die Konfiguration.
 
 In Claude Code rufst du die Skills wie oben auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.

@@ -19,7 +19,3 @@
 ## Liest und schreibt
 
 {{SECTION_4}}
-
----
-
-Dokumentation mit Plugin Manager erstellt. Die Rechte am Quellprodukt bleiben unverändert.

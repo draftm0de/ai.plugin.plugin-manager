@@ -6,14 +6,15 @@
 
 ## Description
 
-You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
+You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. The repository needs a GitHub address (`origin`); if it is missing, `setup` names the commands and stops. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
 
 ## Workflow
 
 1. Resolve the language.
-2. Configure plugin or marketplace.
-3. Add and update shared files: it first names the files and writes after your yes; for changed files you decide one by one. Afterwards it lists what it wrote.
-4. One line "fully configured".
+2. Check the Git repository and `origin`.
+3. Configure plugin or marketplace.
+4. Add and update shared files: it first names the files and writes after your yes; for changed files you decide one by one. Afterwards it lists what it wrote.
+5. One line "fully configured".
 
 Which files are shared and what changing one means is described under [Shared files](../files.md).
 
@@ -29,8 +30,4 @@ Plugins also get a Git hook that checks the standards before every commit. It ru
 
 ## Reads and writes
 
-Reads the folder and the selected marketplace. Writes management files under `.project/`, one rule in `.gitignore`, the shared files, the writing style and, when creating, the skeleton. Creating a plugin or changing its marketplace also changes the selected marketplace folder, and a change touches the previous one too. Only shared files whose template was dropped are deleted: untouched ones automatically, changed ones only by your decision.
-
----
-
-Documentation prepared with Plugin Manager.
+Reads the folder, its Git settings and the selected marketplace. Writes management files under `.project/`, one rule in `.gitignore`, the shared files, the writing style and, when creating, the skeleton. Creating a plugin or changing its marketplace also changes the selected marketplace folder, and a change touches the previous one too. Only shared files whose template was dropped are deleted: untouched ones automatically, changed ones only by your decision.

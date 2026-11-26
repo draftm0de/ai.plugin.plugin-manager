@@ -12,10 +12,14 @@ def snapshot(*roots):
 
 
 class MarketplaceIdentityTests(WorkflowFixture, unittest.TestCase):
-    def test_a_marketplace_without_origin_and_repository_works(self):
+    def test_a_marketplace_needs_an_origin_but_records_no_repository(self):
         local = self.root / 'local-market'
         local.mkdir()
-        subprocess.run(['git', 'init', '-q', str(local)], check=True)  # a Git repository, but no origin
+        subprocess.run(['git', 'init', '-q', str(local)], check=True)  # a Git repository, but no origin yet
+        with self.assertRaises(ValueError):
+            flow.create_marketplace(local, 'local-market', 'Local Market', 'Fictional Publisher')
+        self.assertFalse((local / 'marketplace.json').exists())
+        subprocess.run(['git', '-C', str(local), 'remote', 'add', 'origin', 'https://github.com/example/local-market.git'], check=True)
         flow.create_marketplace(local, 'local-market', 'Local Market', 'Fictional Publisher')
         self.assertNotIn('repository', json.loads((local / 'marketplace.json').read_text()))
         self.market = local

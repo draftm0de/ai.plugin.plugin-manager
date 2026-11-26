@@ -1,6 +1,6 @@
 # Flow: shared development skeleton
 
-Used when `status` says `next: skeleton` (the language is known). The workpackage is configured for this plugin (a kind of this plugin's manifests); Git, origin and marketplace are not needed.
+Used when `status` says `next: skeleton` (the language is known). The workpackage is configured for this plugin (a kind of this plugin's manifests); A marketplace is not needed.
 
 Ask before writing (R50): the question is the first visible text of this step. Write nothing before it, no announcement, summary or explanation of the status. Write the `write_request` of the status answer unchanged and ask exactly this one question, with the host's question tool or in one message without it, with the choices "Yes" and "No" in the operator language. Only an explicit yes starts step 1. On no, or when the question is cancelled or unanswered, write nothing, write `write_declined` unchanged and end.
 

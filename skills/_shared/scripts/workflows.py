@@ -107,11 +107,17 @@ def git_tracked(root, path):
     return bool(listing)
 
 
+def suggested_repository(root):
+    """The folder name as the suggested repository name in a command, or a placeholder when GitHub would not take it."""
+    name = Path(root).resolve().name
+    return name if re.fullmatch(r'[A-Za-z0-9_.-]+', name) else '<name>'
+
+
 def git_repository(root, supplied=None):
     git_root(root)
     configured = git(root, 'config', '--get', 'remote.origin.url')
     if not configured:
-        raise failure('no_origin', path=root)
+        raise failure('no_origin', path=root, repo=suggested_repository(root))
     origin = repository_url(configured)
     if supplied and repository_url(supplied) != origin:
         raise failure('address_differs', address=supplied, origin=origin)
@@ -125,8 +131,32 @@ def identity(name, display):
         raise ValueError('Display name is required separately from technical name')
 
 
-def apply(files, replace=()):
-    """Preflight the whole change, preserve foreign files, roll back on write failure."""
+def file_mode(path, existed):
+    """The mode a written file gets: an existing file keeps its own, a new one the usual mode of this machine."""
+    if existed:
+        return path.stat().st_mode & 0o777
+    mask = os.umask(0)
+    os.umask(mask)
+    return 0o666 & ~mask
+
+
+def written(root, changed, previous, message_language):
+    """The finished list of what was written, with paths relative to the folder of the call (R50)."""
+    relative = {path: os.path.relpath(path, root) for path in changed}
+    return state_helper().messages.write_result(updated=[relative[p] for p in changed if p in previous],
+                                                created=[relative[p] for p in changed if p not in previous], language=message_language)
+
+
+def requested(action, root, files, replace, message_language):
+    """The write-free answer of a --plan call: the question that names every file about to be written (R50)."""
+    messages = state_helper().messages
+    entries = [(os.path.relpath(path, root), 'change' if Path(path).exists() else 'create') for path in apply(files, replace, plan=True)]
+    return {'action': action, 'changed': [], 'published': False,
+            'write_request': messages.write_request(entries, message_language), 'write_declined': messages.write_declined(message_language)}
+
+
+def apply(files, replace=(), plan=False):
+    """Preflight the whole change, preserve foreign files, roll back on write failure. With plan nothing is written."""
     previous = {}
     changes = {}
     for path, content in files.items():
@@ -140,6 +170,8 @@ def apply(files, replace=()):
             raise failure('existing_differs', path=path)
         previous[path] = before
         changes[path] = content
+    if plan:
+        return [str(p) for p in changes]
     written = []
     try:
         for path, content in changes.items():
@@ -148,6 +180,7 @@ def apply(files, replace=()):
                 temp = Path(handle.name)
                 handle.write(content)
             try:
+                os.chmod(temp, file_mode(path, previous[path] is not None))  # a temporary file is private; the result is not
                 os.replace(temp, path)
             finally:
                 temp.unlink(missing_ok=True)
@@ -238,9 +271,29 @@ def marketplace_start_page(language, filename, title, plugins):
     return fill_listings(text, language, plugins=listed).rstrip('\n') + '\n'
 
 
-def create_marketplace(root, name=None, display_name=None, owner=None):
+def marketplace_pages(root, config, url):
+    """The documentation settings and generated pages a new marketplace lacks, so its start page has no dead links
+    (R54). German and English, like the start pages; existing settings and pages are kept."""
+    from documentation import installation_facts, language_policy, write_generated_pages
+    settings = root/'docs/documentation.json'
+    files = {}
+    if settings.exists():
+        policy = language_policy(root)
+    else:
+        policy = {'languages': ['de', 'en'], 'default_language': 'de'}
+        files[settings] = encode({'schema_version': 1, 'extra_sources': [], 'open_questions': [], 'documentation': policy})
+    with tempfile.TemporaryDirectory() as directory:  # built aside: nothing is written before the whole change is known
+        stage = Path(directory).resolve()
+        (stage/'marketplace.json').write_bytes(encode(config))
+        for page in write_generated_pages(stage, policy, installation_facts(stage, recorded=url), unknown=True):
+            if not (root/page).exists():
+                files[root/page] = (stage/page).read_bytes()
+    return files
+
+
+def create_marketplace(root, name=None, display_name=None, owner=None, plan=False, message_language=None):
     root = safe_path(root)
-    git_root(root)
+    url = git_repository(root)
     if (root/'plugin.json').exists():
         raise ValueError('A plugin repository cannot become a marketplace')
     existing = read(root/'marketplace.json', {})
@@ -267,8 +320,14 @@ def create_marketplace(root, name=None, display_name=None, owner=None):
     for lang, filename in (('de', 'README.md'), ('en', 'README.en.md')):  # the start page of a marketplace (R54), once
         if not (root/filename).exists():
             files[root/filename] = marketplace_start_page(lang, filename, display_name, config['plugins']).encode()
+    files.update(marketplace_pages(root, config, url))
     ignore, content = ignore_file(root); files[ignore] = content
-    return {'action': 'create-marketplace', 'changed': apply(files, [ignore]), 'published': False}
+    if plan:
+        return requested('create-marketplace', root, files, [ignore], message_language)
+    existing_paths = {str(path) for path in files if path.exists()}
+    changed = apply(files, [ignore])
+    return {'action': 'create-marketplace', 'changed': changed, 'published': False,
+            'result_message': written(root, changed, existing_paths, message_language)}
 
 
 def checkout_path(base, value):
@@ -399,7 +458,7 @@ def load_evidence(root, plugin):
     return evidence, ctx.kinds
 
 
-def associate(root, marketplace, repository=None, drop_missing_old=False, plugin=OWNER):
+def associate(root, marketplace, repository=None, drop_missing_old=False, plugin=OWNER, plan=False, message_language=None):
     """Set or change the one marketplace a plugin belongs to, in one rollback-capable transaction.
 
     The identity (name, repository) goes into the committed config.json, the path of the checkout into the ignored
@@ -450,8 +509,12 @@ def associate(root, marketplace, repository=None, drop_missing_old=False, plugin
             files.update(release_old_marketplace(old, root, manifest))
     updated = dict(evidence); updated['marketplace'] = target
     files[root/EVIDENCE_FILE.format(plugin=plugin)] = encode(updated)
+    if plan:
+        return requested('associate', root, files, list(files), message_language)
+    existing_paths = {str(path) for path in files if path.exists()}
     changed = apply(files, list(files))
     return {'action': 'associate', 'changed': changed, 'published': False,
+            'result_message': written(root, changed, existing_paths, message_language),
             'from': {'name': declared['name'], 'path': previous},
             'to': {'name': target['name'], 'path': os.path.relpath(market, root)},
             'old_catalog_entry_remains': (not same) and (not renamed) and old is None, 'renamed': renamed,
@@ -520,7 +583,7 @@ def creation_checks(root, market, license_decision=None):
     return checks
 
 
-def create_plugin(root, marketplace, *, name=None, display_name=None, description=None, repository=None, author=None, languages=None, default_language=None, skeleton=False, license=None, license_file=None, copyright_year=None, copyright_holder=None):
+def create_plugin(root, marketplace, *, name=None, display_name=None, description=None, repository=None, author=None, languages=None, default_language=None, skeleton=False, license=None, license_file=None, copyright_year=None, copyright_holder=None, plan=False, message_language=None):
     root = safe_path(root)
     if any((root/item).exists() or (root/item).is_symlink() for item in ('plugin.json', 'marketplace.json')):
         raise ValueError('Product already exists; an existing plugin is not created again (associate changes its marketplace)')
@@ -531,9 +594,11 @@ def create_plugin(root, marketplace, *, name=None, display_name=None, descriptio
         raise ValueError('Use separate plugin and marketplace repositories')
     identity(name, display_name)
     description = description or "Unimplemented plugin skeleton; domain requirements are pending."
-    from licensing import plan, document
-    license_decision = plan(root, license, license_file, copyright_year, copyright_holder)
+    from licensing import plan as license_plan, document
+    license_decision = license_plan(root, license, license_file, copyright_year, copyright_holder)
     if not root.exists():
+        if plan:
+            raise ValueError('A write-free plan needs the checkout of the plugin; clone it first')
         url = repository_url(repository)
         root.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(['git', '-c', 'core.hooksPath=/dev/null', '-c', 'init.templateDir=', 'clone', '--', url + '.git', str(root)], check=True)
@@ -584,6 +649,9 @@ def create_plugin(root, marketplace, *, name=None, display_name=None, descriptio
                 del files[path]
         association = association_files(root, market, manifest, new_plugin=True)
         files.update(association)
+        if plan:
+            return requested('create-plugin', root, files, association.keys(), message_language)
+        existing_paths = {str(path) for path in files if path.exists()}
         changes = apply(files, association.keys())
         for relative, meta in common.items():  # a managed file created here keeps its executable bit
             if meta['executable'] and str(root/relative) in changes:
@@ -593,20 +661,18 @@ def create_plugin(root, marketplace, *, name=None, display_name=None, descriptio
     if checks['status'] != 'passed':
         next_step = 'Resolve the reported creation checks before claiming completion. ' + next_step
     return {'action': 'create-plugin', 'changed': changes, 'repository': origin, 'published': False,
+            'result_message': written(root, changes, existing_paths, message_language),
             'implementation_status': 'skeleton', 'checks': checks, 'next': next_step}
 
 
-def prerequisites(kind, root):
-    """Write-free check before a configuration: a plugin folder is a Git repository with a GitHub address, a marketplace
-    folder is a Git repository. A plugin folder that is no repository gets the message with both steps."""
+def prerequisites(root):
+    """Write-free check at the start of setup, the same for both kinds: the folder is itself a Git repository with a GitHub
+    address. A folder that is no repository gets the message with both steps."""
     root = Path(root).resolve()
-    if kind == 'plugin':
-        if git(root, 'rev-parse', '--show-toplevel') is None:
-            raise failure('plugin_without_repository', path=root)
-        git_repository(root)
-    else:
-        git_root(root)
-    return {'action': 'prerequisites', 'kind': kind, 'ok': True, 'changed': False}
+    if git(root, 'rev-parse', '--show-toplevel') is None:
+        raise failure('no_repository', path=root, repo=suggested_repository(root))
+    git_repository(root)
+    return {'action': 'prerequisites', 'ok': True, 'changed': False}
 
 
 ACTION_NAMES = {'create_marketplace': 'setup', 'create_plugin': 'setup', 'associate': 'setup', 'prerequisites': 'setup'}
@@ -653,8 +719,8 @@ def main():
     for command in (create, associate_parser):
         command.add_argument('--message-language', choices=('de', 'en'), help='Language of an error message: the language of the person\'s text; default the saved operator language, else English')
         command.add_argument('--changed', choices=('none', 'language'), help='What the failed call already saved before it started (named in the message)')
-    prerequisites = sub.add_parser('prerequisites', help='Write-free: is the folder a Git repository with a GitHub address (plugin) or a Git repository (marketplace)?')
-    prerequisites.add_argument('--kind', required=True, choices=('marketplace', 'plugin'))
+        command.add_argument('--plan', action='store_true', help='Write-free: answer with the question that names every file the call would write')
+    prerequisites = sub.add_parser('prerequisites', help='Write-free: is the folder itself a Git repository with a GitHub address?')
     prerequisites.add_argument('--root', type=Path, default=Path.cwd())
     prerequisites.add_argument('--message-language', choices=('de', 'en'))
     prerequisites.add_argument('--changed', choices=('none', 'language'))
@@ -682,9 +748,13 @@ def main():
             del args['owner']
             action = 'create_plugin'
     try:
+        if action != 'prerequisites':
+            args['message_language'] = state_helper().messages.language_for(args_root(args), message_language)
         result = globals()[action](**args)
         print(json.dumps(result, ensure_ascii=False, indent=2)); return 0
     except (ValueError, OSError, KeyError, TypeError, subprocess.CalledProcessError) as exc:
+        if action == 'prerequisites':  # the saved operator language decides, whatever the call says
+            message_language = state_helper().messages.saved_language(args_root(args)) or message_language
         return report_failure(exc, ACTION_NAMES.get(action, 'setup'), args_root(args), message_language, changed)
 
 if __name__ == '__main__':

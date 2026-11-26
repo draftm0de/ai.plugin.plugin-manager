@@ -34,7 +34,7 @@ With `modify` you change what your repository says about itself: the technical n
 
 `/plugin-manager:setup`
 
-You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
+You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. The repository needs a GitHub address (`origin`); if it is missing, `setup` names the commands and stops. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
 
 📖 [/plugin-manager:setup – More](skills/setup.md)
 

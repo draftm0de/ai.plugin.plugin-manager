@@ -48,6 +48,12 @@ class MessagesBaseTests(unittest.TestCase):
         self.assertEqual('en', self.base.pick_language('fr'))
         self.assertEqual('de', self.base.pick_language('de-AT'))
 
+    def test_a_fix_made_of_commands_stands_in_one_code_block_between_request_and_repeat(self):
+        own = dict(self.base.BASE_CATALOGUE, OWN={'cause': {'en': 'x', 'de': 'y'}, 'fix': {'en': 'Please run', 'de': 'Bitte f\u00fchre aus'},
+                                                  'commands': ['git init', 'cd {path}'], 'after': {'en': 'It is local.', 'de': 'Das bleibt lokal.'}})
+        parts = self.base.render_failure(own, 'OWN', 'en', 'demo', 'count', path='/a').split('\n\n')
+        self.assertEqual(['Please run:', '```bash\ngit init\ncd /a\n```', 'It is local. Then call /demo:count again.'], parts[1:])
+
     def test_a_stop_says_was_stopped_and_a_named_change_replaces_nothing_was_changed(self):
         text = self.base.render_failure(self.base.BASE_CATALOGUE, 'UNKNOWN', 'en', 'demo', 'count', changed='The language you chose was saved.', stopped=True)
         self.assertTrue(text.startswith('The count action was stopped, because the cause is not known (an unexpected error). The language you chose was saved.'))

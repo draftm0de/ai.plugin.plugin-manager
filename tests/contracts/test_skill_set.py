@@ -77,7 +77,7 @@ class SkillSetTests(unittest.TestCase):
 
     def test_every_skill_and_failure_flow_follows_the_plain_message_rules(self):  # R25
         rules = text('skills/_shared/references/messages.md')
-        for needle in ('Mandatory structure', 'because', 'Please', 'Führe', 'No labels', 'raw error text', 'git init', 'messages.py', 'The wording is not yours', 'plugin_without_repository', 'Unknown causes', 'Never invent a cause', 'Technische Details anzeigen', '## Address', 'German uses "du"'):
+        for needle in ('Mandatory structure', 'because', 'Please', 'Führe', 'No labels', 'raw error text', 'git init', 'messages.py', 'The wording is not yours', 'no_repository', 'Unknown causes', 'Never invent a cause', 'Technische Details anzeigen', '## Address', 'German uses "du"'):
             self.assertIn(needle, rules)
         for name in SKILLS:
             self.assertIn('../_shared/references/messages.md', text('skills/%s/SKILL.md' % name), name)
