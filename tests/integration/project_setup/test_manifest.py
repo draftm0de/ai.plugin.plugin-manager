@@ -71,7 +71,7 @@ class ManifestTests(unittest.TestCase):
                           'tests/contracts/test_local_plugins.py', 'tests/contracts/test_marketplace_catalogs.py',
                           'tests/contracts/test_plugin_payload.py', 'tests/contracts/test_run_tests.py'}, set(sync['files']))  # R40
         seed = set(files_below(TEMPLATES / 'marketplace/seed'))
-        self.assertEqual({'CUSTOM.mk', 'CUSTOM.AGENTS.md', 'docs/architecture.md', 'docs/style.md', 'local-marketplace.example.json',
+        self.assertEqual({'assets/icon.png', 'CUSTOM.mk', 'CUSTOM.AGENTS.md', 'docs/architecture.md', 'docs/style.md', 'local-marketplace.example.json',
                           'tests/__init__.py', 'tests/contracts/__init__.py', 'tests/contracts/test_structure.py'}, seed)
         manifest = load('marketplace.json')
         self.assertEqual('marketplace.json', manifest['product'])

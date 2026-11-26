@@ -371,11 +371,10 @@ Acceptance: The user documentation of a repository is written from its sources (
 
 | Page | Plugin | Marketplace | Required headings (en / de) |
 | --- | --- | --- | --- |
-| `README.md`, `README.<lang>.md` | yes | yes | Plugin: an introduction without a heading, then Quick start / Schnellstart and Features (an icon may precede a heading) with one `### :<skill>` entry per skill (a short explanation of at most 200 characters and a link to its subpage). The start page is written by hand, never generated, and carries no footer; only this structure is checked. Marketplace: What it offers / Was es bietet; Who it is for / Für wen; Documentation / Dokumentation |
+| `README.md`, `README.<lang>.md` | yes | yes | Plugin: an introduction without a heading, then Quick start / Schnellstart and Features (an icon may precede a heading) with one `### :<skill>` entry per skill (a short explanation of at most 200 characters and a link to its subpage). The start page is written by hand, never generated, and carries no footer; only this structure is checked. Marketplace: a free introduction, then Plugins with one `### <plugin>` entry (display name) per listed plugin and a link to its README; no quick start, no page per plugin, written by hand |
 | `docs/<lang>/installation.md` | yes | yes | Claude (Claude Desktop App, Claude CLI); Codex (ChatGPT Desktop App, Codex CLI, ChatGPT Workspace); Update / Aktualisieren; Remove / Entfernen — one level-three section per surface, so that other pages can link to it |
 | `docs/<lang>/skills.md` | yes | no | `# 🛠 Skills`, `## 📖 Skills`, one `### <skill>` per skill (generated) |
 | `docs/<lang>/skills/<skill>.md` | yes | no | Description; Workflow; Example; Reads and writes / Beschreibung; Ablauf; Beispiel; Liest und schreibt (level two, free level-three headings below) |
-| `docs/<lang>/plugins.md` | no | yes | Overview / Überblick |
 | `docs/<lang>/concepts.md` | yes | yes | Marketplace; Plugin; Skill |
 | `docs/<lang>/development.md` | yes | yes | Requirements / Voraussetzungen; Set up / Einrichten; Test locally / Lokal testen; Publish / Veröffentlichen (R42) |
 
@@ -496,7 +495,7 @@ Test: tests/integration/project_setup/test_take_back.py
 ## R46: The documentation explains the shared files
 
 Status: confirmed
-Acceptance: Every plugin and marketplace has the page `docs/<lang>/files.md` "Shared files" (German and English), linked in the navigation of every documentation page. `:docs` generates it, anew on every run: the explanation of synced and seed files, the introduction of each tree and the footer are the same in every repository; the trees of the synced and seed files of a plugin and of a marketplace come from what the Manager delivers (hash files and seed folders). The footer says that the page is created automatically by `:docs`. `verify` requires its headings of level 1 to 3 one to one and in order. It is not a synced file.
+Acceptance: Every plugin has the page `docs/<lang>/files.md` "Shared files" (German and English), linked in the navigation of every documentation page. `:docs` generates it, anew on every run: the explanation of synced and seed files, the introduction of each tree and the footer are the same in every repository; the trees of the synced and seed files of a plugin and of a marketplace come from what the Manager delivers (hash files and seed folders). The footer says that the page is created automatically by `:docs`. `verify` requires its headings of level 1 to 3 one to one and in order. It is not a synced file.
 Source: skills/_shared/scripts/documentation.py
 Source: skills/_shared/scripts/verify/docs.py
 Source: skills/_shared/templates/documentation/plugin/docs/de/files.md
@@ -566,3 +565,12 @@ Source: skills/docs/references/workflow.md
 Source: skills/_shared/scripts/documentation.py
 Test: tests/contracts/verify/test_ci_checks.py
 Test: tests/integration/update/test_docs_result.py
+
+## R54: The documentation of a marketplace
+
+Status: confirmed
+Acceptance: A marketplace has the start page, Installation, Concepts and Development, linked in this navigation on every page; it has no page per plugin, no plugin list page, no page about skills and none about shared files. The start page is written by hand: a free introduction and a section Plugins with one entry per listed plugin linking the README of its repository. A newly created marketplace receives it once in this structure (German and English) together with a neutral icon. Installation is generated and only adds, updates and removes the marketplace, saying that adding it installs no plugin; Concepts is the same page as in a plugin; Development is generated and explains how plugins are connected and how the local installation with make works. Findings are warnings; former pages are reported, never deleted.
+Source: skills/_shared/templates/documentation/marketplace/docs/de/installation.md
+Source: skills/_shared/templates/documentation/marketplace/docs/de/development.md
+Source: skills/_shared/scripts/verify/docs.py
+Test: tests/integration/update/test_marketplace_docs.py

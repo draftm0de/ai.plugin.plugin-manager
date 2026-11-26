@@ -103,11 +103,12 @@ class MarketplaceFlowAcceptanceTests(unittest.TestCase):
         self.assertEqual('sync', status['next'])
         self.assertEqual(['scripts/verify/structure.py'], [d['path'] for d in status['sync']['decisions']])
 
-    def test_starter_readmes_name_only_existing_commands(self):
+    def test_starter_readmes_have_the_expected_structure(self):
         self.create()
         for name in ('README.md', 'README.en.md'):
             text = (self.market/name).read_text(encoding='utf-8')
             for gone in ('make verify', 'make check-marketplace', 'make sync-marketplace', 'update-local', 'plugin-verify', 'marketplace-verify'):
                 self.assertNotIn(gone, text, name)
-            for present in ('scripts/verify/structure.py', 'scripts/marketplace.py', 'make install-local'):
-                self.assertIn(present, text, name)
+            self.assertIn('## 📦 Plugins', text, name)  # R54: a start page for people; commands are on the development page
+            self.assertNotIn('{{', text, name)
+        self.assertTrue((self.market/'assets/icon.png').is_file())

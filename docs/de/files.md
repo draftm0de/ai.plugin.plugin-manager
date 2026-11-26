@@ -170,6 +170,8 @@ In einem Marketplace sorgen die Sync-Dateien für die Katalog-Erzeugung, die lok
 
 ```text
 .
+├── assets/
+│   └── icon.png
 ├── docs/
 │   ├── architecture.md
 │   └── style.md

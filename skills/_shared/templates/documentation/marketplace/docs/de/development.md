@@ -2,7 +2,7 @@
 
 **Deutsch** | [English](../en/development.md)
 
-[Start](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md) · [Entwicklung](development.md) · [Gemeinsame Dateien](files.md)
+[Start](../../README.md) · [Installation](installation.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
 
 Für alle, die an diesem Marketplace arbeiten. Zum Benutzen brauchst du diese Seite nicht.
 
@@ -25,6 +25,8 @@ Jedes Plugin bekommt sein eigenes Repository. Lege es an, klone es, öffne den O
 
 Dabei entstehen der Eintrag in `marketplace.json` und die lokale Zuordnung, mit der du die Plugins später auf deinem Rechner testest. Committen und pushen machst du selbst, in beiden Repositorys.
 
+Gibt es das Plugin schon, öffne seinen Ordner, rufe `/plugin-manager:setup` auf und bitte darum, es mit diesem Marketplace zu verbinden. Ein Plugin gehört immer zu genau einem Marketplace.
+
 ## Lokal testen
 
 Der Marketplace ist der Ort, aus dem Claude und Codex installieren; die Plugins selbst liegen in eigenen Repositorys. Zum Testen baut er aus den Ordnern auf deinem Rechner einen eigenen Entwicklungs-Marketplace `<name>-dev` und installiert daraus. Wo die Plugins liegen, steht in der lokalen Zuordnung, die `:setup` anlegt. Fehlt der Ordner eines gelisteten Plugins, bricht er ab, bevor er etwas installiert.
@@ -35,11 +37,11 @@ Du brauchst nur einen Befehl, im Ordner des Marketplace:
 make install-local TARGET=claude
 ```
 
-Für Codex nimmst du `TARGET=codex`. Öffne danach eine neue Sitzung. Auch nicht committete Änderungen sind dabei. Vorher musst du nichts erzeugen oder prüfen; das machst du, bevor du veröffentlichst.
+Für Codex nimmst du `TARGET=codex`. Mit `DRY_RUN=1` baut er nur die Pakete und installiert nichts. Öffne danach eine neue Sitzung. Auch nicht committete Änderungen sind dabei. Vorher musst du nichts erzeugen oder prüfen; das machst du, bevor du veröffentlichst.
 
 ## Befehle
 
-`marketplace.json` ist die eine Datei, die du pflegst: der Name des Marketplace und die Liste seiner Plugins. Claude und Codex lesen jeweils einen eigenen **Host-Katalog**, `.claude-plugin/marketplace.json` und `.agents/plugins/marketplace.json`. Beide werden aus `marketplace.json` erzeugt; du bearbeitest sie nie von Hand. Welche Dateien sonst zu deinem Repository gehören, steht unter [Gemeinsame Dateien](files.md).
+`marketplace.json` ist die eine Datei, die du pflegst: der Name des Marketplace und die Liste seiner Plugins. Claude und Codex lesen jeweils einen eigenen **Host-Katalog**, `.claude-plugin/marketplace.json` und `.agents/plugins/marketplace.json`. Beide werden aus `marketplace.json` erzeugt; du bearbeitest sie nie von Hand.
 
 Alle Befehle laufen im Stamm des Repositorys. `make help` listet sie auch.
 
@@ -67,10 +69,6 @@ Eigene Befehle stehen in `CUSTOM.mk`.
 | `python3 -B scripts/verify/docs.py --source .` | nie: fehlende Seiten, Überschriften oder Linkziele der Doku sind nur Warnungen |
 
 Eigene Schritte stehen in einer weiteren Datei unter `.github/workflows/`. Lokal prüfst du dasselbe mit `make test check verify`.
-
-## Gemeinsame Dateien
-
-Plugin Manager hält einen Teil der Dateien aktuell (Sync), andere legt er nur einmal an (Seed). `.project/plugins/plugin-manager/skeleton.json` listet die Sync-Dateien. Ändere sie nicht: Eigene Regeln gehören in `CUSTOM.AGENTS.md`, eigene Befehle in `CUSTOM.mk`, eigene CI-Schritte in eine weitere Datei unter `.github/workflows/`. Änderst du eine Sync-Datei doch, fragt `/plugin-manager:setup`, ob du sie behältst oder die Vorlage übernimmst. Behältst du `AGENTS.md`, `SCOPE.md` eines Marketplace oder einen Standard unter `docs/standards/`, schlägt `verify` fehl.
 
 ## Veröffentlichen
 

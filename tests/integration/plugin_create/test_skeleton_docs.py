@@ -41,7 +41,8 @@ class SkeletonDocsTests(unittest.TestCase):
         outline = OUTLINE
         self.assertEqual({'plugin', 'marketplace'}, set(outline))
         self.assertNotIn('docs/en/skills.md', outline['marketplace'])
-        self.assertIn('docs/en/plugins.md', outline['marketplace'])
+        self.assertNotIn('docs/en/plugins.md', outline['marketplace'])  # R54: the start page lists the plugins
+        self.assertNotIn('docs/en/files.md', outline['marketplace'])
         for kind, pages in outline.items():
             found = {str(p.relative_to(SHARED / 'templates/documentation' / kind)) for p in (SHARED / 'templates/documentation' / kind).rglob('*.md') if p.name != 'skill.md'}
             self.assertEqual(set(pages), found, kind)

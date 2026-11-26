@@ -37,7 +37,7 @@ Unter „Beschreibung“ erscheint in `skills.md` nur der Text bis zur ersten Un
 
 `/plugin-manager:verify`, `make verify` und die CI prüfen, ob alle Seiten da sind, die Überschriften stimmen, jede Sprache verlinkt ist und keine internen Links ins Leere führen. Alles, was sie finden, ist eine **Warnung**: Die CI bleibt grün. Ob und wie du deine Dokumentation schreibst, ist deine Entscheidung.
 
-`<lang>` steht für jede gewählte Dokumentationssprache. Für Marketplaces gilt: `concepts.md`, `development.md` und `files.md` werden erstellt; Installation und Plugin-Liste legt `docs` nur an.
+`<lang>` steht für jede gewählte Dokumentationssprache. Bei Marketplaces werden `installation.md`, `concepts.md` und `development.md` erstellt; von Hand schreibst du dort nur die README mit je einem Eintrag pro Plugin.
 
 ## Ablauf
 

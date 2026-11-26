@@ -2,7 +2,7 @@
 
 [Deutsch](../de/concepts.md) | **English**
 
-[Home](../../README.en.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Concepts](concepts.md) · [Development](development.md)
 
 Claude and ChatGPT can do a lot: write texts, answer questions, explain code, collect ideas. What they do not know is how *you* or your company want a particular task done. Which steps belong to it? What needs care? What should the result look like?
 

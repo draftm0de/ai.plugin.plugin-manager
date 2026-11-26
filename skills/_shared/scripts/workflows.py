@@ -227,6 +227,17 @@ def template_files(kind, root):
     return files
 
 
+def marketplace_start_page(language, filename, title, plugins):
+    """The start page a new marketplace receives, in the expected structure; its texts then belong to the person."""
+    from documentation import fill_listings
+    text = (SKILL/'templates/documentation/marketplace'/filename).read_text(encoding='utf-8')
+    summary = {'de': 'Dieser Marketplace listet Plugins für Claude und Codex. Füge ihn einmal hinzu und installiere daraus, was du brauchst; wie, steht unter [Installation](docs/de/installation.md).',
+               'en': 'This marketplace lists plugins for Claude and Codex. Add it once and install what you need from it; [Installation](docs/en/installation.md) shows how.'}[language]
+    listed = [(entry.get('displayName') or entry['name'], entry.get('description', ''), entry.get('repository', '')) for entry in plugins]
+    text = text.replace('{{TITLE}}', title).replace('{{SUMMARY}}', summary)
+    return fill_listings(text, language, plugins=listed).rstrip('\n') + '\n'
+
+
 def create_marketplace(root, name=None, display_name=None, owner=None):
     root = safe_path(root)
     git_root(root)
@@ -253,13 +264,9 @@ def create_marketplace(root, name=None, display_name=None, owner=None):
     files[root/'marketplace.json'] = encode(config)
     files.update(catalog_files(root, config))
     # Keep existing project prose and licensing untouched.
-    for lang, filename in (('de', 'README.md'), ('en', 'README.en.md')):
+    for lang, filename in (('de', 'README.md'), ('en', 'README.en.md')):  # the start page of a marketplace (R54), once
         if not (root/filename).exists():
-            text = (f'# {display_name}\n\nMarketplace `{name}`\n\n' +
-                ('Plugin-Repositories werden in `marketplace.json` eingetragen. Lokale Pfade stehen ausschließlich in `.local/marketplace.json`.\n\n' if lang == 'de' else 'Plugin repositories are registered in `marketplace.json`. Local paths belong only in `.local/marketplace.json`.\n\n') +
-                '```sh\npython3 -B scripts/verify/structure.py --source .\npython3 -B scripts/marketplace.py check\nmake install-local TARGET=claude\n```\n\n' +
-                ('Ein frischer Clone benötigt für lokale Installation zuerst Checkout-Zuordnungen über die Plugin-Zuordnung von plugin-manager. local-marketplace.example.json ist nur eine optionale manuelle Kopiervorlage; nur .local/marketplace.json wird zur Laufzeit gelesen und bleibt uncommitted. Snapshots verwenden den aktuellen Checkout einschließlich uncommitteter Änderungen auf jedem Branch. Nach Änderungen oder Branchwechsel install-local und eine neue Host-Sitzung; kein Commit/Push/PR und kein Marketplace pro Branch. [Voraussetzungen](docs/prerequisites.md): Git und Python 3.10+, Make optional, Host-CLI nur für automatische lokale Installation. Strukturprüfung ist keine GitHub-/GUI-Abnahme.\n' if lang == 'de' else 'A fresh clone needs checkout associations through the plugin association of plugin-manager before local installation. local-marketplace.example.json is only an optional manual template; only .local/marketplace.json is read at runtime and stays uncommitted. Snapshots use the current checkout including uncommitted edits on any branch. After edits or branch switches run install-local and open a new host session; no commit/push/PR or per-branch marketplace. [Prerequisites](docs/prerequisites.md): Git and Python 3.10+, optional Make, host CLI only for automatic local installation. Structural verification is not GitHub/GUI acceptance.\n'))
-            files[root/filename] = text.encode()
+            files[root/filename] = marketplace_start_page(lang, filename, display_name, config['plugins']).encode()
     ignore, content = ignore_file(root); files[ignore] = content
     return {'action': 'create-marketplace', 'changed': apply(files, [ignore]), 'published': False}
 

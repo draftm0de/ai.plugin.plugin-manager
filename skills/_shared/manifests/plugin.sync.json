@@ -62,7 +62,7 @@
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "2e1f3baf85ed285e7f522c68d721fa309c1013e26be95b3fca7bacfada80b9c8",
+      "sha256": "7f61cbf67d4a2cc087384400479c887d32a49f8e78b6778b50394f58d63b8681",
       "executable": false
     },
     "scripts/verify/hashes.py": {

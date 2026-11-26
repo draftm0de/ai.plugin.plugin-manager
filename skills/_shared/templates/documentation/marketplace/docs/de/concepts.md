@@ -2,7 +2,7 @@
 
 **Deutsch** | [English](../en/concepts.md)
 
-[Start](../../README.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Begriffe](concepts.md) · [Entwicklung](development.md) · [Gemeinsame Dateien](files.md)
+[Start](../../README.md) · [Installation](installation.md) · [Begriffe](concepts.md) · [Entwicklung](development.md)
 
 Claude und ChatGPT können sehr viel: Texte schreiben, Fragen beantworten, Code erklären, Ideen sammeln. Was sie nicht wissen, ist, wie *du* oder deine Firma eine bestimmte Aufgabe erledigt haben wollt. Welche Schritte gehören dazu? Worauf ist zu achten? Wie soll das Ergebnis aussehen?
 

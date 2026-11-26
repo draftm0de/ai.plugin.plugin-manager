@@ -43,7 +43,7 @@ def plugins_info(root):
         link = entry.get('repository') or entry.get('homepage') or ''
         if not link and isinstance(entry.get('source'), dict):
             link = entry['source'].get('url', '')
-        result.append((entry.get('name', ''), entry.get('description', ''), link))
+        result.append((entry.get('displayName') or entry.get('name', ''), entry.get('description', ''), link))
     return result
 
 
@@ -148,7 +148,7 @@ def shared_files(kind, part):
 
 # written anew by docs; the installation page of a plugin also carries the facts of its repository (R35)
 GENERATED_PAGES = {'plugin': ('installation.md', 'skills.md', 'concepts.md', 'development.md', 'files.md'),
-                   'marketplace': ('concepts.md', 'development.md', 'files.md')}
+                   'marketplace': ('installation.md', 'concepts.md', 'development.md')}
 
 
 def description_of(page, language):
@@ -221,8 +221,10 @@ def fill_listings(text, language, skills=(), plugins=(), section_text=None):
     text = text.replace('{{SKILL_FEATURES}}', '\n\n'.join('### :%s\n\n%s\n\n📖 [:%s – %s](docs/%s/skills/%s.md)' % (
         name, section_text or '{{FEATURE_%d}}' % number, name, {'de': 'Mehr dazu', 'en': 'More'}[language], language, name)
         for number, (name, _) in enumerate(skills, 1)))
-    return text.replace('{{PLUGIN_ROWS}}', '\n'.join('| %s | %s | %s |' % (one_line(name), one_line(description), '[' + name + '](' + link + ')' if link else '')
-                                                    for name, description, link in plugins))
+    more = {'de': 'Mehr dazu', 'en': 'More'}[language]
+    return text.replace('{{PLUGIN_FEATURES}}', '\n\n'.join('### %s\n\n%s\n\n📖 [%s – %s](%s#readme)' % (
+        name, one_line(description) or '{{PLUGIN_%d}}' % number, name, more, re.sub(r'\.git$', '', link))
+        for number, (name, description, link) in enumerate(plugins, 1)))
 
 
 def template_text(template, policy, base=None, kind='plugin'):

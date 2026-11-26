@@ -170,6 +170,8 @@ In a marketplace the synced files provide catalog generation, local installation
 
 ```text
 .
+├── assets/
+│   └── icon.png
 ├── docs/
 │   ├── architecture.md
 │   └── style.md

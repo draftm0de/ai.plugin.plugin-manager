@@ -28,8 +28,8 @@ Run this one command, exactly as written. The helper lies in the shared folder, 
 
 Add `--languages` and `--default-language` only for the first run. The command
 
-- writes the generated pages anew: `concepts.md`, `development.md`, `files.md` and, for a plugin, `installation.md` and `skills.md`
-- creates missing pages the person writes: `README`, `skills/<skill>.md`; a marketplace also `installation.md` and `plugins.md`
+- writes the generated pages anew: `installation.md`, `concepts.md`, `development.md` and, for a plugin, `skills.md` and `files.md`
+- creates missing pages the person writes: `README` and, for a plugin, `skills/<skill>.md`
 - checks the documentation; everything it finds is a warning, never a failure
 
 ### 3. Answer
@@ -40,10 +40,11 @@ Fix nothing by hand and offer no text. When the person asks for texts afterwards
 
 ## Pages
 
-| Page | Who writes it |
-| --- | --- |
-| `docs/<language>/installation.md` (plugin), `skills.md` (plugin), `concepts.md`, `development.md`, `files.md` | generated, anew on every run |
-| `README`, `docs/<language>/skills/<skill>.md` | the person; created once when missing |
-| `docs/<language>/installation.md` and `plugins.md` (marketplace) | the person; created once when missing |
+| Page | Plugin | Marketplace |
+| --- | --- | --- |
+| `README` | by hand: introduction, Quick start, Features per skill | by hand: introduction, Plugins with one `### <plugin>` and a link to its README |
+| `installation.md`, `concepts.md`, `development.md` | generated | generated |
+| `skills.md`, `files.md` | generated | none |
+| `skills/<skill>.md` | by hand | none |
 
-The headings each page needs are in `scripts/verify/docs.py` (`OUTLINE`, `EXACT_HEADINGS`). Pages of the former structure are reported; nothing is converted or deleted.
+A marketplace has no page per plugin. The headings each page needs are in `scripts/verify/docs.py` (`OUTLINE`, `EXACT_HEADINGS`). Pages of the former structure are reported; nothing is converted or deleted.

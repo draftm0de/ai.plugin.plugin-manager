@@ -2,7 +2,7 @@
 
 [Deutsch](../de/development.md) | **English**
 
-[Home](../../README.en.md) · [Installation](installation.md) · [Plugins](plugins.md) · [Concepts](concepts.md) · [Development](development.md) · [Shared files](files.md)
+[Home](../../README.en.md) · [Installation](installation.md) · [Concepts](concepts.md) · [Development](development.md)
 
 For people who work on this marketplace. You do not need this page to use it.
 
@@ -25,6 +25,8 @@ Every plugin gets its own repository. Create it, clone it, open the folder and c
 
 This writes the entry in `marketplace.json` and the local association with which you test the plugins on your machine later. You commit and push yourself, in both repositories.
 
+If the plugin already exists, open its folder, call `/plugin-manager:setup` and ask to connect it with this marketplace. A plugin always belongs to exactly one marketplace.
+
 ## Test locally
 
 The marketplace is the place Claude and Codex install from; the plugins themselves live in repositories of their own. For testing it builds a separate development marketplace `<name>-dev` from the folders on your machine and installs from it. Where the plugins lie is recorded in the local association that `:setup` creates. If the folder of a listed plugin is missing, it stops before it installs anything.
@@ -35,11 +37,11 @@ You need just one command, in the folder of the marketplace:
 make install-local TARGET=claude
 ```
 
-For Codex use `TARGET=codex`. Open a new session afterwards. Uncommitted changes are included. You do not have to generate or check anything first; you do that before you publish.
+For Codex use `TARGET=codex`. With `DRY_RUN=1` it only builds the packages and installs nothing. Open a new session afterwards. Uncommitted changes are included. You do not have to generate or check anything first; you do that before you publish.
 
 ## Commands
 
-`marketplace.json` is the one file you maintain: the name of the marketplace and the list of its plugins. Claude and Codex each read a **host catalog** of their own, `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`. Both are generated from `marketplace.json`; you never edit them by hand. Which other files belong to your repository is described under [Shared files](files.md).
+`marketplace.json` is the one file you maintain: the name of the marketplace and the list of its plugins. Claude and Codex each read a **host catalog** of their own, `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`. Both are generated from `marketplace.json`; you never edit them by hand.
 
 All commands run in the root of the repository. `make help` lists them too.
 
@@ -67,10 +69,6 @@ Your own commands belong into `CUSTOM.mk`.
 | `python3 -B scripts/verify/docs.py --source .` | never: missing pages, headings or link targets of the documentation are only warnings |
 
 Your own steps belong into another file under `.github/workflows/`. Locally you check the same with `make test check verify`.
-
-## Shared files
-
-Plugin Manager keeps some files up to date (synced) and creates others only once (seed). `.project/plugins/plugin-manager/skeleton.json` lists the synced files. Do not change them: your own rules belong into `CUSTOM.AGENTS.md`, your own commands into `CUSTOM.mk`, your own CI steps into another file under `.github/workflows/`. If you change a synced file anyway, `/plugin-manager:setup` asks whether to keep it or adopt the template. If you keep `AGENTS.md`, the `SCOPE.md` of a marketplace or a standard under `docs/standards/`, `verify` fails.
 
 ## Publish
 

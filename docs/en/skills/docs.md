@@ -37,7 +37,7 @@ From "Description", `skills.md` shows only the text up to the first sub-heading.
 
 `/plugin-manager:verify`, `make verify` and CI check that all pages exist, the headings are right, every language is linked and no internal link leads nowhere. Everything they find is a **warning**: CI stays green. Whether and how you write your documentation is your decision.
 
-`<lang>` stands for each selected documentation language. For marketplaces: `concepts.md`, `development.md` and `files.md` are created; `docs` only creates the installation and plugin list pages when missing.
+`<lang>` stands for each selected documentation language. For marketplaces `installation.md`, `concepts.md` and `development.md` are created; there you write only the README with one entry per plugin.
 
 ## Workflow
 
