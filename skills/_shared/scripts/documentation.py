@@ -370,12 +370,56 @@ def scaffold(source, output, title=None, languages=None, default_language=None):
 
 
 REPORT = {
-    'en': {'updated': 'Rewritten:', 'created': 'Created:', 'open': 'Still to be written:', 'facts': 'Missing facts:', 'notes': 'Notes:',
+    'en': {'updated': 'Rewritten:', 'created': 'Created:', 'open': 'Still to be written:', 'facts': 'Missing facts:', 'notes': 'Warnings:',
            'complete': '{kind} {name} docs: complete', 'one': '{kind} {name} docs: 1 warning', 'many': '{kind} {name} docs: {count} warnings'},
-    'de': {'updated': 'Neu geschrieben:', 'created': 'Neu angelegt:', 'open': 'Noch zu schreiben:', 'facts': 'Fehlende Angaben:', 'notes': 'Hinweise:',
+    'de': {'updated': 'Neu geschrieben:', 'created': 'Neu angelegt:', 'open': 'Noch zu schreiben:', 'facts': 'Fehlende Angaben:', 'notes': 'Warnungen:',
            'complete': '{kind} {name} Doku: vollständig', 'one': '{kind} {name} Doku: 1 Warnung', 'many': '{kind} {name} Doku: {count} Warnungen'},
 }
-FACT_NAMES = {'url': 'marketplace address', 'market': 'marketplace name', 'id': 'plugin id'}
+FACT_NAMES = {'en': {'url': 'marketplace address', 'market': 'marketplace name', 'id': 'plugin id'},
+              'de': {'url': 'Adresse des Marketplace', 'market': 'Name des Marketplace', 'id': 'Plugin-Kennung'}}
+# the warnings of the check are English (they also show in CI); the answer of docs speaks the language of the person
+GERMAN = [(re.compile(pattern, re.DOTALL), text) for pattern, text in (
+    (r'Features lacks the entry (.+)', r'unter Features fehlt der Eintrag \1'),
+    (r'Features names (.+), which is no skill of the plugin', r'unter Features steht \1, das ist kein Skill des Plugins'),
+    (r'the feature (.+) needs a link to (.+)', r'beim Feature \1 fehlt der Link auf \2'),
+    (r'the feature (.+) has no explanation', r'beim Feature \1 fehlt die Erklärung'),
+    (r'the explanation of (.+) has (\d+) characters, at most (\d+)', r'die Erklärung zu \1 hat \2 Zeichen, erlaubt sind höchstens \3'),
+    (r'Plugins lacks the entry (.+)', r'unter Plugins fehlt der Eintrag \1'),
+    (r'Plugins names (.+), which marketplace\.json does not list', r'unter Plugins steht \1, das marketplace.json nicht listet'),
+    (r'the entry (.+) needs a link to the README of the plugin \((.*)\)', r'beim Eintrag \1 fehlt der Link auf die README des Plugins (\2)'),
+    (r'no skill of the plugin has this name', r'kein Skill des Plugins heißt so'),
+    (r'page of the former structure; remove it \(nothing is converted\)', r'Seite der früheren Struktur; bitte entfernen (umgewandelt wird nichts)'),
+    (r'missing page', r'Seite fehlt'),
+    (r'unresolved template placeholders', r'enthält noch Platzhalter'),
+    (r'unclosed fenced block', r'ein Codeblock ist nicht geschlossen'),
+    (r'the headings must be exactly those of the generated page; run /plugin-manager:docs',
+     r'die Überschriften weichen von der erzeugten Seite ab; führe /plugin-manager:docs aus'),
+    (r'(.+) is not linked to its page (.+)', r'\1 ist nicht mit seiner Seite \2 verlinkt'),
+    (r'level-two headings must match outline order', r'die ##-Überschriften stimmen nicht (Namen oder Reihenfolge)'),
+    (r'expected exactly one page title', r'genau eine #-Überschrift ist erforderlich'),
+    (r'machine-specific path', r'enthält einen Pfad deines Rechners'),
+    (r'missing language counterpart link', r'der Link zur anderen Sprache fehlt'),
+    (r'link escapes repository: (.+)', r'Link führt aus dem Repository hinaus: \1'),
+    (r'missing link target: (.+)', r'Linkziel fehlt: \1'),
+    (r'missing heading anchor: (.+)', r'Sprungmarke fehlt: \1'),
+    (r'public link to ignored test artifacts', r'verlinkt auf ignorierte Testergebnisse'),
+    (r'the icon assets/icon\.png must be referenced', r'das Logo assets/icon.png ist nicht eingebunden'),
+)]
+ICON_MISSING = 'assets/icon.png is missing (the single icon of the plugin)'
+
+
+def translate(warning, language):
+    # A warning of the check in the language of the person; an unknown text stays as it is.
+    if language != 'de':
+        return warning
+    if warning == ICON_MISSING:
+        return 'assets/icon.png fehlt (das eine Logo des Repositorys)'
+    page, separator, text = warning.partition(': ')
+    for pattern, german in GERMAN:
+        found = pattern.fullmatch(text)
+        if separator and found:
+            return page + ': ' + found.expand(german)
+    return warning
 
 
 def operator_language(root, requested=None):
@@ -389,17 +433,19 @@ def operator_language(root, requested=None):
 def result_message(root, created, updated, warnings, missing_facts, language):
     """The finished answer of docs: only what happened and what is open, then one status line."""
     words, kind = REPORT[language], kind_of(root)
-    if any('/skills/' in warning for warning in warnings):  # skills.md only repeats what is open on a skill page
-        warnings = [warning for warning in warnings if not re.fullmatch(r'docs/\w+/skills\.md: unresolved template placeholders', warning)]
+    # skills.md only repeats what is open on a skill page of the same language; without such a page its own warning stays
+    still_open = {found[1] for found in (re.match(r'^docs/(\w+)/skills/.+: ".+" is still to be written', warning) for warning in warnings) if found}
+    warnings = [warning for warning in warnings
+                if not any(warning == f'docs/{code}/skills.md: unresolved template placeholders' for code in still_open)]
     manifest = local_json(root / ('plugin.json' if kind == 'plugin' else 'marketplace.json'))
     sections, notes = {}, []
     for warning in warnings:
         found = re.match(r'^(.+?): "(.+?)" is still to be written', warning)
-        sections.setdefault(found[1], []).append('"%s"' % found[2]) if found else notes.append(warning)
+        sections.setdefault(found[1], []).append('"%s"' % ('Einleitung' if language == 'de' and found[2] == 'introduction' else found[2])) if found else notes.append(warning)
     blocks = [words[key] + '\n' + '\n'.join('- ' + line for line in lines) for key, lines in (
         ('updated', sorted(updated)), ('created', sorted(created)),
         ('open', [page + ': ' + ', '.join(names) for page, names in sections.items()]),
-        ('facts', [FACT_NAMES.get(fact, fact) for fact in missing_facts]), ('notes', notes)) if lines]
+        ('facts', [FACT_NAMES[language].get(fact, fact) for fact in missing_facts]), ('notes', [translate(note, language) for note in notes])) if lines]
     count = len(warnings) + len(missing_facts)
     status = words['complete' if not count else 'one' if count == 1 else 'many']
     blocks.append(status.format(kind=kind.title(), name=manifest.get('name') or root.name, count=count))

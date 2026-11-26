@@ -6,45 +6,109 @@
 
 ## Beschreibung
 
-`docs` kümmert sich um den Aufbau deiner Dokumentation. Einen Teil der Seiten erstellt es selbst, bei den anderen schreibst du die Texte und es kommt nur auf die Struktur an. Fehlende Skill-Seiten legt es an. Was nicht passt, bekommst du gemeldet.
+`docs` kümmert sich um den Aufbau deiner Dokumentation. Einen Teil der Seiten erstellt es selbst, bei den anderen schreibst du die Texte und es kommt nur auf die Struktur an. Fehlende Seiten legt es an. Was nicht passt, bekommst du gemeldet.
 
-### Automatisch erstellte Dateien
+Welche Seiten das sind und was geprüft wird, hängt davon ab, ob dein Repository ein Plugin oder ein Marketplace ist. `docs` erkennt das selbst.
 
-Diese Seiten schreibt `/plugin-manager:docs` bei jedem Lauf neu. Ändere sie nicht von Hand, deine Änderungen gingen verloren. Jede trägt unten einen Hinweis darauf.
+### Plugins
+
+#### Automatisch erstellt
 
 | Datei | Wodurch der Inhalt entsteht |
 | --- | --- |
-| `docs/<lang>/installation.md` | fester Text, dazu Name deines Plugins aus `plugin.json` sowie Name und Adresse deines Marketplace |
+| `docs/<lang>/installation.md` | fester Text, dazu der Name deines Plugins aus `plugin.json` sowie Name und Adresse deines Marketplace |
 | `docs/<lang>/skills.md` | fester Text, dazu je Skill der Abschnitt „Beschreibung“ aus seiner Skill-Seite |
 | `docs/<lang>/concepts.md` | fester Text |
 | `docs/<lang>/development.md` | fester Text |
 | `docs/<lang>/files.md` | fester Text, dazu die Dateibäume aus dem, was der Plugin Manager ausliefert |
 
+#### Von dir geschrieben
+
+Vorgeschrieben sind nur die Überschriften. Alles darunter ist frei.
+
+**`README.md`** (und je weitere Sprache `README.<lang>.md`)
+
+```text
+# <Titel>                  Pflicht, genau eine
+│   Vorstellung            frei
+├── ## ⚡ Schnellstart      Pflicht
+│   └── ### …              frei
+└── ## 🛠 Features          Pflicht
+    └── ### :<skill>       Pflicht, eine je Skill
+            Erklärung      höchstens 200 Zeichen
+            Link           auf docs/<lang>/skills/<skill>.md
+```
+
+**`docs/<lang>/skills/<skill>.md`** (eine Datei je Skill, Dateiname gleich Skill-Name)
+
+```text
+# <Titel>                  Pflicht, genau eine
+├── ## Beschreibung        Pflicht
+│   └── ### …              frei
+├── ## Ablauf              Pflicht
+├── ## Beispiel            Pflicht
+└── ## Liest und schreibt  Pflicht
+```
+
+Die `##`-Überschriften müssen genau so heißen und in dieser Reihenfolge stehen. In der README darf vor ihnen ein Icon stehen. Unter „Beschreibung“ erscheint in `skills.md` nur der Text bis zur ersten Unterüberschrift.
+
+#### Geprüft wird
+
+- Alle Seiten sind da, und die erzeugten Seiten haben genau ihre Überschriften.
+- Die README hat Schnellstart und Features, mit genau einem Eintrag je Skill, kurz genug und verlinkt.
+- `skills.md` hat einen Eintrag je Skill, und jede Skill-Seite hat ihre vier Abschnitte.
+
+### Marketplaces
+
+#### Automatisch erstellt
+
+| Datei | Wodurch der Inhalt entsteht |
+| --- | --- |
+| `docs/<lang>/installation.md` | fester Text, dazu Name und Adresse des Marketplace; nur hinzufügen, aktualisieren, entfernen |
+| `docs/<lang>/concepts.md` | fester Text, derselbe wie bei Plugins |
+| `docs/<lang>/development.md` | fester Text: Plugins verbinden, lokal testen, Befehle und CI |
+
+Es gibt keine Seite je Plugin, keine Plugin-Liste und keine Seite „Gemeinsame Dateien“.
+
+#### Von dir geschrieben
+
+Vorgeschrieben sind nur die Überschriften. Alles darunter ist frei.
+
+**`README.md`** (und je weitere Sprache `README.<lang>.md`)
+
+```text
+# <Titel>                  Pflicht, genau eine
+│   Einleitung             frei, kein Schnellstart
+└── ## 📦 Plugins          Pflicht
+    └── ### <Anzeigename>  Pflicht, eines je Plugin aus marketplace.json
+            Erklärung      frei
+            Link           auf die README im Repository des Plugins
+```
+
+Vor `## Plugins` darf ein Icon stehen.
+
+#### Geprüft wird
+
+- Alle Seiten sind da, und die erzeugten Seiten haben genau ihre Überschriften.
+- Die README hat genau einen Eintrag je gelistetem Plugin, jeder mit Link in dessen Repository.
+- Alte Seiten `plugins.md` oder `files.md` werden gemeldet, aber nicht gelöscht.
+
+### Für beide
+
+Die erzeugten Seiten schreibt `/plugin-manager:docs` bei jedem Lauf neu. Ändere sie nicht von Hand, deine Änderungen gingen verloren; jede trägt unten einen Hinweis darauf. Deine eigenen Seiten legt es nur an, wenn sie fehlen, und überschreibt sie nie.
+
 Fehlt eine Angabe, zum Beispiel die Adresse des Marketplace, steht auf der Seite „(noch nicht festgelegt)“, und der Befehl meldet es.
 
-### Dateien, die du selbst schreibst
+`/plugin-manager:verify`, `make verify` und die CI prüfen außerdem, ob jede Sprache verlinkt ist und keine internen Links ins Leere führen. Alles, was sie finden, ist eine **Warnung**: Die CI bleibt grün. Ob und wie du deine Dokumentation schreibst, ist deine Entscheidung.
 
-Diese Seiten legt `/plugin-manager:docs` nur an, wenn sie fehlen. Danach gehören sie dir und werden nie überschrieben. Vorgeschrieben ist nur die Struktur.
-
-| Datei | Struktur |
-| --- | --- |
-| `README.md`, `README.<lang>.md` | Titel und Vorstellung, `## ⚡ Schnellstart` mit freien Unterabschnitten, `## 🛠 Features` mit je einem `### :<skill>`: höchstens 200 Zeichen und ein Link auf die Skill-Seite |
-| `docs/<lang>/skills/<skill>.md` | je Skill eine Datei, Dateiname gleich Skill-Name: `## Beschreibung`, `## Ablauf`, `## Beispiel`, `## Liest und schreibt` |
-
-Unter „Beschreibung“ erscheint in `skills.md` nur der Text bis zur ersten Unterüberschrift.
-
-### Was geprüft wird
-
-`/plugin-manager:verify`, `make verify` und die CI prüfen, ob alle Seiten da sind, die Überschriften stimmen, jede Sprache verlinkt ist und keine internen Links ins Leere führen. Alles, was sie finden, ist eine **Warnung**: Die CI bleibt grün. Ob und wie du deine Dokumentation schreibst, ist deine Entscheidung.
-
-`<lang>` steht für jede gewählte Dokumentationssprache. Bei Marketplaces werden `installation.md`, `concepts.md` und `development.md` erstellt; von Hand schreibst du dort nur die README mit je einem Eintrag pro Plugin.
+`<lang>` steht für jede gewählte Dokumentationssprache.
 
 ## Ablauf
 
 1. Prüft, ob das Repository eingerichtet ist, und klärt beim ersten Mal die Doku-Sprachen.
 2. Schreibt die automatisch erstellten Seiten neu und legt fehlende Seiten an.
 3. Prüft Struktur und Links.
-4. Berichtet, was noch zu schreiben ist und was in den Abschnitt gehört. Texte schreibt es nicht.
+4. Berichtet kurz, was geschrieben wurde und was noch offen ist. Texte schreibt es nicht.
 
 ## Beispiel
 

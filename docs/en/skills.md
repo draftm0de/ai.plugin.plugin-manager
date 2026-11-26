@@ -16,7 +16,9 @@ Plugin Manager comes with the following skills, one per task. In Claude Code you
 
 `/plugin-manager:docs`
 
-`docs` takes care of how your documentation is built. It creates some of the pages itself; for the others you write the texts and only the structure matters. It creates missing skill pages. What does not fit is reported to you.
+`docs` takes care of how your documentation is built. It creates some of the pages itself; for the others you write the texts and only the structure matters. It creates missing pages. What does not fit is reported to you.
+
+Which pages these are and what is checked depends on whether your repository is a plugin or a marketplace. `docs` detects that itself.
 
 📖 [/plugin-manager:docs – More](skills/docs.md)
 

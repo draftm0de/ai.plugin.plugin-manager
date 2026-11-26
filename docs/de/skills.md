@@ -16,7 +16,9 @@ Plugin Manager bringt die folgenden Skills mit, je einen pro Aufgabe. In Claude 
 
 `/plugin-manager:docs`
 
-`docs` kümmert sich um den Aufbau deiner Dokumentation. Einen Teil der Seiten erstellt es selbst, bei den anderen schreibst du die Texte und es kommt nur auf die Struktur an. Fehlende Skill-Seiten legt es an. Was nicht passt, bekommst du gemeldet.
+`docs` kümmert sich um den Aufbau deiner Dokumentation. Einen Teil der Seiten erstellt es selbst, bei den anderen schreibst du die Texte und es kommt nur auf die Struktur an. Fehlende Seiten legt es an. Was nicht passt, bekommst du gemeldet.
+
+Welche Seiten das sind und was geprüft wird, hängt davon ab, ob dein Repository ein Plugin oder ein Marketplace ist. `docs` erkennt das selbst.
 
 📖 [/plugin-manager:docs – Mehr dazu](skills/docs.md)
 
