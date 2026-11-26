@@ -25,7 +25,7 @@ STOPPED_ANY = {
     'de': 'Die angefragte Aktion wurde abgebrochen, weil {cause}.',
 }
 PLEASE = {'en': 'Please {way}.', 'de': 'Bitte {way}.'}
-REPEAT = {'en': 'Then call /plugin-manager:{skill} again.', 'de': 'Rufe danach /plugin-manager:{skill} erneut auf.'}
+REPEAT = {'en': 'Then call /plugin-manager:{skill} (in Codex: $plugin-manager:{skill}) again.', 'de': 'Rufe danach /plugin-manager:{skill} (in Codex: $plugin-manager:{skill}) erneut auf.'}
 CHANGED = {
     'none': {'en': 'Nothing was changed.', 'de': 'Es wurde nichts geändert.'},
     'language': {'en': 'The language you chose was saved.', 'de': 'Die Sprache, die du gewählt hast, wurde gespeichert.'},
@@ -86,8 +86,8 @@ CATALOGUE = {
                'verschiebe die Datei oder benenne sie um (der Manager wandelt sie nie um und löscht sie nie)'),
     },
     'not_configured': {
-        'en': ('this folder is not configured yet', 'run /plugin-manager:setup first'),
-        'de': ('dieser Ordner noch nicht konfiguriert ist', 'führe zuerst /plugin-manager:setup aus'),
+        'en': ('this folder is not configured yet', 'run /plugin-manager:setup (in Codex: $plugin-manager:setup) first'),
+        'de': ('dieser Ordner noch nicht konfiguriert ist', 'führe zuerst /plugin-manager:setup (in Codex: $plugin-manager:setup) aus'),
     },
     'invalid_name': {
         'en': ('the technical name is not valid', 'give a name in lowercase kebab-case (letters, digits and single hyphens, for example `my-plugin`)'),
@@ -112,8 +112,8 @@ CATALOGUE = {
                'aktualisiere oder installiere den Plugin Manager neu und öffne eine neue Sitzung'),
     },
     'no_decision': {
-        'en': ('there is no open question for the file {path}', 'call /plugin-manager:setup and say which kept file you want to take back'),
-        'de': ('es zur Datei {path} keine offene Entscheidung gibt', 'rufe /plugin-manager:setup auf und nenne die behaltene Datei, die du zurückhaben willst'),
+        'en': ('there is no open question for the file {path}', 'call /plugin-manager:setup (in Codex: $plugin-manager:setup) and say which kept file you want to take back'),
+        'de': ('es zur Datei {path} keine offene Entscheidung gibt', 'rufe /plugin-manager:setup (in Codex: $plugin-manager:setup) auf und nenne die behaltene Datei, die du zurückhaben willst'),
     },
     'stale_decision': {
         'en': ('the file {path} changed after the question was asked', 'answer the question again for the current state'),
@@ -121,9 +121,9 @@ CATALOGUE = {
     },
     'unknown': {
         'en': ('the cause is not known (an unexpected error)',
-               'either call the same skill again (it checks the state first, so repeating is safe) or run `/plugin-manager:verify` for a read-only check of the folder'),
+               'either call the same skill again (it checks the state first, so repeating is safe) or run `/plugin-manager:verify` (in Codex: `$plugin-manager:verify`) for a read-only check of the folder'),
         'de': ('die Ursache nicht bekannt ist (ein unerwarteter Fehler)',
-               'rufe entweder denselben Skill erneut auf (er prüft zuerst den Zustand, Wiederholen ist also sicher) oder führe `/plugin-manager:verify` für eine reine Lese-Prüfung des Ordners aus'),
+               'rufe entweder denselben Skill erneut auf (er prüft zuerst den Zustand, Wiederholen ist also sicher) oder führe `/plugin-manager:verify` (in Codex: `$plugin-manager:verify`) für eine reine Lese-Prüfung des Ordners aus'),
     },
 }
 
@@ -139,10 +139,10 @@ CONFLICT_CODES = {'no_decision': 'no_decision', 'stale_decision': 'stale_decisio
 
 # R50: the question before the skeleton flow writes, the answer to "no" and the list of what was written
 WRITE = {
-    'en': {'ask': 'I would like to change file(s):', 'may': 'May I write?', 'declined': 'Nothing was changed. Call /plugin-manager:setup again when I may write.',
+    'en': {'ask': 'I would like to change file(s):', 'may': 'May I write?', 'declined': 'Nothing was changed. Call /plugin-manager:setup (in Codex: $plugin-manager:setup) again when I may write.',
            'create': 'create', 'change': 'change', 'delete': 'delete',
            'updated': 'I updated:', 'created': 'I created:', 'removed': 'I removed:'},
-    'de': {'ask': 'Ich möchte Datei(en) ändern:', 'may': 'Darf ich schreiben?', 'declined': 'Es wurde nichts geändert. Rufe /plugin-manager:setup erneut auf, wenn ich schreiben darf.',
+    'de': {'ask': 'Ich möchte Datei(en) ändern:', 'may': 'Darf ich schreiben?', 'declined': 'Es wurde nichts geändert. Rufe /plugin-manager:setup (in Codex: $plugin-manager:setup) erneut auf, wenn ich schreiben darf.',
            'create': 'anlegen', 'change': 'ändern', 'delete': 'löschen',
            'updated': 'Aktualisiert habe ich:', 'created': 'Neu angelegt habe ich:', 'removed': 'Entfernt habe ich:'},
 }
@@ -180,7 +180,7 @@ GATE_REASONS = {
 }
 GATE_CAUSE = {'en': 'this folder is not set up yet, or only partly ({reason})',
               'de': 'dieser Ordner noch nicht oder nur teilweise eingerichtet ist ({reason})'}
-GATE_WAY = {'en': 'Please run /plugin-manager:setup first.', 'de': 'Führe zuerst /plugin-manager:setup aus.'}
+GATE_WAY = {'en': 'Please run /plugin-manager:setup (in Codex: $plugin-manager:setup) first.', 'de': 'Führe zuerst /plugin-manager:setup (in Codex: $plugin-manager:setup) aus.'}
 
 
 class Failure(ValueError):

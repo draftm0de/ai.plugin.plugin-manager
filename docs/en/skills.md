@@ -8,13 +8,13 @@ A skill is comparable to a work instruction for an employee.
 
 It describes how the AI assistant is to carry out a certain task, which rules apply and which steps must be followed.
 
-Plugin Manager comes with the following skills, one per task. In Claude Code you call them by their name. In Codex and ChatGPT you describe the task or pick the skill.
+Plugin Manager comes with the following skills, one per task. In Claude Code you call them with `/` and their name, in Codex with `$`; both forms are given for every skill. In ChatGPT you describe the task or pick the skill.
 
 ## 📖 Skills
 
 ### docs
 
-`/plugin-manager:docs`
+`/plugin-manager:docs` · Codex: `$plugin-manager:docs`
 
 `docs` takes care of how your documentation is built. It creates some of the pages itself; for the others you write the texts and only the structure matters. It creates missing pages. What does not fit is reported to you.
 
@@ -24,7 +24,7 @@ Which pages these are and what is checked depends on whether your repository is 
 
 ### modify
 
-`/plugin-manager:modify`
+`/plugin-manager:modify` · Codex: `$plugin-manager:modify`
 
 With `modify` you change what your repository says about itself: the technical name, the display name and the description. A marketplace has no description. First you see which files would change, including the marketplace entry. Nothing is written before your yes. The name and address of the repository stay, and `modify` does not rewrite the documentation.
 
@@ -32,7 +32,7 @@ With `modify` you change what your repository says about itself: the technical n
 
 ### setup
 
-`/plugin-manager:setup`
+`/plugin-manager:setup` · Codex: `$plugin-manager:setup`
 
 You start here. `setup` configures your cloned repository as a plugin or a marketplace and asks you step by step for what it needs to know. The repository needs a GitHub address (`origin`); if it is missing, `setup` names the commands and stops. After that it keeps the shared files in sync. Before it writes, it names the files. If you changed one of them yourself, you decide whether your version stays or the template is adopted. You can call it again at any time.
 
@@ -40,7 +40,7 @@ You start here. `setup` configures your cloned repository as a plugin or a marke
 
 ### verify
 
-`/plugin-manager:verify`
+`/plugin-manager:verify` · Codex: `$plugin-manager:verify`
 
 `verify` tells you whether your repository follows the rules. It detects by itself whether it is a plugin or a marketplace and checks structure, shared standards and documentation. On request it also compares `SCOPE.md` with the source code. It only reads: it changes nothing and runs no code of your repository.
 

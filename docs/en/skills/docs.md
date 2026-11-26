@@ -48,7 +48,7 @@ Only the headings are prescribed. Everything below them is free.
 ├── ## Workflow            required
 ├── 
 
-You are asked only when the setup is missing ("Run /plugin-manager:setup now?") or, the first time, for the documentation languages ("Which documentation languages?").
+You are asked only when the setup is missing ("Run /plugin-manager:setup (in Codex: $plugin-manager:setup) now?") or, the first time, for the documentation languages ("Which documentation languages?").
 
 ## Example             required
 └── ## Reads and writes    required
@@ -116,7 +116,7 @@ When a fact is missing, for example the address of the marketplace, the page say
 
 ## Example
 
-`/plugin-manager:docs` after adding a skill: the skills page gets its section.
+`/plugin-manager:docs` (Codex: `$plugin-manager:docs`) after adding a skill: the skills page gets its section.
 
 ## Reads and writes
 

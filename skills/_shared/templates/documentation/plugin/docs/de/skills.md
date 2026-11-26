@@ -8,7 +8,7 @@ Ein Skill ist vergleichbar mit einer Arbeitsanleitung für einen Mitarbeiter.
 
 Er beschreibt, wie der KI-Assistent eine bestimmte Aufgabe erledigen soll, welche Regeln dabei gelten und welche Schritte einzuhalten sind.
 
-{{PLUGIN_LABEL}} bringt die folgenden Skills mit, je einen pro Aufgabe. In Claude Code rufst du sie mit ihrem Namen auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
+{{PLUGIN_LABEL}} bringt die folgenden Skills mit, je einen pro Aufgabe. In Claude Code rufst du sie mit `/` und ihrem Namen auf, in Codex mit `$`; beide Formen stehen bei jedem Skill. In ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
 
 ## 📖 Skills
 

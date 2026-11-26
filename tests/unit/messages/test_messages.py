@@ -29,7 +29,7 @@ class MessagesTests(unittest.TestCase):
                     first, second = parts
                 self.assertIn(headline, first, code)
                 self.assertTrue(second.startswith(please), code)
-                self.assertTrue(second.rstrip().endswith('/plugin-manager:setup again.' if lang == 'en' else '/plugin-manager:setup erneut auf.'), code)
+                self.assertTrue(second.rstrip().endswith('/plugin-manager:setup (in Codex: $plugin-manager:setup) again.' if lang == 'en' else '/plugin-manager:setup (in Codex: $plugin-manager:setup) erneut auf.'), code)
                 self.assertNotIn('{', text, code)  # every fact is filled
                 self.assertIsNone(FORBIDDEN.search(text), (code, lang, text))
                 self.assertNotRegex(text, r'^(Why|Warum|Solution|L[öo]sung)', code)
@@ -75,9 +75,9 @@ class MessagesTests(unittest.TestCase):
                 self.assertNotIn('was stopped, because', path.read_text(), path)
 
     def test_the_gate_message_is_deterministic_in_both_languages(self):
-        self.assertEqual('The docs action was stopped, because this folder is not set up yet, or only partly (a shared file needs your decision).\n\nPlease run /plugin-manager:setup first.',
+        self.assertEqual('The docs action was stopped, because this folder is not set up yet, or only partly (a shared file needs your decision).\n\nPlease run /plugin-manager:setup (in Codex: $plugin-manager:setup) first.',
                          self.messages.gate_message('docs', 'sync', 'en'))
-        self.assertEqual('Die Aktion modify wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (eine gemeinsame Datei braucht deine Entscheidung).\n\nFühre zuerst /plugin-manager:setup aus.',
+        self.assertEqual('Die Aktion modify wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (eine gemeinsame Datei braucht deine Entscheidung).\n\nFühre zuerst /plugin-manager:setup (in Codex: $plugin-manager:setup) aus.',
                          self.messages.gate_message('modify', 'sync', 'de'))
 
 

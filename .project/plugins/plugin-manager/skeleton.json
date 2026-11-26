@@ -42,8 +42,8 @@
       "local_hash": "43da9da322dccb2830af3abac71d1b2324177ebc50fac9a2da851207053dddc8"
     },
     "docs/standards/messages.md": {
-      "source_hash": "a4fc6b84a5041ffd5a2d35f75f241ebe426900e793894511def5852cde763d6c",
-      "local_hash": "a4fc6b84a5041ffd5a2d35f75f241ebe426900e793894511def5852cde763d6c"
+      "source_hash": "e569063b1ab53a2e2587e48a31d028d2d0b69b879cefbe1cea6dc12726d36863",
+      "local_hash": "e569063b1ab53a2e2587e48a31d028d2d0b69b879cefbe1cea6dc12726d36863"
     },
     "docs/standards/skills.md": {
       "source_hash": "bff996bf42b905fea0bf15eb15cf56e5514f236529b3bb8b9b687f4d9dd51690",
@@ -78,8 +78,8 @@
       "local_hash": "42c62ecc241964b54a83afda35698f03471b2ff1874b68ed64ed3801b81478a4"
     },
     "scripts/verify/docs.py": {
-      "source_hash": "7f61cbf67d4a2cc087384400479c887d32a49f8e78b6778b50394f58d63b8681",
-      "local_hash": "7f61cbf67d4a2cc087384400479c887d32a49f8e78b6778b50394f58d63b8681"
+      "source_hash": "82aaa3c5b21ee2adadf601fc3700847e683837d37eaf40c0977fa9f7c70409d8",
+      "local_hash": "82aaa3c5b21ee2adadf601fc3700847e683837d37eaf40c0977fa9f7c70409d8"
     },
     "scripts/verify/hashes.py": {
       "source_hash": "cd3f56a7173ad1630a31c8b700f98321588aba76b23bdaf13775ec6beea86a97",
@@ -90,8 +90,8 @@
       "local_hash": "7df7a7392b84a466f966ef7e6ff5076c507aa3ccc2e0b446a62de65e14aa4333"
     },
     "scripts/verify/standards.py": {
-      "source_hash": "8c840f478a30e66127a61656047e388199aa6eabf372aee9ee0d21ab161e78fb",
-      "local_hash": "8c840f478a30e66127a61656047e388199aa6eabf372aee9ee0d21ab161e78fb"
+      "source_hash": "faa7935a0f0c0e2ba235482612dbbde0bbd8c0ab77f845f255299e9ea6b3d7b1",
+      "local_hash": "faa7935a0f0c0e2ba235482612dbbde0bbd8c0ab77f845f255299e9ea6b3d7b1"
     },
     "scripts/verify/structure.py": {
       "source_hash": "8b3bf773ff392b02545df1bc1bc908470eef07f56009e458ae35d0aea2801841",
@@ -106,8 +106,8 @@
       "local_hash": "608c81480295570eb14e8eb59cfd53dca25fdf438ae33a846255dec915107933"
     },
     "skills/_shared/scripts/messages_base.py": {
-      "source_hash": "c337ee0a2a4eac3ed150d9aa16899f0f1ec34a0140dcd0cace7869ae2be165c9",
-      "local_hash": "c337ee0a2a4eac3ed150d9aa16899f0f1ec34a0140dcd0cace7869ae2be165c9"
+      "source_hash": "be39291085151795e67f8bd6161d8f762c3926fde5cc46d48ec7654089de1c3d",
+      "local_hash": "be39291085151795e67f8bd6161d8f762c3926fde5cc46d48ec7654089de1c3d"
     },
     "skills/_shared/scripts/operator_language.py": {
       "source_hash": "3660c928e59a241bc4e3250ca63d39c76eb3a52e7c33bf0d9602121b030aba5e",

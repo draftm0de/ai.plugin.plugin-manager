@@ -31,8 +31,8 @@ class MessagesBaseTests(unittest.TestCase):
 
     def test_every_base_entry_has_the_layout_in_both_languages_without_technical_words(self):
         for code in self.base.BASE_CATALOGUE:
-            for language, headline, please, again in (('en', 'could not be completed, because', 'Please', 'Then call /demo:count again.'),
-                                                      ('de', 'konnte nicht abgeschlossen werden, weil', 'Bitte', 'Rufe danach /demo:count erneut auf.')):
+            for language, headline, please, again in (('en', 'could not be completed, because', 'Please', 'Then call /demo:count (in Codex: $demo:count) again.'),
+                                                      ('de', 'konnte nicht abgeschlossen werden, weil', 'Bitte', 'Rufe danach /demo:count (in Codex: $demo:count) erneut auf.')):
                 text = self.base.render_failure(self.base.BASE_CATALOGUE, code, language, 'demo', 'count', path='/p')
                 first, second = text.split('\n\n')
                 self.assertIn(headline, first, code)
@@ -53,7 +53,7 @@ class MessagesBaseTests(unittest.TestCase):
         own = dict(self.base.BASE_CATALOGUE, OWN={'cause': {'en': 'x', 'de': 'y'}, 'fix': {'en': 'Please run', 'de': 'Bitte f\u00fchre aus'},
                                                   'commands': ['git init', 'cd {path}'], 'after': {'en': 'It is local.', 'de': 'Das bleibt lokal.'}})
         parts = self.base.render_failure(own, 'OWN', 'en', 'demo', 'count', path='/a').split('\n\n')
-        self.assertEqual(['Please run:', '```bash\ngit init\ncd /a\n```', 'It is local. Then call /demo:count again.'], parts[1:])
+        self.assertEqual(['Please run:', '```bash\ngit init\ncd /a\n```', 'It is local. Then call /demo:count (in Codex: $demo:count) again.'], parts[1:])
 
     def test_a_failure_no_script_reported_has_a_finished_text_that_claims_nothing(self):
         out, err = io.StringIO(), io.StringIO()

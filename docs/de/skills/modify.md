@@ -20,7 +20,7 @@ Mit `modify` änderst du, was dein Repository über sich sagt: den technischen N
 
 | Frage | Was ist das? | Worauf achten |
 | --- | --- | --- |
-| Soll ich /plugin-manager:setup jetzt ausführen? | Die Einrichtung fehlt oder ist unvollständig | `modify` ändert erst, wenn sie abgeschlossen ist. Rufe es danach erneut auf. |
+| Soll ich /plugin-manager:setup (in Codex: $plugin-manager:setup) jetzt ausführen? | Die Einrichtung fehlt oder ist unvollständig | `modify` ändert erst, wenn sie abgeschlossen ist. Rufe es danach erneut auf. |
 | Was soll sich ändern? | Technischer Name, Anzeigename oder Beschreibung | Ein Marketplace hat keine Beschreibung. |
 | Neuer Wert für „`<Feld>`“ (bisher: `<Wert>`)? | Der neue Name oder Text | Ein neuer technischer Name ändert die Aufrufe und die Installation. |
 | Darf ich schreiben? | Darüber steht die Liste der Dateien, die sich ändern, auch im Marketplace | Bei „Nein“ bleibt alles, wie es ist. |

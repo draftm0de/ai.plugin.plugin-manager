@@ -32,7 +32,7 @@ git init
 git remote add origin https://github.com/<owner>/plugin.a.git
 ```
 
-The repository does not have to exist on GitHub yet. Then call /plugin-manager:setup again.
+The repository does not have to exist on GitHub yet. Then call /plugin-manager:setup (in Codex: $plugin-manager:setup) again.
 ````
 
 When the fix consists of shell commands, the request ends with a colon, the commands stand in one `bash` code block and

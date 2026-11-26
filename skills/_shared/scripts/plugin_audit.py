@@ -97,11 +97,11 @@ def audit(root):
         target = root / 'docs/standards' / source.name
         same = target.is_file() and not target.is_symlink() and target.read_bytes() == source.read_bytes()
         add('standards:' + source.name, 'pass' if same else 'fail',
-            'Matches the managed standard' if same else 'Missing or changed; a standard is never edited in a plugin, run /plugin-manager:setup to bring it back')
+            'Matches the managed standard' if same else 'Missing or changed; a standard is never edited in a plugin, run /plugin-manager:setup (in Codex: $plugin-manager:setup) to bring it back')
     agents, managed_agents = root / 'AGENTS.md', template / 'AGENTS.md'
     same = agents.is_file() and not agents.is_symlink() and agents.read_bytes() == managed_agents.read_bytes()
     add('standards:AGENTS.md', 'pass' if same else 'fail',
-        'Matches the managed AGENTS.md' if same else 'Missing or changed; plugin-specific instructions belong into CUSTOM.AGENTS.md, run /plugin-manager:setup to bring the managed file back')
+        'Matches the managed AGENTS.md' if same else 'Missing or changed; plugin-specific instructions belong into CUSTOM.AGENTS.md, run /plugin-manager:setup (in Codex: $plugin-manager:setup) to bring the managed file back')
     own = {name: (root / name).read_text(encoding='utf-8') for name in ('SCOPE.md', 'CUSTOM.AGENTS.md') if (root / name).is_file() and not (root / name).is_symlink()}
     copied = sorted({name + ': ' + line.strip() for source in standard_files for line in source.read_text(encoding='utf-8').splitlines()
                      if len(line.strip()) >= 60 for name, text in own.items() if line.strip() in text})
@@ -111,7 +111,7 @@ def audit(root):
     makefile, managed = root / 'Makefile', SKILL / 'templates/plugin/sync/Makefile'
     same_make = makefile.is_file() and not makefile.is_symlink() and makefile.read_bytes() == managed.read_bytes()
     add('installer:make', 'pass' if same_make else 'fail',
-        'Matches the managed Makefile' if same_make else 'Missing or changed; own targets belong into CUSTOM.mk, run /plugin-manager:setup to bring the managed file back')
+        'Matches the managed Makefile' if same_make else 'Missing or changed; own targets belong into CUSTOM.mk, run /plugin-manager:setup (in Codex: $plugin-manager:setup) to bring the managed file back')
     try:
         spec = importlib.util.spec_from_file_location('trusted_plugin_template', template / 'scripts/plugin.py')
         engine = importlib.util.module_from_spec(spec)

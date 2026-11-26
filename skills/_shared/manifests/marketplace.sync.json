@@ -46,7 +46,7 @@
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "7f61cbf67d4a2cc087384400479c887d32a49f8e78b6778b50394f58d63b8681",
+      "sha256": "82aaa3c5b21ee2adadf601fc3700847e683837d37eaf40c0977fa9f7c70409d8",
       "executable": false
     },
     "scripts/verify/scope.py": {
@@ -54,7 +54,7 @@
       "executable": false
     },
     "scripts/verify/standards.py": {
-      "sha256": "8c840f478a30e66127a61656047e388199aa6eabf372aee9ee0d21ab161e78fb",
+      "sha256": "faa7935a0f0c0e2ba235482612dbbde0bbd8c0ab77f845f255299e9ea6b3d7b1",
       "executable": false
     },
     "scripts/verify/structure.py": {

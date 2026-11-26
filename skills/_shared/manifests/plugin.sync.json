@@ -26,7 +26,7 @@
       "executable": false
     },
     "docs/standards/messages.md": {
-      "sha256": "a4fc6b84a5041ffd5a2d35f75f241ebe426900e793894511def5852cde763d6c",
+      "sha256": "e569063b1ab53a2e2587e48a31d028d2d0b69b879cefbe1cea6dc12726d36863",
       "executable": false
     },
     "docs/standards/skills.md": {
@@ -62,7 +62,7 @@
       "executable": false
     },
     "scripts/verify/docs.py": {
-      "sha256": "7f61cbf67d4a2cc087384400479c887d32a49f8e78b6778b50394f58d63b8681",
+      "sha256": "82aaa3c5b21ee2adadf601fc3700847e683837d37eaf40c0977fa9f7c70409d8",
       "executable": false
     },
     "scripts/verify/hashes.py": {
@@ -74,7 +74,7 @@
       "executable": false
     },
     "scripts/verify/standards.py": {
-      "sha256": "8c840f478a30e66127a61656047e388199aa6eabf372aee9ee0d21ab161e78fb",
+      "sha256": "faa7935a0f0c0e2ba235482612dbbde0bbd8c0ab77f845f255299e9ea6b3d7b1",
       "executable": false
     },
     "scripts/verify/structure.py": {
@@ -90,7 +90,7 @@
       "executable": false
     },
     "skills/_shared/scripts/messages_base.py": {
-      "sha256": "c337ee0a2a4eac3ed150d9aa16899f0f1ec34a0140dcd0cace7869ae2be165c9",
+      "sha256": "be39291085151795e67f8bd6161d8f762c3926fde5cc46d48ec7654089de1c3d",
       "executable": false
     },
     "skills/_shared/scripts/operator_language.py": {

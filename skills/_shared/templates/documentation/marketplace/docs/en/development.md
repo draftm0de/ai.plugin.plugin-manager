@@ -15,6 +15,8 @@ For people who work on this marketplace. You do not need this page to use it.
 
 ## Set up
 
+In Codex you call skills with `$` instead of `/`, so `$plugin-manager:setup`.
+
 If you did not clone the folder of a repository, run `git init` and `git remote add origin <address>` in it; `setup` names the commands for you.
 
 ### Marketplace

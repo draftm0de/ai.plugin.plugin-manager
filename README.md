@@ -41,7 +41,7 @@ Dein Ordner muss ein Git-Repository mit GitHub-Adresse (`origin`) sein. Am einfa
 
 Führe `:setup` aus, um deinen verbundenen Ordner als Plugin oder Marketplace zu konfigurieren. Der Skill führt dich mit Fragen durch die Konfiguration.
 
-In Claude Code rufst du die Skills wie oben auf. In Codex und ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
+In Claude Code rufst du die Skills wie oben auf. In Codex schreibst du `$` statt `/`, zum Beispiel `$plugin-manager:setup`. In ChatGPT beschreibst du die Aufgabe oder wählst den Skill aus.
 
 ### Ein Plugin bauen
 

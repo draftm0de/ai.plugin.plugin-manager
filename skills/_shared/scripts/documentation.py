@@ -168,7 +168,7 @@ def skill_entries(root, language, plugin, skills):
         text = description_of(page.read_text(encoding='utf-8'), language) if page.is_file() else ''
         call = f'/{plugin}' if len(skills) == 1 else f'/{plugin}:{name}'
         more = {'de': 'Mehr dazu', 'en': 'More'}[language]
-        entries.append(f'### {name}\n\n`{call}`\n\n{text or "{{SKILL_%d_1}}" % number}\n\n📖 [{call} – {more}](skills/{name}.md)')
+        entries.append(f'### {name}\n\n`{call}` · Codex: `${plugin}:{name}`\n\n{text or "{{SKILL_%d_1}}" % number}\n\n📖 [{call} – {more}](skills/{name}.md)')
     return '\n\n'.join(entries)
 
 
@@ -378,8 +378,8 @@ GERMAN = [(re.compile(pattern, re.DOTALL), text) for pattern, text in (
     (r'missing page', r'Seite fehlt'),
     (r'unresolved template placeholders', r'enthält noch Platzhalter'),
     (r'unclosed fenced block', r'ein Codeblock ist nicht geschlossen'),
-    (r'the headings must be exactly those of the generated page; run /plugin-manager:docs',
-     r'die Überschriften weichen von der erzeugten Seite ab; führe /plugin-manager:docs aus'),
+    (r'the headings must be exactly those of the generated page; run /plugin-manager:docs \(in Codex: \$plugin-manager:docs\)',
+     r'die Überschriften weichen von der erzeugten Seite ab; führe /plugin-manager:docs (in Codex: $plugin-manager:docs) aus'),
     (r'(.+) is not linked to its page (.+)', r'\1 ist nicht mit seiner Seite \2 verlinkt'),
     (r'level-two headings must match outline order', r'die ##-Überschriften stimmen nicht (Namen oder Reihenfolge)'),
     (r'expected exactly one page title', r'genau eine #-Überschrift ist erforderlich'),

@@ -39,7 +39,7 @@ Your folder has to be a Git repository with a GitHub address (`origin`). The eas
 
 Run `:setup` to configure your connected folder as a plugin or a marketplace. The skill guides you through the configuration with questions.
 
-In Claude Code you call the skills as above. In Codex and ChatGPT you describe the task or pick the skill.
+In Claude Code you call the skills as above. In Codex write `$` instead of `/`, for example `$plugin-manager:setup`. In ChatGPT you describe the task or pick the skill.
 
 ### Building a plugin
 

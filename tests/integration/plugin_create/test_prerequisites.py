@@ -24,7 +24,7 @@ class PrerequisitesTests(unittest.TestCase):
             self.assertIn('```bash\ngit init\ngit remote add origin https://github.com/<owner>/my.market.git\n```', second)
             self.assertIn('Die Aktion setup konnte nicht abgeschlossen werden, weil der Ordner', first)
             self.assertIn('Es wurde nichts geändert.', first)
-            self.assertIn('Rufe danach /plugin-manager:setup erneut auf.', second)
+            self.assertIn('Rufe danach /plugin-manager:setup (in Codex: $plugin-manager:setup) erneut auf.', second)
             self.assertEqual([], list(folder.iterdir()))
 
     def test_a_repository_without_origin_needs_only_the_address_and_with_it_passes(self):

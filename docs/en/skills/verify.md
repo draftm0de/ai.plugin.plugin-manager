@@ -29,7 +29,7 @@
 
 ## Example
 
-`/plugin-manager:verify` before publishing.
+`/plugin-manager:verify` (Codex: `$plugin-manager:verify`) before publishing.
 
 ## Reads and writes
 

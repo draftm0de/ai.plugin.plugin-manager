@@ -14,7 +14,7 @@ class GateTests(SyncBase):
         self.assertEqual(1, code, result.stderr + result.stdout)
         self.assertEqual((False, 'language'), (data['ready'], data['next']))
         self.assertTrue(data['reason'])
-        self.assertEqual('The requested action was stopped, because this folder is not set up yet, or only partly (the language is not set yet).\n\nPlease run /plugin-manager:setup first.', data['message'])
+        self.assertEqual('The requested action was stopped, because this folder is not set up yet, or only partly (the language is not set yet).\n\nPlease run /plugin-manager:setup (in Codex: $plugin-manager:setup) first.', data['message'])
         self.assertEqual(before, tree(self.box.project))
 
     def test_gate_names_the_open_flow_for_every_state_before_ready(self):
@@ -45,12 +45,12 @@ class GateTests(SyncBase):
             self.assertTrue(data['message'].startswith('The ' + action + ' action was stopped, because this folder is not set up yet'))
             shapes.add(re.sub(r'\(.*?\)', '(...)', data['message']).replace(action, '<action>'))
         self.assertEqual(1, len(shapes))
-        self.assertIn('\n\nPlease run /plugin-manager:setup first.', data['message'])
+        self.assertIn('\n\nPlease run /plugin-manager:setup (in Codex: $plugin-manager:setup) first.', data['message'])
         self.assertEqual(2, self.box.call('gate', '--action', 'verify')[0])  # only gated skills are known
 
     def test_the_message_comes_in_the_requested_language_else_the_saved_one_else_english(self):  # R26
         code, data, _ = self.box.call('gate', '--action', 'docs', '--message-language', 'de')
-        self.assertEqual('Die Aktion docs wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (die Sprache ist noch nicht gesetzt).\n\nFühre zuerst /plugin-manager:setup aus.', data['message'])
+        self.assertEqual('Die Aktion docs wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (die Sprache ist noch nicht gesetzt).\n\nFühre zuerst /plugin-manager:setup (in Codex: $plugin-manager:setup) aus.', data['message'])
         self.assertTrue(self.box.call('gate', '--action', 'docs')[1]['message'].startswith('The docs action was stopped'))  # nothing saved: English
         self.setup_all()
         self.assertEqual(0, self.box.call('gate', '--action', 'docs')[0])

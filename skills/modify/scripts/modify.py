@@ -19,8 +19,8 @@ import workflows as flow  # noqa: E402
 NAME = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
 PUBLISH_NOTE = ('The changed files are committed files left unversioned; commit and push them yourself '
                 '(plugin and marketplace repositories separately). Nothing was committed, pushed, installed or published.')
-DOCS_NOTE = ('Call forms (/<name>:<skill>, <name>@<marketplace>), documentation and tests that name the old values are not '
-             'rewritten here; refresh the documentation with /plugin-manager:docs.')
+DOCS_NOTE = ('Call forms (/<name>:<skill> or $<name>:<skill>, <name>@<marketplace>), documentation and tests that name the old values are not '
+             'rewritten here; refresh the documentation with /plugin-manager:docs (in Codex: $plugin-manager:docs).')
 
 
 def check_values(name, display_name, description):
@@ -141,7 +141,7 @@ def catalog_update(root, market, old, new):
             raise ValueError('The name ' + new['name'] + ' is already registered in the marketplace for another plugin')
         entries.append(entry)
     if not found:
-        raise ValueError('The marketplace does not list this plugin (name and repository); associate it first (/plugin-manager:setup)')
+        raise ValueError('The marketplace does not list this plugin (name and repository); associate it first (/plugin-manager:setup, in Codex: $plugin-manager:setup)')
     config['plugins'] = entries
     local = flow.read(market / '.local/marketplace.json', {})
     sources = local.get('sources', {})
@@ -182,7 +182,7 @@ def modify_marketplace(root, evidence, name, display_name, description, plugin, 
     changed, pending = write(files, dry_run)
     notes = []
     if affected:
-        notes.append('Plugin repositories keep the old marketplace name in their configuration; in each, run /plugin-manager:setup '
+        notes.append('Plugin repositories keep the old marketplace name in their configuration; in each, run /plugin-manager:setup (in Codex: $plugin-manager:setup) '
                      '(association) so associate takes the new name. They were not changed.')
     if pending:
         notes += [DOCS_NOTE, PUBLISH_NOTE]

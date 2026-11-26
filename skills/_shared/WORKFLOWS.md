@@ -35,3 +35,7 @@ How the repositories are laid out, distributed and installed locally: `reference
 - Changes to rules may make an existing plugin fail verification. Update it only under an explicit implementation request; never weaken scope to accept outdated content.
 
 Keine Altformat-Unterstützung oder stillen Migrationen. Nicht unterstützte Daten mit konkretem Grund ablehnen, niemals löschen oder überschreiben.
+
+## Call forms
+
+Claude calls a skill as `/plugin-manager:<skill>`, Codex as `$plugin-manager:<skill>`. When you name a call form to the person, name both.

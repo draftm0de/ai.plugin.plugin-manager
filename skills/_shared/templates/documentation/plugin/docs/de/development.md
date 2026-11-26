@@ -15,6 +15,8 @@ Für alle, die an diesem Plugin arbeiten. Zum Benutzen brauchst du diese Seite n
 
 ## Einrichten
 
+In Codex rufst du Skills mit `$` statt `/` auf, also `$plugin-manager:setup`.
+
 Hast du den Ordner eines Repositorys nicht geklont, führe darin `git init` und `git remote add origin <Adresse>` aus; `setup` nennt dir die Befehle.
 
 ### Marketplace

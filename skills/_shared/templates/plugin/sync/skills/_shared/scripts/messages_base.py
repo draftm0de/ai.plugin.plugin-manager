@@ -49,14 +49,14 @@ LAYOUT = {
     'en': {
         'failed': 'The {action} action could not be completed, because {cause}. {changed}',
         'stopped': 'The {action} action was stopped, because {cause}. {changed}',
-        'then': 'Then call /{plugin}:{skill} again.',
+        'then': 'Then call /{plugin}:{skill} (in Codex: ${plugin}:{skill}) again.',
         'nothing': 'Nothing was changed.',
         'unsure': 'Whether anything was changed is not known.',
     },
     'de': {
         'failed': 'Die Aktion {action} konnte nicht abgeschlossen werden, weil {cause}. {changed}',
         'stopped': 'Die Aktion {action} wurde abgebrochen, weil {cause}. {changed}',
-        'then': 'Rufe danach /{plugin}:{skill} erneut auf.',
+        'then': 'Rufe danach /{plugin}:{skill} (in Codex: ${plugin}:{skill}) erneut auf.',
         'nothing': 'Es wurde nichts geändert.',
         'unsure': 'Ob etwas geändert wurde, ist nicht bekannt.',
     },

@@ -29,7 +29,7 @@
 
 ## Beispiel
 
-`/plugin-manager:verify` vor dem Pushen.
+`/plugin-manager:verify` (Codex: `$plugin-manager:verify`) vor dem Pushen.
 
 ## Liest und schreibt
 

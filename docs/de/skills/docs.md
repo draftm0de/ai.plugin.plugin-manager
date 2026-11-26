@@ -48,7 +48,7 @@ Vorgeschrieben sind nur die Überschriften. Alles darunter ist frei.
 ├── ## Ablauf              Pflicht
 ├── 
 
-Gefragt wirst du nur, wenn die Einrichtung fehlt („Soll ich /plugin-manager:setup jetzt ausführen?“) oder beim ersten Mal nach den Doku-Sprachen („Welche Doku-Sprachen?“).
+Gefragt wirst du nur, wenn die Einrichtung fehlt („Soll ich /plugin-manager:setup (in Codex: $plugin-manager:setup) jetzt ausführen?“) oder beim ersten Mal nach den Doku-Sprachen („Welche Doku-Sprachen?“).
 
 ## Beispiel            Pflicht
 └── ## Liest und schreibt  Pflicht
@@ -116,7 +116,7 @@ Fehlt eine Angabe, zum Beispiel die Adresse des Marketplace, steht auf der Seite
 
 ## Beispiel
 
-`/plugin-manager:docs` nach einem neuen Skill: Die Skills-Seite bekommt seinen Abschnitt.
+`/plugin-manager:docs` (Codex: `$plugin-manager:docs`) nach einem neuen Skill: Die Skills-Seite bekommt seinen Abschnitt.
 
 ## Liest und schreibt
 

@@ -68,7 +68,7 @@ Plugins also get a Git hook that checks the standards before every commit. It ru
 
 ## Example
 
-`/plugin-manager:setup` in an empty, cloned repository.
+`/plugin-manager:setup` (Codex: `$plugin-manager:setup`) in an empty, cloned repository.
 
 ## Reads and writes
 

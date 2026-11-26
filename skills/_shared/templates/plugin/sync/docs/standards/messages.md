@@ -10,12 +10,14 @@ letters, no headings, no line break inside a sentence.
 ```
 The <action> action could not be completed, because <cause in plain words>. <What was already changed, or that nothing was.>
 
-Please <the way to fix it>. Then call /<plugin>:<skill> again.
+Please <the way to fix it>. Then call /<plugin>:<skill> (in Codex: $<plugin>:<skill>) again.
 ```
 
 When the fix consists of shell commands, the request ends with a colon, the commands stand in one `bash` code block, one
 per line, and the remaining sentences follow the block. Nothing else uses a block or a list.
 
+- Wherever a message or an answer names a call form, it names both: `/<plugin>:<skill>` (Claude) and
+  `$<plugin>:<skill>` (Codex).
 - `<plugin>` is the name of this plugin exactly as in its `plugin.json` (for example `/word-counter:count`), without any prefix of its own.
 - A deliberate stop says "was stopped" instead of "could not be completed".
 - Two ways go in one sentence: "Please either ... or ...". At most two ways, with exact commands and where to run them
