@@ -18,7 +18,7 @@ The rules of the `docs` action. Paths are relative to `skills/_shared/` unless e
 ### 1. Languages
 
 - Read `docs/documentation.json` → `documentation.languages` and `documentation.default_language`.
-- Honor an explicit user choice, including English only. With no saved policy and no clear instruction, ask whether German, English or both and which is the default; read `references/languages.md`.
+- Honor an explicit user choice, including English only. With no saved policy and no clear instruction, ask with the question `documentation_languages` of `setup_state.py questions` (fixed wording, R55); read `references/languages.md`.
 
 ### 2. Generate, create and check
 

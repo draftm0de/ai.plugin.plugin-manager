@@ -46,7 +46,11 @@ Only the headings are prescribed. Everything below them is free.
 ├── ## Description         required
 │   └── ### …              free
 ├── ## Workflow            required
-├── ## Example             required
+├── 
+
+You are asked only when the setup is missing ("Run /plugin-manager:setup now?") or, the first time, for the documentation languages ("Which documentation languages?").
+
+## Example             required
 └── ## Reads and writes    required
 ```
 

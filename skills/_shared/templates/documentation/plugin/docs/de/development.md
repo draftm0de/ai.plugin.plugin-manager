@@ -21,7 +21,7 @@ Hast du den Ordner eines Repositorys nicht geklont, führe darin `git init` und 
 
 Damit du ein Plugin entwickeln kannst, fordert dich `:setup` auf, es einem Marketplace zuzuordnen. Du brauchst also ein Repository, das über `/plugin-manager:setup` als Marketplace eingerichtet wurde.
 
-Hast du noch keinen, lege auf GitHub ein leeres Repository an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Eigentümer. Einen Marketplace richtest du nur einmal ein; er kann viele Plugins aufnehmen.
+Hast du noch keinen, lege auf GitHub ein leeres Repository an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Herausgeber. Einen Marketplace richtest du nur einmal ein; er kann viele Plugins aufnehmen.
 
 ### Plugin
 

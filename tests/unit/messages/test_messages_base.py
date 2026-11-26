@@ -1,4 +1,5 @@
 """R30: the managed messages_base.py builds the layout once; the managed language helper raises coded failures."""
+import io
 import importlib.util
 import json
 from pathlib import Path
@@ -53,6 +54,15 @@ class MessagesBaseTests(unittest.TestCase):
                                                   'commands': ['git init', 'cd {path}'], 'after': {'en': 'It is local.', 'de': 'Das bleibt lokal.'}})
         parts = self.base.render_failure(own, 'OWN', 'en', 'demo', 'count', path='/a').split('\n\n')
         self.assertEqual(['Please run:', '```bash\ngit init\ncd /a\n```', 'It is local. Then call /demo:count again.'], parts[1:])
+
+    def test_a_failure_no_script_reported_has_a_finished_text_that_claims_nothing(self):
+        out, err = io.StringIO(), io.StringIO()
+        self.assertEqual(0, self.base.main(['--skill', 'count', '--language', 'de'], out, err))
+        self.assertIn('Die Aktion count konnte nicht abgeschlossen werden, weil die Ursache nicht bekannt ist', out.getvalue())
+        self.assertIn('Ob etwas geändert wurde, ist nicht bekannt.', out.getvalue())
+        self.assertNotIn('Es wurde nichts geändert', out.getvalue())
+        self.assertEqual(1, self.base.main(['--language', 'en'], io.StringIO(), err))
+        self.assertIn('incomplete or contains an unknown option', err.getvalue())
 
     def test_a_stop_says_was_stopped_and_a_named_change_replaces_nothing_was_changed(self):
         text = self.base.render_failure(self.base.BASE_CATALOGUE, 'UNKNOWN', 'en', 'demo', 'count', changed='The language you chose was saved.', stopped=True)

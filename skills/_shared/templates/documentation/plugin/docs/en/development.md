@@ -21,7 +21,7 @@ If you did not clone the folder of a repository, run `git init` and `git remote 
 
 To develop a plugin, `:setup` asks you to associate it with a marketplace. So you need a repository that has been set up as a marketplace with `/plugin-manager:setup`.
 
-If you do not have one yet, create an empty repository on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the owner. You set up a marketplace only once; it can hold many plugins.
+If you do not have one yet, create an empty repository on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the publisher. You set up a marketplace only once; it can hold many plugins.
 
 ### Plugin
 

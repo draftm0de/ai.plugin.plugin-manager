@@ -3,6 +3,7 @@ import argparse
 import json
 from .context import Context
 from . import preferences
+from . import questions
 from . import messages
 from . import recording
 from . import reporting
@@ -31,6 +32,9 @@ def main(argv=None, source_root=None, manager_root=None):
     closed = commands.add_parser('gate', help='Write-free: is the workpackage ready for a writing skill other than setup (exit 1 if not)')
     closed.add_argument('--action', choices=('docs', 'modify'), help='The gated skill; names it in the stop message')
     closed.add_argument('--message-language', choices=messages.LANGUAGES, help='Language of the message: the language of the person\'s text; default the saved operator language, else English')
+    catalogue = commands.add_parser('questions', help='Write-free: every question of the skills with its choices, in one language')
+    catalogue.add_argument('--target', required=True, help='Folder whose saved operator language counts')
+    catalogue.add_argument('--message-language', choices=messages.LANGUAGES, help='Only when no operator language is saved yet')
     unknown = commands.add_parser('explain', help='Write-free: the finished message for an error no command reported (cause not known)')
     unknown.add_argument('--action', required=True, choices=tuple(messages.ACTIONS), help='What the person asked for')
     unknown.add_argument('--message-language', choices=messages.LANGUAGES)
@@ -48,6 +52,10 @@ def main(argv=None, source_root=None, manager_root=None):
     if args.operation == 'explain':
         said = messages.explain(args.action, RuntimeError(args.error), args.message_language)
         print(json.dumps({'operation': 'explain', 'ok': True, 'message': said['message'], 'known': said['known'], 'detail': said['detail']}, indent=2, ensure_ascii=False))
+        return 0
+    if args.operation == 'questions':
+        language = messages.saved_language(args.target) or messages.language_for(args.target, args.message_language)
+        print(json.dumps({'operation': 'questions', 'ok': True, 'language': language, 'questions': questions.questions(language)}, indent=2, ensure_ascii=False))
         return 0
     try:
         ctx = Context(args.plugin, source_root, manager_root)

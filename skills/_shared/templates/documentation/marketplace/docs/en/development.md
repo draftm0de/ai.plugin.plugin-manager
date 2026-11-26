@@ -19,7 +19,7 @@ If you did not clone the folder of a repository, run `git init` and `git remote 
 
 ### Marketplace
 
-A marketplace is a repository of its own. Create it on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the owner. After that the catalog `marketplace.json` and the shared files are in your repository.
+A marketplace is a repository of its own. Create it on GitHub, clone it and open the folder. Call `/plugin-manager:setup` there and choose "Marketplace". Among other things it asks for the name and the publisher. After that the catalog `marketplace.json` and the shared files are in your repository.
 
 ### Adding plugins
 

@@ -75,9 +75,9 @@ class MessagesTests(unittest.TestCase):
                 self.assertNotIn('was stopped, because', path.read_text(), path)
 
     def test_the_gate_message_is_deterministic_in_both_languages(self):
-        self.assertEqual('The docs action was stopped, because this folder is not set up yet, or only partly (a managed file needs your decision).\n\nPlease run /plugin-manager:setup first.',
+        self.assertEqual('The docs action was stopped, because this folder is not set up yet, or only partly (a shared file needs your decision).\n\nPlease run /plugin-manager:setup first.',
                          self.messages.gate_message('docs', 'sync', 'en'))
-        self.assertEqual('Die Aktion modify wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (eine verwaltete Datei braucht deine Entscheidung).\n\nFühre zuerst /plugin-manager:setup aus.',
+        self.assertEqual('Die Aktion modify wurde abgebrochen, weil dieser Ordner noch nicht oder nur teilweise eingerichtet ist (eine gemeinsame Datei braucht deine Entscheidung).\n\nFühre zuerst /plugin-manager:setup aus.',
                          self.messages.gate_message('modify', 'sync', 'de'))
 
 

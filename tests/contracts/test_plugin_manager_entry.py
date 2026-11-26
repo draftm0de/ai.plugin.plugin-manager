@@ -77,8 +77,8 @@ class EntryTextTests(unittest.TestCase):
     def test_marketplace_selection_tool_errors_and_generator_timing(self):
         text = self.flow('configure')
         for needle in ('suggestion is never a selection',
-                       'Even with a single candidate', 'explicit confirmation of the concrete path', '"Use this checkout"',
-                       '"Choose another checkout"', 'never add a filler option',
+                       'Even with a single candidate', 'explicit confirmation of the concrete path', 'question `marketplace`',
+                       'Another marketplace folder', 'never add a filler option',
                        'because of a suggestion, a preselection or a tool error', 'ask for the path with one targeted question',
                        'already confirmed explicitly in this conversation is not asked again',
                        'schema error or rejection of a question call means that no question in it was answered',
@@ -114,7 +114,7 @@ class EntryTextTests(unittest.TestCase):
     def test_sync_flow_is_dialogue_guided_explicit_and_stops_on_stale_decisions(self):
         text = self.flow('sync')
         for needle in ('Python never asks', 'one file at a time', 'in the operator language', 'Show only the file path', 'Do not show file contents',
-                       'Keep local file', 'Adopt template', 'A preselection, silence, a cancelled or rejected question is not a decision',
+                       'Keep my file', 'Adopt template', 'A preselection, silence, a cancelled or rejected question is not a decision',
                        'nothing is written or stored', 'sync --target', '--decision keep|adopt', '--source-hash', '--local-hash',
                        'records both current hashes', 'replaces only this file', 'Only the explicitly chosen file is touched',
                        '`stale_decision`', 'not applied', 'run `status` again', 'never mean `matches_template`',
@@ -162,7 +162,7 @@ class EntryTextTests(unittest.TestCase):
                        '`.git`, `.idea` or `.project`', 'foreign files are never deleted', '`removals`', '`unowned`'):
             self.assertIn(needle, self.text)
         sync = self.flow('sync')
-        for needle in ('removal question', 'Delete local file', '--source-hash removed', '`source_hash: null`',
+        for needle in ('removal question', 'Delete file', '--source-hash removed', '`source_hash: null`',
                        'does not ask again while a later local change does', 'no file content, excerpt, diff or summary is ever shown',
                        'its source was removed in the parent template'):
             self.assertIn(needle, sync)
@@ -255,7 +255,7 @@ class EntryTextTests(unittest.TestCase):
         text = self.flow('associate')
         for needle in ('A plugin belongs to exactly one marketplace', 'config.json', 'local.json', 'status', '`association`',
                        'path_missing', 'path_invalid', 'mismatch', 'unsupported', 'a suggestion is never a selection',
-                       'Use this checkout', 'Choose another checkout', 'Guided dialogue (both kinds)',
+                       'question `marketplace`', 'Another marketplace folder', 'Guided dialogue (both kinds)',
                        'workflows.py" associate --root', '--plugin plugin-manager', '--marketplace', '--drop-missing-old',
                        'old_catalog_entry_remains', '`action: "associate"`', 'success means exit 0', 'no `ok`',
                        'unversioned', 'publish', 'one transaction with rollback', 'never read or migrate the former plugin-side'):

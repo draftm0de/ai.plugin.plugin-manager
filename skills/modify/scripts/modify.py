@@ -32,7 +32,23 @@ def check_values(name, display_name, description):
         raise flow.failure('empty_description')
 
 
-def modify(root, *, name=None, display_name=None, description=None, plugin=flow.OWNER, dry_run=False):
+def modify(root, *, name=None, display_name=None, description=None, plugin=flow.OWNER, dry_run=False, message_language=None):
+    """Change name, display name and/or description. A dry run answers with the question that names every file
+    (write_request, as the generators do); the writing run lists what it wrote (result_message)."""
+    values = dict(name=name, display_name=display_name, description=description, plugin=plugin)
+    planned = change(root, dry_run=True, **values)
+    messages = flow.state_helper().messages
+    language = messages.language_for(root, message_language)
+    paths = planned['would_change']
+    if dry_run:
+        entries = [(os.path.relpath(path, flow.safe_path(root)), 'change' if Path(path).exists() else 'create') for path in paths]
+        return dict(planned, write_request=messages.write_request(entries, language), write_declined=messages.write_declined(language))
+    existing = {path for path in paths if Path(path).exists()}
+    done = change(root, dry_run=False, **values)
+    return dict(done, result_message=flow.written(flow.safe_path(root), done['changed'], existing, language))
+
+
+def change(root, *, name=None, display_name=None, description=None, plugin=flow.OWNER, dry_run=False):
     """Change name, display name and/or description of the plugin or marketplace at `root`.
     dry_run writes nothing and lists the files that would change (`would_change`), to show the consequences first."""
     check_values(name, display_name, description)
@@ -190,7 +206,7 @@ def main(argv=None):
         parser.error('give at least one of --name, --display-name, --description')
     try:
         print(json.dumps(modify(args.root, name=args.name, display_name=args.display_name, description=args.description,
-                                plugin=args.plugin, dry_run=args.dry_run), ensure_ascii=False, indent=2))
+                                plugin=args.plugin, dry_run=args.dry_run, message_language=args.message_language), ensure_ascii=False, indent=2))
         return 0
     except (ValueError, OSError, KeyError, TypeError, subprocess.CalledProcessError) as exc:
         return flow.report_failure(exc, 'modify', args.root, args.message_language, None)

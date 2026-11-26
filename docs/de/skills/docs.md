@@ -46,7 +46,11 @@ Vorgeschrieben sind nur die Überschriften. Alles darunter ist frei.
 ├── ## Beschreibung        Pflicht
 │   └── ### …              frei
 ├── ## Ablauf              Pflicht
-├── ## Beispiel            Pflicht
+├── 
+
+Gefragt wirst du nur, wenn die Einrichtung fehlt („Soll ich /plugin-manager:setup jetzt ausführen?“) oder beim ersten Mal nach den Doku-Sprachen („Welche Doku-Sprachen?“).
+
+## Beispiel            Pflicht
 └── ## Liest und schreibt  Pflicht
 ```
 

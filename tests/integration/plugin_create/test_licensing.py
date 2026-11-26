@@ -27,8 +27,9 @@ class LicensingTests(WorkflowFixture, TestCase):
             self.assertEqual('MIT', json.loads((self.plugin/name).read_text())['license'])
         for name in ('README.md', 'README.en.md'):
             text = (self.plugin/name).read_text()
-            self.assertIn('MIT', text)
-            self.assertIn('license.md)', text)
+            self.assertNotIn('license.md', text)  # no license line on the start page
+            self.assertNotIn('Lizenz:', text)
+            self.assertNotIn('License:', text)
             self.assertNotIn('separat zu klären', text)
             self.assertNotIn('Licensing must be resolved separately', text)
         self.assertIn('../LICENSE', (self.plugin/'docs/license.md').read_text())
@@ -40,8 +41,8 @@ class LicensingTests(WorkflowFixture, TestCase):
         result = self.create_license(license='deferred')
         self.assertFalse((self.plugin/'LICENSE').exists())
         self.assertNotIn('license', json.loads((self.plugin/'plugin.json').read_text()))
-        self.assertIn('ausdrücklich vertagt', (self.plugin/'README.md').read_text())
-        self.assertIn('explicitly deferred', (self.plugin/'README.en.md').read_text())
+        self.assertNotIn('vertagt', (self.plugin/'README.md').read_text())  # no license line on the start page
+        self.assertNotIn('deferred', (self.plugin/'README.en.md').read_text())
         self.assertIn('explicitly deferred', (self.plugin/'docs/license.md').read_text())
         self.assertEqual('deferred', result['checks']['licensing']['status'])
 
@@ -88,7 +89,7 @@ class LicensingTests(WorkflowFixture, TestCase):
             description='Fictional source',author='Fixture',languages=['en'],license='MIT',
             copyright_year='2026',copyright_holder='Fictional Holder')
         self.assertTrue((self.plugin/'LICENSE').is_file())
-        self.assertIn('MIT',(self.plugin/'README.md').read_text())
+        self.assertNotIn('MIT',(self.plugin/'README.md').read_text());self.assertIn('MIT',(self.plugin/'docs/license.md').read_text())
         self.assertTrue(result['checks']['licensing']['valid'])
         self.assertTrue(result['checks']['documentation']['valid'])
 
@@ -113,11 +114,10 @@ class LicensingTests(WorkflowFixture, TestCase):
             self.assertFalse(report['licensing']['valid'])
             path.write_bytes(original)
 
-    def test_existing_readme_is_preserved_and_license_documentation_gap_reported(self):
+    def test_an_existing_readme_is_preserved_and_needs_no_license_line(self):
         original = '# User prose\n'
         (self.plugin/'README.md').write_text(original)
         result = self.create_license(license='MIT', copyright_year='2026', copyright_holder='Fictional Holder')
         self.assertEqual(original, (self.plugin/'README.md').read_text())
-        self.assertEqual('needs_attention', result['checks']['status'])
-        self.assertFalse(result['checks']['licensing']['valid'])
+        self.assertTrue(result['checks']['licensing']['valid'])
         self.assertTrue((self.plugin/'LICENSE').is_file())

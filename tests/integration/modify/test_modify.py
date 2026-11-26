@@ -71,6 +71,16 @@ class PluginModifyTests(ModifyBase):
         self.assertEqual('renamed-plugin', result['to']['name'])
         self.assertTrue(any('/plugin-manager:docs' in note for note in result['follow_up']))
 
+    def test_the_dry_run_asks_with_every_file_and_the_run_lists_what_it_wrote(self):  # R55
+        asked = self.modify.modify(self.plugin, display_name='Renamed Fixture', dry_run=True, message_language='de')
+        done = self.modify.modify(self.plugin, display_name='Renamed Fixture', message_language='de')
+        self.assertTrue(asked['write_request'].endswith('Darf ich schreiben?'))
+        self.assertTrue(done['changed'])
+        for path in done['changed']:
+            relative = os.path.relpath(path, self.plugin)
+            self.assertIn('* %s (ändern)' % relative, asked['write_request'])
+            self.assertIn('- ' + relative, done['result_message'])
+
     def test_a_dry_run_lists_the_consequences_and_writes_nothing(self):
         before = snapshot(self.plugin, self.market)
         result = self.modify.modify(self.plugin, name='renamed-plugin', dry_run=True)

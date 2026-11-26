@@ -15,6 +15,18 @@
 3. Meldet eine noch offene Einrichtung, ohne sie auszuführen.
 4. Auf Wunsch vergleicht es `SCOPE.md` mit dem Quellcode.
 
+### Was im Bericht steht
+
+| Begriff | Was heißt das? |
+| --- | --- |
+| Struktur gültig | Manifeste, Kataloge, Skills und Ordner passen zu den Regeln. Es sagt nichts darüber, ob dein Skill das Richtige tut. |
+| Lokale Zuordnung unvollständig | Auf diesem Rechner fehlt der Pfad zum Marketplace oder zu den Plugins. Nach einem frischen Klon ist das normal; zum lokalen Installieren braucht es ihn. |
+| Standards | `AGENTS.md`, die gemeinsamen Standards und beim Marketplace `SCOPE.md` sind unverändert. |
+| Warnungen zur Doku | Fehlende Seiten, Überschriften oder Links. Sie lassen nichts scheitern. |
+| Einrichtung offen | Eine gemeinsame Datei fehlt oder ist veraltet: `/plugin-manager:setup` ausführen. |
+| Bereit für das Source-Review | Alle in `SCOPE.md` genannten Belege sind lesbar. Ob die Anforderungen erfüllt sind, ist damit nicht gesagt. |
+| Nicht geprüft | Ob Claude oder Codex das Plugin laden und wie sich der Skill dort verhält. |
+
 ## Beispiel
 
 `/plugin-manager:verify` vor dem Pushen.

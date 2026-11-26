@@ -24,6 +24,48 @@ Every plugin belongs to exactly one marketplace. To change it, or when its folde
 
 Plugins also get a Git hook that checks the standards before every commit. It runs only after you activate it once per clone: `git config core.hooksPath githooks`.
 
+### Questions from the workflow
+
+`setup` asks only what it cannot know itself, always in the same words. What the questions mean:
+
+#### Applies to both
+
+| Question | What is it? | Mind |
+| --- | --- | --- |
+| Which operator language should I use? | The language the Plugin Manager talks to you in | Only for you, never committed. The documentation languages are independent of it. |
+| Message: Git repository or GitHub address (`origin`) is missing | Your folder needs both | Run the commands shown and call `setup` again. The repository need not exist on GitHub yet. |
+| Plugin or marketplace? | A plugin is the package of skills, a marketplace the directory people install from | Create the marketplace first, then the plugins. |
+
+#### Marketplace
+
+| Question | What is it? | Mind |
+| --- | --- | --- |
+| What is the technical name? | The identifier, for example in `plugin@marketplace` | Lowercase letters, digits and hyphens. Changeable with `modify`; whoever uses the marketplace adds it again afterwards. |
+| What is the display name? | The readable name | Free to choose, changeable with `modify`. |
+| Who is the publisher? | The person or organisation that publishes the marketplace | Part of the catalog and therefore visible. |
+
+#### Plugin
+
+| Question | What is it? | Mind |
+| --- | --- | --- |
+| What is the technical name? | The identifier, for example in `/name:skill` | Lowercase letters, digits and hyphens. The first skill skeleton has the same name; when building, give the skill its own. |
+| What is the display name? | The readable name | Free to choose, changeable with `modify`. |
+| What does the plugin do, in one or two sentences? | The description, also shown in the marketplace | "Still open" is allowed, changeable with `modify`. |
+| Who is the publisher? | Who publishes the plugin | Visible. |
+| Which documentation languages? | German, English or both, with a default | Each language means texts of its own to maintain. |
+| Which licence? | What others may do with your code | MIT allows almost everything. Another licence needs its complete text. "Decide later" means that no rights are granted yet. |
+| Which year goes into the copyright notice? (MIT only) | The year of the notice | |
+| Who holds the rights? (MIT only) | Whom the rights belong to | This may differ from the publisher, for example your company. |
+| Which marketplace does the plugin belong to? | The marketplace folder the plugin is listed in | It is cloned on your machine and set up with `setup`. Every plugin belongs to exactly one. |
+
+#### When writing, and later
+
+| Question | What is it? | Mind |
+| --- | --- | --- |
+| May I write? | Above it stands the list of all files that are created, changed or deleted. `../` means another repository, for example your marketplace. | On "No" none of it is written. |
+| `<file>` differs from the template. | A shared file and its template are different | "Keep my file" leaves your version without updates until you change it again or a new template arrives. |
+| The template of `<file>` is gone. | The Plugin Manager no longer ships this file | You are asked only if you had changed it. |
+
 ## Example
 
 `/plugin-manager:setup` in an empty, cloned repository.

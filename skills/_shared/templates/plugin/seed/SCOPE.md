@@ -16,6 +16,8 @@ Pending confirmation / Noch zu bestätigen.
 
 ## Requirements / Anforderungen
 
+<!-- How to write requirements; this comment does not show on the page.
+
 Add confirmed requirements as level-two headings `## R1: Short title` (R2, R3, ...).
 Each requirement uses these fields; keep unconfirmed requirements marked draft:
 
@@ -31,6 +33,7 @@ Do not put private data in this document. A review never promotes draft to confi
 Bestätigte Anforderungen mit stabilen R-IDs und beobachtbaren Abnahmekriterien
 festhalten. Source/Test sind Belegverweise, kein Nachweis bestandener Tests oder
 fachlicher Erfüllung. Unbekanntes bleibt draft; keine privaten Daten eintragen.
+-->
 
 ## Current formats only / Nur aktuelle Formate
 

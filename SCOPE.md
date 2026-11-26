@@ -51,7 +51,7 @@ Test: tests/behavior/plugin_create_acceptance.md
 ## R6: Implement confirmed licensing and persist the decision
 
 Status: confirmed
-Acceptance: `create --kind plugin` requires an explicit license identifier or explicit deferral before writes. A selected MIT license creates the standard license with confirmed copyright year and holder; another selected license uses an explicitly confirmed complete file without alteration. Missing inputs, unsupported templates and conflicting existing license files fail before plugin/marketplace writes. Existing matching license bytes are preserved. Selected licensing appears in plugin and derived host manifests, and new documentation in every selected language links to the persisted decision and license file. Explicit deferral is persisted without claiming a license. Final checks distinguish implemented, deferred and inconsistent licensing; existing prose is preserved and missing licensing documentation is reported.
+Acceptance: `create --kind plugin` requires an explicit license identifier or explicit deferral before writes. A selected MIT license creates the standard license with confirmed copyright year and holder; another selected license uses an explicitly confirmed complete file without alteration. Missing inputs, unsupported templates and conflicting existing license files fail before plugin/marketplace writes. Existing matching license bytes are preserved. Selected licensing appears in plugin and derived host manifests, and the decision is persisted with its license file in `docs/license.md`; no README gets a license line. Explicit deferral is persisted without claiming a license. Final checks distinguish implemented, deferred and inconsistent licensing; existing prose is preserved and missing licensing documentation is reported.
 Source: skills/_shared/scripts/licensing.py
 Source: skills/_shared/scripts/workflows.py
 Source: skills/setup/flows/configure.md
@@ -566,3 +566,17 @@ Source: skills/_shared/scripts/verify/docs.py
 Source: skills/_shared/scripts/workflows.py
 Test: tests/integration/update/test_marketplace_docs.py
 Test: tests/integration/marketplace_create/test_workflows.py
+
+
+## R55: Fixed questions and terms
+
+Status: confirmed
+Acceptance: The questions the skills ask stand once, in German and English, in one catalogue (`state/questions.py`); `setup_state.py questions` returns them write-free in the saved operator language, and the flows show question and choices unchanged, replacing only the placeholders. The first language question is bilingual. `modify` asks before writing with the same file list as the generators and lists what it wrote. The skill pages show the same wording, which a test compares. For people the terms are: publisher (Herausgeber), technical name, display name, marketplace folder, shared file, template, operator language, documentation languages.
+Source: skills/setup/scripts/state/questions.py
+Source: skills/setup/scripts/state/cli.py
+Source: skills/modify/scripts/modify.py
+Source: skills/modify/SKILL.md
+Source: skills/setup/flows/configure.md
+Test: tests/contracts/test_questions.py
+Test: tests/integration/modify/test_modify.py
+\n

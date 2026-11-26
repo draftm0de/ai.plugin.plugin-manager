@@ -19,7 +19,7 @@ Hast du den Ordner eines Repositorys nicht geklont, führe darin `git init` und 
 
 ### Marketplace
 
-Ein Marketplace ist ein eigenes Repository. Lege es auf GitHub an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Eigentümer. Danach liegen der Katalog `marketplace.json` und die gemeinsamen Dateien in deinem Repository.
+Ein Marketplace ist ein eigenes Repository. Lege es auf GitHub an, klone es und öffne den Ordner. Rufe dort `/plugin-manager:setup` auf und wähle „Marketplace“. Er fragt dich unter anderem nach Name und Herausgeber. Danach liegen der Katalog `marketplace.json` und die gemeinsamen Dateien in deinem Repository.
 
 ### Plugins aufnehmen
 

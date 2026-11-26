@@ -183,7 +183,7 @@ class PluginCreateWorkflowTests(WorkflowFixture, unittest.TestCase):
 
     def test_generated_repositories_use_layered_test_commands(self):
         self.create()
-        for repository, count in ((self.plugin, 6), (self.market, 17)):  # managed tests: 4 operator-language (plugin), 16 marketplace scripts (R40); the rest is structure
+        for repository, count in ((self.plugin, 7), (self.market, 17)):  # managed tests: 5 operator-language (plugin), 16 marketplace scripts (R40); the rest is structure
             result = subprocess.run(['make', 'test', 'TEST_GROUP='], cwd=repository, capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertIn('Ran ' + str(count) + ' test', result.stderr)

@@ -15,6 +15,18 @@
 3. Reports a setup that is still open, without running it.
 4. On request compares `SCOPE.md` with the source code.
 
+### What the report says
+
+| Term | What does it mean? |
+| --- | --- |
+| Structure valid | Manifests, catalogs, skills and folders follow the rules. It says nothing about whether your skill does the right thing. |
+| Local mapping incomplete | This machine lacks the path to the marketplace or the plugins. Normal after a fresh clone; needed for a local installation. |
+| Standards | `AGENTS.md`, the shared standards and, in a marketplace, `SCOPE.md` are unchanged. |
+| Documentation warnings | Missing pages, headings or links. They fail nothing. |
+| Setup open | A shared file is missing or outdated: run `/plugin-manager:setup`. |
+| Ready for source review | All evidence named in `SCOPE.md` can be read. It does not say that the requirements are met. |
+| Not checked | Whether Claude or Codex load the plugin and how the skill behaves there. |
+
 ## Example
 
 `/plugin-manager:verify` before publishing.

@@ -16,6 +16,15 @@ Mit `modify` änderst du, was dein Repository über sich sagt: den technischen N
 4. Schreibt erst nach deinem Ja.
 5. Nennt die nächsten Schritte: Dokumentation mit `docs` auffrischen, Änderungen selbst committen und pushen.
 
+### Fragen aus dem Ablauf
+
+| Frage | Was ist das? | Worauf achten |
+| --- | --- | --- |
+| Soll ich /plugin-manager:setup jetzt ausführen? | Die Einrichtung fehlt oder ist unvollständig | `modify` ändert erst, wenn sie abgeschlossen ist. Rufe es danach erneut auf. |
+| Was soll sich ändern? | Technischer Name, Anzeigename oder Beschreibung | Ein Marketplace hat keine Beschreibung. |
+| Wie lautet der neue Wert für `<Feld>`? | Der neue Name oder Text | Ein neuer technischer Name ändert die Aufrufe und die Installation. |
+| Darf ich schreiben? | Darüber steht die Liste der Dateien, die sich ändern, auch im Marketplace | Bei „Nein“ bleibt alles, wie es ist. |
+
 ## Beispiel
 
 „Gib dem Plugin den Anzeigenamen Bewerbungs-Coach.“

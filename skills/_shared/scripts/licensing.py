@@ -45,8 +45,7 @@ def plan(root, license_id, license_file, copyright_year, copyright_holder):
 
 
 def document(stage, decision):
-    """Write decision once and link it from all newly generated localized READMEs."""
-    from documentation import language_policy, page_layout
+    """Persist the decision once in docs/license.md; no start page gets a license line."""
     selected = decision['identifier']
     if selected:
         lines = [f'# License / Lizenz\n\n{selected}: [License text / Lizenztext](../{decision["file"]}).',
@@ -56,23 +55,9 @@ def document(stage, decision):
                  'The licensing decision was explicitly deferred; no license is granted by this scaffold. / '
                  'Die Lizenzentscheidung wurde ausdrücklich vertagt; dieses Gerüst erteilt keine Lizenz.']
     (stage/'docs/license.md').write_text('\n\n'.join(lines) + '\n')
-    for relative, (_, _, language) in page_layout(language_policy(stage)).items():
-        if not relative.startswith('README') and not relative.endswith('/README.md'):
-            continue
-        path = stage/relative
-        text = path.read_text()
-        link = 'docs/license.md' if relative.startswith('README') else '../license.md'
-        sentence = (f'Lizenz: {selected or "ausdrücklich vertagt"}. Siehe [Lizenzentscheidung]({link}).'
-                    if language == 'de' else
-                    f'License: {selected or "explicitly deferred"}. See [licensing decision]({link}).')
-        text = text.replace('Die Lizenz ist separat zu klären; erzeugte Dokumentation legt keine Lizenz fest. ', '')
-        text = text.replace('Licensing must be resolved separately; generated documentation does not establish a license. ', '')
-        text = text.replace('\n## ', '\n' + sentence + '\n\n## ', 1)
-        path.write_text(text)
 
 
 def check(root, decision):
-    from documentation import language_policy, page_layout
     import json
     errors = []
     for name in ('plugin.json', '.claude-plugin/plugin.json'):
@@ -93,11 +78,5 @@ def check(root, decision):
                     if decision['identifier'] else 'The licensing decision was explicitly deferred')
         if expected not in text:
             errors.append('Persistent licensing decision differs')
-    for relative in page_layout(language_policy(root)):
-        if relative.startswith('README') or relative.endswith('/README.md'):
-            text = (root/relative).read_text()
-            if ('license.md)' not in text or
-                    (decision['identifier'] and decision['identifier'] not in text)):
-                errors.append(relative + ': licensing decision link missing; preserve and update existing prose')
     return {'status': decision['status'], 'identifier': decision['identifier'],
             'file': decision['file'], 'valid': not errors, 'errors': errors}
