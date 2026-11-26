@@ -45,13 +45,13 @@ class DocumentationTests(unittest.TestCase):
                     doc.scaffold(source,repo,languages=['en'])
                 self.assertEqual(before,{str(p):p.read_bytes() for p in repo.rglob('*') if p.is_file()})
 
-    def test_the_removed_source_pointer_is_rejected_with_a_reason_and_nothing_is_converted(self):  # R29
+    def test_the_removed_source_pointer_is_rejected_with_a_reason_and_nothing_is_converted(self):
         repo = self.root/'repository';(repo/'docs').mkdir(parents=True)
         (repo/'skills/one').mkdir(parents=True);(repo/'skills/one/SKILL.md').write_text('---\nname: one\n---\n')
         manifest = repo/'docs/documentation.json'
         text = json.dumps({'schema_version':1,'source_skill':'skills/one','documentation':{'languages':['en'],'default_language':'en'}})
         manifest.write_text(text)
-        for call in (lambda: doc.scaffold(repo, self.output, languages=['en']), lambda: doc.inspect(repo)):
+        for call in (lambda: doc.scaffold(repo, self.output, languages=['en']),):
             with self.assertRaisesRegex(ValueError, 'Unsupported field source_skill'):
                 call()
         self.assertFalse(self.output.exists())
@@ -154,24 +154,6 @@ class DocumentationTests(unittest.TestCase):
         self.assertEqual(outline['README.en.md'][0], 'Quick start')
         self.assertEqual(['📖 Skills'], outline['docs/de/skills.md'])
         self.assertEqual(['📖 Skills'], outline['docs/en/skills.md'])
-
-    def test_every_skill_of_the_repository_and_the_scope_are_documentation_sources(self):  # R29
-        repo = self.root / 'repository'
-        for name in ('one', 'two'):
-            (repo / 'skills' / name / 'flows').mkdir(parents=True)
-            (repo / 'skills' / name / 'SKILL.md').write_text('---\nname: %s\n---\n' % name)
-            (repo / 'skills' / name / 'flows/x.md').write_text('flow')
-        (repo / 'SCOPE.md').write_text('# Scope')
-        info = doc.inspect(repo)
-        self.assertEqual(['skills/one/SKILL.md', 'skills/one/flows/x.md', 'skills/two/SKILL.md', 'skills/two/flows/x.md', 'SCOPE.md'], info['evidence_files'])
-        self.assertEqual(2, len(info['skills']))
-        doc.scaffold(repo, repo, languages=['de','en'])
-        data = json.loads((repo / 'docs/documentation.json').read_text())
-        self.assertNotIn('source_skill', data)  # no pointer to one skill is written
-        data['features'] = ['A duplicated unsupported claim']
-        (repo / 'docs/documentation.json').write_text(json.dumps(data))
-        with self.assertRaisesRegex(ValueError, 'not duplicated'):
-            doc.inspect(repo)
 
     def test_a_repository_without_a_skill_is_rejected(self):
         repo = self.root / 'empty'

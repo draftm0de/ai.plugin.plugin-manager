@@ -168,7 +168,7 @@ class FictionalSandbox(Sandbox):
         return self.manager / 'skills/_shared/templates/plugin/sync'
 
     def write_sync_file(self):
-        """The generated hash file, built with the rules of scripts/skeleton_hashes.py from the sync/ folder."""
+        """The generated hash file, built with the rules of scripts/build_hashes.py from the sync/ folder."""
         files = {}
         for path in sorted(p for p in self.sync_dir.rglob('*') if p.is_file()):
             files[str(path.relative_to(self.sync_dir))] = {'sha256': digest(path.read_bytes()), 'executable': bool(path.stat().st_mode & 0o111)}

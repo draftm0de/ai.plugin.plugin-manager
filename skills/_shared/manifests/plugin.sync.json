@@ -70,7 +70,7 @@
       "executable": false
     },
     "scripts/verify/scope.py": {
-      "sha256": "0dda7f4b66b7ca0c0d2ad476288889813b6bb8bc85e5429492472c3e0f3192aa",
+      "sha256": "7df7a7392b84a466f966ef7e6ff5076c507aa3ccc2e0b446a62de65e14aa4333",
       "executable": false
     },
     "scripts/verify/standards.py": {

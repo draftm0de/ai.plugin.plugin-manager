@@ -270,22 +270,8 @@ EVIDENCE_FOLDERS = ('references', 'flows', 'scripts')
 EVIDENCE_SUFFIXES = ('.md', '.py', '.sh', '.json', '.yaml', '.yml')
 
 
-# what a marketplace has instead of skills; the files that exist are its documentation sources
-MARKETPLACE_SOURCES = ('marketplace.json', 'SCOPE.md', 'Makefile', 'CUSTOM.mk')
-
-
-def inspect_marketplace(root):
-    paths = [root / name for name in MARKETPLACE_SOURCES] + sorted((root / '.github/workflows').glob('*.y*ml'))
-    evidence = [path.relative_to(root).as_posix() for path in paths
-                if path.is_file() and not any((root / part).is_symlink() for part in (path.relative_to(root), *path.relative_to(root).parents))]
-    data = strict_json((root / 'marketplace.json').read_text(encoding='utf-8'))
-    return {'skills': [], 'name': data.get('name') or root.name, 'evidence_files': evidence, 'source_executed': False}
-
-
 def inspect(source):
     root = Path(source).expanduser().resolve()
-    if kind_of(root) == 'marketplace':
-        return inspect_marketplace(root)
     skills = source_skills(root)
     standalone = skills == [root]
     base = root
@@ -468,8 +454,6 @@ def run(source, output, title=None, languages=None, default_language=None, messa
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    scan = sub.add_parser('inspect')
-    scan.add_argument('--source', type=Path, required=True)
     create = sub.add_parser('scaffold')
     create.add_argument('--source', type=Path, required=True)
     create.add_argument('--output', type=Path, required=True)
@@ -481,9 +465,7 @@ def main(argv=None):
     verify.add_argument('--output', type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        if args.command == 'inspect':
-            result = inspect(args.source)
-        elif args.command == 'scaffold':
+        if args.command == 'scaffold':
             result = run(args.source, args.output, args.title, args.languages, args.default_language, args.message_language)
         else:
             errors = validate(args.output)

@@ -63,7 +63,7 @@ class RepositoryPolicyTests(unittest.TestCase):
     def test_internal_builder_remains_available_for_current_plugin_create(self):
         self.assertTrue(callable(audit.scaffold_plugin))
 
-    def test_extracted_packages_inspect_current_sources_and_reject_obsolete_init(self):
+    def test_extracted_packages_document_current_sources_and_reject_obsolete_init(self):
         env={k:v for k,v in os.environ.items() if k not in ('PYTHONPATH','PYTHONHOME','PYTHONDONTWRITEBYTECODE')}
         source=self.root/'fictional-source';source.mkdir()
         (source/'SKILL.md').write_text('---\nname: fictional-example\ndescription: Fictional test.\n---\n# Example\n')
@@ -71,8 +71,9 @@ class RepositoryPolicyTests(unittest.TestCase):
             with self.subTest(host=host):
                 extracted=materialize(self.root/host, host)
                 scripts=extracted/'skills/_shared/scripts'
-                inspected=subprocess.run([sys.executable,str(scripts/'documentation.py'),'inspect','--source',str(source)],cwd=self.root,env=env,check=True,capture_output=True,text=True)
-                self.assertEqual('fictional-example',json.loads(inspected.stdout)['name'])
+                pages=self.root/(host+'-docs')
+                documented=subprocess.run([sys.executable,str(scripts/'documentation.py'),'scaffold','--source',str(source),'--output',str(pages),'--languages','en'],cwd=self.root,env=env,check=True,capture_output=True,text=True)
+                self.assertIn('README.md',json.loads(documented.stdout)['created'])
                 output=self.root/(host+'-initialized')
                 result=subprocess.run([sys.executable,str(scripts/'plugin_audit.py'),'init'],cwd=self.root,env=env,check=False,capture_output=True,text=True)
                 self.assertNotEqual(result.returncode, 0)

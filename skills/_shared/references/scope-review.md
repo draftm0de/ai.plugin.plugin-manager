@@ -14,6 +14,8 @@ If it is missing, draft, ambiguous or inconsistent, ask only the unresolved ques
 and report that acceptance cannot be assessed. Do not invent requirements or infer
 confirmation from existing code. Requirements use stable R-numbered IDs, confirmed
 status, observable acceptance criteria and explicit public Source/Test file pointers.
+Source pointers are Python, Markdown, shell, JavaScript or TypeScript files. Below `skills/<skill>/templates/` and
+`skills/<skill>/manifests/` also `.json`, `.yml` (including `.github/`), `Makefile` and `pre-commit`.
 
 Run the bundled trusted `scripts/verify/scope.py --source TARGET` (relative to
 skills/_shared). It reads only, preserves structural/local availability distinctions,

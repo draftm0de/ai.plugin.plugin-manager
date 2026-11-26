@@ -2,7 +2,7 @@
 
 Status: confirmed
 
-This scope records the approved compatibility boundary and creation interaction requirements, not a complete product acceptance. Every requirement states only the current target; history lives in Git. Requirement ids are stable and never reused; R19 was withdrawn.
+This scope records the approved compatibility boundary and creation interaction requirements, not a complete product acceptance. Every requirement states only the current target; history lives in Git. Requirement ids are stable and never reused; R19, R29 and R49 were withdrawn.
 
 ## R1: No backwards compatibility
 
@@ -309,17 +309,6 @@ Test: tests/integration/project_setup/test_manifest.py
 Test: tests/integration/project_setup/test_setup.py
 Test: tests/integration/project_setup/test_sync.py
 
-## R29: Documentation reads every skill of the plugin
-
-Status: confirmed
-Acceptance: The documentation of a plugin repository is written from all of its sources, not from one skill: every skill under `skills/` (`SKILL.md` and its `references`, `flows` and `scripts`) and `SCOPE.md`, plus the `extra_sources` named in `docs/documentation.json`. `docs/documentation.json` holds only the language policy, `extra_sources` and open questions; it names no skill. A manifest with the field `source_skill` is rejected with a concrete reason before any write and is never converted or edited by the Manager. A standalone skill folder outside a repository is still documented as that one skill, with the output repository named explicitly. The documentation reads sources only and never executes them; the helper lists the sources (`inspect`), the agent reads them and writes the content from evidence.
-Source: skills/_shared/scripts/documentation.py
-Source: skills/_shared/WORKFLOWS.md
-Source: skills/docs/references/workflow.md
-Source: skills/_shared/references/source-of-truth.md
-Test: tests/integration/update/test_documentation.py
-Test: tests/contracts/test_skill_entrypoints.py
-
 ## R30: Shared failure messages for plugins
 
 Status: confirmed
@@ -338,7 +327,7 @@ Test: tests/unit/operator_language/test_validation.py
 Status: confirmed
 Acceptance: Every plugin receives the runner `tests/behavior/run_cases.py` as a managed file, identical everywhere. It reads the cases of the plugin from `tests/fixtures/skills/cases.json` (owned by the plugin; without the file it reports `NOT RUN` and exits 0) and, only when started explicitly with `--cli claude|codex` (`make test-behavior CLI=...` of a new plugin), sends each case to the model without tools: the real skill texts, the output of the commands the skill starts with and the conversation so far. The answer (reply, commands, next step, offered options, whether files are written) is graded deterministically against the expectation of the case: language, required and forbidden text, order, forbidden and required commands, next step, options, writes, number of questions. `--list` lists the cases without a model. The runner never installs a tool, starts no host and states that one run on one model shows that the text steers a model, not how often. `verify` does not run it. Model cases are optional: the standards (`testing.md`) require none; whether a model carries out a task correctly is not a concern of the Manager.
 Source: skills/_shared/templates/plugin/sync/tests/behavior/run_cases.py
-Source: skills/_shared/templates/plugin/seed/Makefile
+Source: skills/_shared/templates/plugin/sync/Makefile
 Source: skills/_shared/templates/plugin/sync/docs/standards/testing.md
 Test: tests/unit/behavior/test_run_cases.py
 Test: tests/integration/project_setup/test_manifest.py
@@ -355,9 +344,9 @@ Test: tests/contracts/verify/test_standards.py
 ## R33: The standards are checked in CI and, if the person activates it, before a commit
 
 Status: confirmed
-Acceptance: The CI workflow of a new plugin runs `verify` (`python3 -B scripts/verify.py --source . --kind plugin`) in addition to its tests, so a missing, changed or violated standard fails the run. The copy of `verify` inside a plugin compares the standards and `AGENTS.md` with the source hashes recorded in the plugin's committed skeleton lock; without a readable lock it checks presence and the other rules only. Every plugin receives the managed, executable hook `githooks/pre-commit`, which runs the same check and stays silent when it passes. Nothing activates the hook: only the person does, once per clone, with `git config core.hooksPath githooks` (`make install-hooks` in a new plugin); the Manager changes no Git configuration. Existing plugins add the CI step and the make target by hand, because both files are seeded once.
-Source: skills/_shared/templates/plugin/seed/ci.yml
-Source: skills/_shared/templates/plugin/seed/Makefile
+Acceptance: The managed workflow `dm-verify.yml` runs the check scripts (R51) in addition to the tests, so a missing, changed or violated standard fails the run. The copy of the standards check inside a plugin compares the standards and `AGENTS.md` with the source hashes recorded in the plugin's committed skeleton lock; without a readable lock it checks presence and the other rules only. Every plugin receives the managed, executable hook `githooks/pre-commit`, which runs the same checks and stays silent when they pass. Nothing activates the hook: only the person does, once per clone, with `make install-hooks`.
+Source: skills/_shared/templates/plugin/sync/.github/workflows/dm-verify.yml
+Source: skills/_shared/templates/plugin/sync/Makefile
 Source: skills/_shared/templates/plugin/sync/githooks/pre-commit
 Source: skills/_shared/scripts/verify/structure.py
 Source: skills/_shared/scripts/plugin_audit.py
@@ -386,7 +375,7 @@ Test: tests/integration/update/test_documentation.py
 ## R35: The installation page comes from the repository's data
 
 Status: confirmed
-Acceptance: `installation.md` is produced from facts, not written freely; for a plugin `:docs` generates the whole page anew on every run (fixed text, the facts below, a footer saying so; headings of level 1 to 3 required one to one): the name and repository of a plugin (`plugin.json`), the name of its marketplace (configuration evidence) and the marketplace address. The address is read once from the `origin` of the marketplace checkout named in the local association and recorded as `marketplace_url` in `docs/documentation.json`; without a checkout or `origin` it is asked, never invented. A marketplace uses its own `origin`. Steps that a host supports only through its interface (Claude Desktop) are described as that path, not as commands. Host steps are taken from verified evidence; an unverified step is not written. Evidence of 25 November 2026: the Claude Code commands from the official documentation (discover-plugins, plugin-marketplaces), the Codex commands from the help of the installed Codex CLI 0.165.0, the desktop interface paths of both apps from the owner's reports and screenshots (18 November 2026), not documented by the hosts.
+Acceptance: `installation.md` is produced from facts, not written freely; for a plugin `:docs` generates the whole page anew on every run (fixed text, the facts below, a footer saying so; headings of level 1 to 3 required one to one): the name and repository of a plugin (`plugin.json`), the name of its marketplace (configuration evidence) and the marketplace address. The address is read once from the `origin` of the marketplace checkout named in the local association and recorded as `marketplace_url` in `docs/documentation.json`; without a checkout or `origin` the page states it as open and the report names it; it is never invented. A marketplace uses its own `origin`. Steps that a host supports only through its interface (Claude Desktop) are described as that path, not as commands. Host steps are taken from verified evidence; an unverified step is not written. Evidence of 25 November 2026: the Claude Code commands from the official documentation (discover-plugins, plugin-marketplaces), the Codex commands from the help of the installed Codex CLI 0.165.0, the desktop interface paths of both apps from the owner's reports and screenshots (18 November 2026), not documented by the hosts.
 Source: skills/_shared/scripts/documentation.py
 Test: tests/integration/update/test_documentation.py
 
@@ -410,7 +399,7 @@ Test: tests/contracts/verify/test_standards.py
 ## R38: Writing styles of a plugin
 
 Status: confirmed
-Acceptance: Two optional files say how a repository writes; both belong to the repository and the Manager never changes or overwrites them. `docs/style.md` says how the documentation is written: a new plugin or marketplace receives it as a seed; `setup` does not ask for it, no skill is stopped without it and no check requires it. `skills/_shared/references/style.md` says how the plugin talks with its user, is optional, is read by every skill after the language rules when present, and never overrides the standards, the operator language or the message layout. The Manager's own structure and design rules for documentation live in `references/documentation-layout.md`.
+Acceptance: Two optional files say how a repository writes; both belong to the repository and the Manager never changes or overwrites them. `docs/style.md` says how the documentation is written: a new plugin or marketplace receives it as a seed; `setup` does not ask for it, no skill is stopped without it and no check requires it. `skills/_shared/references/style.md` says how the plugin talks with its user, is optional, is read by every skill after the language rules when present, and never overrides the standards, the operator language or the message layout.
 Source: skills/setup/scripts/state/reporting.py
 Source: skills/_shared/templates/plugin/seed/docs/style.md
 Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
@@ -517,13 +506,6 @@ Acceptance: The development page of each kind (German and English) has a section
 Source: skills/_shared/templates/documentation/plugin/docs/de/development.md
 Source: skills/_shared/templates/documentation/marketplace/docs/de/development.md
 Test: tests/contracts/shared_files/test_development_page.py
-
-## R49: inspect names the sources of a marketplace
-
-Status: confirmed
-Acceptance: For a marketplace, which has no skills, `inspect` lists the existing files `marketplace.json`, `SCOPE.md`, `Makefile`, `CUSTOM.mk` and the workflows as documentation sources instead of stopping. Symlinks are never listed and nothing is executed.
-Source: skills/_shared/scripts/documentation.py
-Test: tests/integration/update/test_inspect_marketplace.py
 
 ## R50: setup asks before the skeleton flow writes and lists what it wrote
 

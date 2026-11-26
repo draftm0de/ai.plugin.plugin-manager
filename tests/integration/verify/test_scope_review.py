@@ -64,6 +64,24 @@ class ScopeReviewTests(unittest.TestCase):
                 self.assertIn('evidence_unavailable', {f['code'] for f in report['findings']})
                 self.assertNotIn('never-return-this', str(report))
 
+    def test_templates_and_hash_files_of_a_skill_are_source_but_nothing_else_of_these_types(self):
+        delivered = ('skills/example/manifests/plugin.sync.json', 'skills/example/templates/sync/Makefile',
+                     'skills/example/templates/sync/githooks/pre-commit',
+                     'skills/example/templates/sync/.github/workflows/verify.yml')
+        private = ('skills/example/scripts/settings.json', 'skills/example/scripts/Makefile', 'scripts/settings.json',
+                   'skills/example/templates/.env', 'skills/example/templates/.private/values.json',
+                   'skills/example/templates/.github/values.json', 'skills/example/templates/server.pem')
+        for pointer in delivered + private:
+            (self.root/pointer).parent.mkdir(parents=True, exist_ok=True)
+            (self.root/pointer).write_text('fictional\n')
+        for pointer in delivered + private:
+            with self.subTest(pointer=pointer):
+                (self.root/'SCOPE.md').write_text(self.scope.replace('skills/example/scripts/runtime.py', pointer))
+                codes = {f['code'] for f in verify.scope_review(self.root)['findings']}
+                self.assertEqual(pointer in private, 'evidence_unavailable' in codes)
+        (self.root/'SCOPE.md').write_text(self.scope.replace('tests/integration/test_example.py', delivered[0]))
+        self.assertIn('evidence_unavailable', {f['code'] for f in verify.scope_review(self.root)['findings']})
+
     def test_skeleton_and_runtime_importing_development_tools_are_reported(self):
         self.source.write_text('# <!-- plugin-skeleton: unimplemented -->\nfrom scripts.development import helper\n')
         (self.root/'scripts/development.py').write_text("raise RuntimeError('never import me')\n")

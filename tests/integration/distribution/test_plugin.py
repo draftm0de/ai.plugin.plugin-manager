@@ -46,7 +46,7 @@ class PluginTests(unittest.TestCase):
             shutil.copy2(ROOT / 'plugin.json', root / 'plugin.json')
             with patch.object(packaging, 'ROOT', root):
                 before = packaging.payload()[0]
-                with (root / 'skills/_shared/references/documentation-layout.md').open('a') as handle:
+                with (root / 'skills/_shared/references/repository-layout.md').open('a') as handle:
                     handle.write('\nA revised documentation rule.\n')
                 after = packaging.payload()[0]
                 self.assertNotEqual(before, after)

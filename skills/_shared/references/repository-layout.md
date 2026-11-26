@@ -4,7 +4,7 @@ Paths are relative to `skills/_shared/` unless explicitly rooted elsewhere.
 
 ## Shared installation source
 
-Follow the temporary-file, ignore and Python rules in `references/source-of-truth.md`.
+Temporary work goes into `.tmp/`, derived distributions into `dist/`; both are ignored. Use the Python standard library and never write runtime state into an installed plugin.
 
 ### Templates
 
