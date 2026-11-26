@@ -1,12 +1,16 @@
 """R37, R47: the scripts a repository runs in CI check the documentation structure and the sync hash files."""
+import contextlib
 import hashlib
+import io
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 R = next(p for p in Path(__file__).resolve().parents if (p / 'Makefile').is_file())
 sys.path.insert(0, str(R / 'skills/_shared/scripts'))
@@ -30,7 +34,11 @@ class DocumentationCheck(unittest.TestCase):
         result = docs.check(self.root)
         self.assertTrue(result['valid'])  # findings are warnings, never a failure
         self.assertIn('docs/en/development.md: missing page', result['warnings'])
-        self.assertEqual(0, docs.main(['--source', str(self.root)]))
+        for actions, annotated in (('true', True), ('', False)):  # captured: a test must not annotate the real CI run
+            output = io.StringIO()
+            with patch.dict(os.environ, {'GITHUB_ACTIONS': actions}), contextlib.redirect_stdout(output):
+                self.assertEqual(0, docs.main(['--source', str(self.root)]))
+            self.assertEqual(annotated, '::warning::docs/en/development.md: missing page' in output.getvalue())
         self.assertIn('"Example" is still to be written: one fictional example',
                       ' '.join(docs.open_sections('docs/en/skills/x.md', '## Example\n\n{{SKILL_1_3}}\n', 'en')))
 
