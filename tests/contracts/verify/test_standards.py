@@ -57,6 +57,16 @@ class StandardsTests(unittest.TestCase):
         self.assertEqual('fail', self.status()['standards:AGENTS.md'])
         self.assertTrue((self.plugin / 'CUSTOM.AGENTS.md').is_file())
 
+    def test_the_skill_standard_says_when_a_skill_writes_on_the_order_and_when_it_asks_first(self):  # R56
+        text = ' '.join((SOURCE / 'skills.md').read_text().split())
+        self.assertIn("A concrete order is the person's approval for exactly the change it names", text)
+        self.assertIn('writes it without asking again', text)
+        self.assertIn('asks first and waits for an explicit yes', text)
+        for case in ('a script changes files the order does not make evident', "the person's own content would be lost",
+                     'the effect leaves the working copy (commit, push, publishing, installation, costs)'):
+            self.assertIn(case, text)
+        self.assertNotIn('shows the consequences first and writes only after an explicit yes', text)
+
     def test_a_standard_copied_into_the_scope_is_a_finding(self):
         line = next(l.strip() for l in (SOURCE / 'coding.md').read_text().splitlines() if len(l.strip()) >= 60)
         scope = self.plugin / 'SCOPE.md'
