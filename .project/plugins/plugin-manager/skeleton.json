@@ -46,8 +46,8 @@
       "local_hash": "e569063b1ab53a2e2587e48a31d028d2d0b69b879cefbe1cea6dc12726d36863"
     },
     "docs/standards/skills.md": {
-      "source_hash": "5f1de56e7675e184a8f1573eb7cac69a5bd9ad97de08a2f42eb5426dba33702e",
-      "local_hash": "5f1de56e7675e184a8f1573eb7cac69a5bd9ad97de08a2f42eb5426dba33702e"
+      "source_hash": "77c10b9e615f6f0939dc89b2e6aeddb7bbcbab197c93dc8298e4fecbc03ad93b",
+      "local_hash": "77c10b9e615f6f0939dc89b2e6aeddb7bbcbab197c93dc8298e4fecbc03ad93b"
     },
     "docs/standards/testing.md": {
       "source_hash": "dbdb139eddacb89f2f9c209379f65200a3e99aaae3b4aa3a3796c9f768ee1f97",
@@ -74,8 +74,8 @@
       "local_hash": "e58a1f82664c114093a5723a6d7face9a7140e4b3344784c551bb7e0873b1873"
     },
     "scripts/verify/conventions.py": {
-      "source_hash": "42c62ecc241964b54a83afda35698f03471b2ff1874b68ed64ed3801b81478a4",
-      "local_hash": "42c62ecc241964b54a83afda35698f03471b2ff1874b68ed64ed3801b81478a4"
+      "source_hash": "bf10f2bb103451ecc0212c5a792c2af7da217e8b7b595481d68503ebba33b27a",
+      "local_hash": "bf10f2bb103451ecc0212c5a792c2af7da217e8b7b595481d68503ebba33b27a"
     },
     "scripts/verify/docs.py": {
       "source_hash": "82aaa3c5b21ee2adadf601fc3700847e683837d37eaf40c0977fa9f7c70409d8",

@@ -4,8 +4,8 @@ Managed by the plugin manager and identical in every plugin. Do not edit it here
 
 ## Cut
 
-- One skill per action. The call, not the model, selects the action. A plugin with exactly one skill can be called
-  bare (`/plugin`); with several skills every call carries the skill name (`/plugin:skill`).
+- One skill per action. The call, not the model, selects the action. Every call names plugin and skill
+  (`/plugin:skill`), also when the plugin has exactly one skill.
 - With several skills, Claude Code gets one `commands/<skill>.md` per skill; Codex has no command files.
 - A skill description names the task and its boundary in one short text. It does not cover several actions.
 

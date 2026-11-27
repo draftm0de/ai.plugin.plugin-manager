@@ -595,3 +595,11 @@ Acceptance: In the testing standard of every plugin the layer `tests/native/` is
 Source: skills/_shared/templates/plugin/sync/docs/standards/testing.md
 Source: skills/_shared/templates/plugin/sync/scripts/run_tests.py
 Test: tests/contracts/verify/test_standards.py
+
+## R58: Every call names plugin and skill
+
+Status: confirmed
+Acceptance: Wherever the skill standard or a generated documentation page names the call of a skill, it gives plugin and skill together, `/<plugin>:<skill>` for Claude and `$<plugin>:<skill>` for Codex, also for a plugin with a single skill. The plugin name alone is never presented as a call.
+Source: skills/_shared/scripts/documentation.py
+Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
+Test: tests/contracts/verify/test_standards.py

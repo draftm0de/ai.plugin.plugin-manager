@@ -30,7 +30,7 @@
       "executable": false
     },
     "docs/standards/skills.md": {
-      "sha256": "5f1de56e7675e184a8f1573eb7cac69a5bd9ad97de08a2f42eb5426dba33702e",
+      "sha256": "77c10b9e615f6f0939dc89b2e6aeddb7bbcbab197c93dc8298e4fecbc03ad93b",
       "executable": false
     },
     "docs/standards/testing.md": {
@@ -58,7 +58,7 @@
       "executable": false
     },
     "scripts/verify/conventions.py": {
-      "sha256": "42c62ecc241964b54a83afda35698f03471b2ff1874b68ed64ed3801b81478a4",
+      "sha256": "bf10f2bb103451ecc0212c5a792c2af7da217e8b7b595481d68503ebba33b27a",
       "executable": false
     },
     "scripts/verify/docs.py": {

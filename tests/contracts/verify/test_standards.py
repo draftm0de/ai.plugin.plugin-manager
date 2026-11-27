@@ -73,6 +73,16 @@ class StandardsTests(unittest.TestCase):
         self.assertIn('| `tests/native/` | real external tools, such as host CLIs or npm, with isolated profiles |', text)
         self.assertIn('`make test` runs unit, integration and contracts only, never native or model tests', text)
 
+    def test_every_call_names_plugin_and_skill_also_with_a_single_skill(self):  # R58
+        import documentation
+        text = ' '.join((SOURCE / 'skills.md').read_text().split())
+        self.assertIn('Every call names plugin and skill (`/plugin:skill`), also when the plugin has exactly one skill.', text)
+        for language in ('de', 'en'):
+            entry = documentation.skill_entries(self.plugin, language, 'fictional-plugin', ['only-skill'])
+            self.assertIn('`/fictional-plugin:only-skill` · Codex: `$fictional-plugin:only-skill`', entry)
+            self.assertIn('[/fictional-plugin:only-skill – ', entry)
+            self.assertNotIn('`/fictional-plugin`', entry)
+
     def test_a_standard_copied_into_the_scope_is_a_finding(self):
         line = next(l.strip() for l in (SOURCE / 'coding.md').read_text().splitlines() if len(l.strip()) >= 60)
         scope = self.plugin / 'SCOPE.md'

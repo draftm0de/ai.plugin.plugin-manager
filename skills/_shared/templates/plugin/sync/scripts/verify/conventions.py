@@ -24,7 +24,7 @@ def conventions(root):
     every skill, the failure layout in one place, the failure codes in a catalogue and the test folders by type."""
     problems = []
     skills = sorted(path.parent.name for path in (root / 'skills').glob('*/SKILL.md'))
-    for name in skills if len(skills) > 1 else ():  # a plugin with exactly one skill is called bare and needs no command file
+    for name in skills if len(skills) > 1 else ():  # a plugin with exactly one skill needs no command file
         if not (root / 'commands' / (name + '.md')).is_file():
             problems.append('skill ' + name + ' has no commands/' + name + '.md')
     sources = [path for path in sorted((root / 'skills').rglob('*.py')) if '__pycache__' not in path.parts and not path.is_symlink()]

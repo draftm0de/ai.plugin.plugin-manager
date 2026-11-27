@@ -161,12 +161,12 @@ def description_of(page, language):
 
 
 def skill_entries(root, language, plugin, skills):
-    """One entry per skill: heading, call, its description and the link to its page. A plugin with one skill is called bare."""
+    """One entry per skill: heading, call, its description and the link to its page. Every call names plugin and skill (R58)."""
     entries = []
     for number, name in enumerate(skills, 1):
         page = safe_target(root, f'docs/{language}/skills/{name}.md')
         text = description_of(page.read_text(encoding='utf-8'), language) if page.is_file() else ''
-        call = f'/{plugin}' if len(skills) == 1 else f'/{plugin}:{name}'
+        call = f'/{plugin}:{name}'
         more = {'de': 'Mehr dazu', 'en': 'More'}[language]
         entries.append(f'### {name}\n\n`{call}` · Codex: `${plugin}:{name}`\n\n{text or "{{SKILL_%d_1}}" % number}\n\n📖 [{call} – {more}](skills/{name}.md)')
     return '\n\n'.join(entries)
