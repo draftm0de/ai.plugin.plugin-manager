@@ -50,8 +50,8 @@
       "local_hash": "5f1de56e7675e184a8f1573eb7cac69a5bd9ad97de08a2f42eb5426dba33702e"
     },
     "docs/standards/testing.md": {
-      "source_hash": "e90ced5fb5f676a0d543be0173ac8497880e6af60a7cb40f625d59c518ca039f",
-      "local_hash": "e90ced5fb5f676a0d543be0173ac8497880e6af60a7cb40f625d59c518ca039f"
+      "source_hash": "dbdb139eddacb89f2f9c209379f65200a3e99aaae3b4aa3a3796c9f768ee1f97",
+      "local_hash": "dbdb139eddacb89f2f9c209379f65200a3e99aaae3b4aa3a3796c9f768ee1f97"
     },
     "githooks/pre-commit": {
       "source_hash": "45875e9c31c1e032da2aa7e5de513518418cd264aa665820b61d8b5509bd8ce2",

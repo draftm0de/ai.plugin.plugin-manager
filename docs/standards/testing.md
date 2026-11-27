@@ -13,7 +13,7 @@ directories that are needed, and add `__init__.py` to every discovered directory
 | `tests/integration/` | tools, files and temporary repositories together |
 | `tests/contracts/` | skill, manifest, catalogue and package contracts |
 | `tests/behavior/` | explicitly started model tests |
-| `tests/native/` | real host CLIs with isolated profiles |
+| `tests/native/` | real external tools, such as host CLIs or npm, with isolated profiles |
 | `tests/fixtures/` | fictional data |
 | `tests/support/` | shared helpers without tests of their own |
 

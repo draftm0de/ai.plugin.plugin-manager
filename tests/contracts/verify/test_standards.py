@@ -68,6 +68,11 @@ class StandardsTests(unittest.TestCase):
             self.assertIn(case, text)
         self.assertNotIn('shows the consequences first and writes only after an explicit yes', text)
 
+    def test_the_native_layer_is_for_real_external_tools_and_stays_out_of_make_test(self):  # R57
+        text = ' '.join((SOURCE / 'testing.md').read_text().split())
+        self.assertIn('| `tests/native/` | real external tools, such as host CLIs or npm, with isolated profiles |', text)
+        self.assertIn('`make test` runs unit, integration and contracts only, never native or model tests', text)
+
     def test_a_standard_copied_into_the_scope_is_a_finding(self):
         line = next(l.strip() for l in (SOURCE / 'coding.md').read_text().splitlines() if len(l.strip()) >= 60)
         scope = self.plugin / 'SCOPE.md'

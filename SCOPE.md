@@ -587,3 +587,11 @@ Status: confirmed
 Acceptance: The skill standard delivered to every plugin states it: an order that names the change is the approval for that change, and the skill reports afterwards; what is missing is asked for as a fact. A yes is required first, with files or effect named, in these cases only: a script changes files that the order does not reveal, content of the person would be lost, something the order does not name happens outside the working copy (such as commit, push, publication or installation), or something costs money. A commit, push, publication or installation that the order names runs without a further question. The Manager's own questions before writing (R50, modify) fall under the first case.
 Source: skills/_shared/templates/plugin/sync/docs/standards/skills.md
 Test: tests/contracts/verify/test_standards.py
+
+## R57: What the native test layer holds
+
+Status: confirmed
+Acceptance: In the testing standard of every plugin the layer `tests/native/` is for tests that need a real tool from outside the repository, whether a host command line or another one such as a package manager, run against isolated profiles. Such tests stay outside `make test` and are started only on purpose.
+Source: skills/_shared/templates/plugin/sync/docs/standards/testing.md
+Source: skills/_shared/templates/plugin/sync/scripts/run_tests.py
+Test: tests/contracts/verify/test_standards.py

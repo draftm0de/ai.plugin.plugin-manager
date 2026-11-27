@@ -6,7 +6,7 @@
 - `skills/_shared/`: optional shared runtime/rules, no extra SKILL.md.
 - `scripts/`: development, validation and distribution helpers only.
 - `tests/unit/`, `tests/integration/`, `tests/contracts/`: deterministic tests.
-- `tests/behavior/`, `tests/native/`: explicit model/isolated-host tests only.
+- `tests/behavior/`, `tests/native/`: explicitly started tests only, with a model or with real external tools.
 - `tests/fixtures/`, `tests/support/`: fictional data and shared helpers.
 - `docs/`: maintained documentation. Do not duplicate authoritative product facts.
 - `.local/marketplace.json`: ignored machine-local associations, never committed.

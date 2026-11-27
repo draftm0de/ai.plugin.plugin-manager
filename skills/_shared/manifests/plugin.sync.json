@@ -34,7 +34,7 @@
       "executable": false
     },
     "docs/standards/testing.md": {
-      "sha256": "e90ced5fb5f676a0d543be0173ac8497880e6af60a7cb40f625d59c518ca039f",
+      "sha256": "dbdb139eddacb89f2f9c209379f65200a3e99aaae3b4aa3a3796c9f768ee1f97",
       "executable": false
     },
     "githooks/pre-commit": {
