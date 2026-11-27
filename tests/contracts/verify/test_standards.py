@@ -63,7 +63,8 @@ class StandardsTests(unittest.TestCase):
         self.assertIn('writes it without asking again', text)
         self.assertIn('asks first and waits for an explicit yes', text)
         for case in ('a script changes files the order does not make evident', "the person's own content would be lost",
-                     'the effect leaves the working copy (commit, push, publishing, installation, costs)'):
+                     'an effect the order does not name leaves the working copy (commit, push, publishing, installation)',
+                     'Costs are always confirmed'):
             self.assertIn(case, text)
         self.assertNotIn('shows the consequences first and writes only after an explicit yes', text)
 

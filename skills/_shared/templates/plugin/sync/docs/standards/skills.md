@@ -15,8 +15,9 @@ Managed by the plugin manager and identical in every plugin. Do not edit it here
 - A concrete order is the person's approval for exactly the change it names: the skill writes it without asking again
   and afterwards reports what it changed. Missing facts are asked for as facts, not as permission, and never invented.
 - The skill asks first and waits for an explicit yes, naming the files or the effect, when a script changes files the
-  order does not make evident, when the person's own content would be lost, or when the effect leaves the working copy
-  (commit, push, publishing, installation, costs). Both rules hold in every plugin.
+  order does not make evident, when the person's own content would be lost, or when an effect the order does not name
+  leaves the working copy (commit, push, publishing, installation). Costs are always confirmed. Both rules hold in
+  every plugin.
 - A gate and a setup skill belong only to a plugin whose writing skills depend on a state of the person's project
   (a configuration, a prepared folder). Without such a state the plugin has neither; do not invent one.
 - With such a state, a writing skill asks a shared gate first. The gate is one read-only script and one flow text that
